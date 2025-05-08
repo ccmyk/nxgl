@@ -1,4 +1,4 @@
-// components/webgl/effects/Loader.jsx
+// components/webgl/Loader.jsx
 'use client';
 
 import React, { useRef, useEffect, useImperativeHandle, forwardRef, useState, useCallback } from 'react';

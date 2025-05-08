@@ -105,5 +105,303 @@
   /* Overrides for text colors etc */
   .linkText { color: var(--gray); } /* Adjust as per original .home .footer .Awrite */
   .creditLabel { color: var(--gray); }
-  /* etc */
+}
+
+.footer {
+  padding-bottom: 1.6rem;
+  padding-top: 1.6rem;
+  width: 100%;
+  margin-top: 24rem;
+  padding-bottom: 5.6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+:root.D .footer_cm {
+  width: 100%;
+}
+
+@media (orientation: landscape) {
+  :root.T .footer_cm {
+    width: 100%;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .footer_cm {
+    width: 100vw;
+    margin: 0 auto;
+  }
+
+  :root.T .footer_cm.fix {
+    width: 100vw;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  :root.T .footer_cm {
+    width: 39rem;
+  }
+}
+
+.footer_cm .Atitle {
+  margin-left: var(--pgrid);
+}
+
+.footer_cm .Atitle .cCover {
+  position: absolute;
+}
+
+:root.D .footer_cm .Atitle .cCover {
+  left: -2rem;
+  right: -2rem;
+  top: -2rem;
+  bottom: -2rem;
+  pointer-events: none;
+  transform: translateY(-2.2rem);
+}
+
+@media (orientation: landscape) {
+  :root.T .footer_cm .Atitle .cCover {
+    left: -2rem;
+    right: -2rem;
+    top: -2rem;
+    bottom: -2rem;
+    pointer-events: none;
+    transform: translateY(-2.2rem);
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .footer_cm .Atitle .cCover {
+    left: 0;
+    right: 0;
+    top: -1.5rem;
+    bottom: -1.5rem;
+    pointer-events: none;
+    transform: translateY(-1.4rem);
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .footer_cm .Atitle .cCover {
+    left: 0;
+    right: 0;
+    top: -1rem;
+    bottom: -1rem;
+    pointer-events: none;
+    transform: translateY(-0.8rem);
+  }
+}
+
+.footer_cm .Atitle .cCover canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.footer_cm .Atitle .ttj {
+  opacity: 0;
+}
+
+:root.D .footer_cm .Atitle .ttj {
+  font-size: 27.7rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .footer_cm .Atitle .ttj {
+    font-size: 27.7rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .footer_cm .Atitle .ttj {
+    font-size: 14.8rem;
+    white-space: nowrap;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .footer_cm .Atitle .ttj {
+    font-size: 19vw;
+    white-space: nowrap;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  :root.T .footer_cm .Atitle .ttj {
+    font-size: 7.4rem;
+  }
+}
+
+:root.AND .footer_cm .Atitle .ttj {
+  opacity: 1;
+}
+
+:root.D .footer .cnt {
+  margin-top: 8.5rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .footer .cnt {
+    margin-top: 8.5rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .footer .cnt {
+    margin-top: 5.6rem;
+  }
+}
+
+.footer .cnt_lk {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.4rem 1rem;
+}
+
+:root.D .footer .cnt_lk {
+  margin-left: 70.9rem;
+  width: 54.9rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .footer .cnt_lk {
+    margin-left: 70.9rem;
+    width: 54.9rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .footer .cnt_lk {
+    margin-left: 30rem;
+    width: 28.6rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .footer .cnt_lk {
+    margin-left: 9.4rem;
+    width: 18.4rem;
+  }
+}
+
+.footer .cnt_lk_el {
+  width: calc(50% - 0.5rem);
+}
+
+.footer .cnt_lk .Awrite {
+  --dark: #8a8a8a;
+  --light: #000;
+}
+
+.footer .cnt_lk .Awrite .iO {
+  width: 1px;
+}
+
+.footer .cnt_lk .Awrite i {
+  width: 0.8rem;
+  margin-left: 0.4rem;
+  display: inline-flex;
+  transition: 0.3s opacity cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.footer .cnt_lk .Awrite i svg {
+  width: 100%;
+}
+
+.footer .cnt_lk .Awrite i svg path {
+  fill: #000;
+}
+
+.footer .cnt_lk .Awrite:not(.ivi) i {
+  opacity: 0;
+}
+
+:root.D .footer .cnt_cr {
+  margin-left: 70.9rem;
+  width: 54.9rem;
+  margin-top: 3.2rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .footer .cnt_cr {
+    margin-left: 70.9rem;
+    width: 54.9rem;
+    margin-top: 3.2rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .footer .cnt_cr {
+    margin-top: 4rem;
+    margin-left: 30rem;
+    width: 28.7rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .footer .cnt_cr {
+    margin-top: 4rem;
+    margin-left: 9.4rem;
+    width: 20.7rem;
+  }
+}
+
+.footer .cnt_cr_el {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.footer .cnt_cr_el + .cnt_cr_el {
+  margin-top: min(2px, 0.2rem);
+}
+
+.footer .cnt_cr .Awrite:first-child {
+  --dark: #8a8a8a;
+  --light: #000;
+}
+
+:root.D .footer .cnt_cp {
+  margin-left: 70.9rem;
+  width: 54.9rem;
+  margin-top: 3.2rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .footer .cnt_cp {
+    margin-left: 70.9rem;
+    width: 54.9rem;
+    margin-top: 3.2rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .footer .cnt_cp {
+    margin-top: 4rem;
+    margin-left: 30rem;
+    width: 100%;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .footer .cnt_cp {
+    margin-top: 4rem;
+    margin-left: 9.4rem;
+    width: 100%;
+  }
+}
+
+.footer .cnt_cp .Awrite {
+  --dark: #8a8a8a;
+}
+
+.footer .Awrite.nono:not(.stview.inview) {
+  opacity: 0;
+  transition: 0.4s opacity cubic-bezier(0.55, 0, 0.1, 1);
 }

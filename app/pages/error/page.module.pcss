@@ -1,0 +1,155 @@
+/* app/pages/error/page.module.pcss */
+
+.error {
+  position: relative;
+}
+
+.error_hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+:root.D .error_hero {
+  height: 100vh;
+}
+
+:root.T .error_hero {
+  height: var(--ck_hmin);
+}
+
+.error_hero .cnt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error_hero .cnt_tp {
+  text-align: center;
+}
+
+.error_hero .cnt_tp .Atext {
+  --dark: #8a8a8a;
+}
+
+.error_hero .cnt_bp {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  bottom: 1.4rem;
+}
+
+.error_hero .cnt_bp .Atext {
+  --dark: #8a8a8a;
+}
+
+.error_hero .cnt_hold {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error_hero .cnt_tt {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+:root.D .error_hero .cnt_tt {
+  margin: 4rem 0 10rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .error_hero .cnt_tt {
+    margin: 4rem 0 10rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .error_hero .cnt_tt {
+    margin: 3.2rem 0 5.6rem;
+  }
+}
+
+.error_hero .cnt_tt .Oiel:not(.act) {
+  pointer-events: none;
+}
+
+.error_hero .cnt_tt .ttj {
+  opacity: 0;
+}
+
+.error_hero .cnt_tt .cCover {
+  position: absolute;
+  left: -2rem;
+  right: 1.4rem;
+  top: -2rem;
+  bottom: -2rem;
+  pointer-events: none;
+  transform: translate(1.7rem);
+}
+
+.error_hero .cnt_tt .cCover canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+:root.D .error_hero .cnt_tt .Atitle:last-child {
+  margin-left: 4rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .error_hero .cnt_tt .Atitle:last-child {
+    margin-left: 4rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .error_hero .cnt_tt .Atitle:last-child {
+    margin-left: 2rem;
+  }
+}
+
+.error_hero .cnt_bt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error_hero .cnt_bt .Awrite .iO {
+  width: 1px;
+}
+
+.error_hero .cnt_bt .Awrite i {
+  width: 0.8rem;
+  margin-left: 0.4rem;
+  display: inline-flex;
+  opacity: 0;
+  transition: 0.45s cubic-bezier(0.55, 0, 0.1, 1) opacity;
+}
+
+.error_hero .cnt_bt .Awrite i svg {
+  width: 100%;
+}
+
+.error_hero .cnt_bt .Awrite i svg path {
+  fill: #000;
+}
+
+.error_hero .cnt_bt .Awrite.ivi i {
+  opacity: 1;
+}
+
+.error_hero .cnt_bt .Awrite + .Awrite {
+  margin-top: 0.4rem;
+}

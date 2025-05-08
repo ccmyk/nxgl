@@ -1,4 +1,4 @@
-// components/webgl/effects/Roll.jsx
+// components/webgl/Roll.jsx
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback, forwardRef } from 'react';

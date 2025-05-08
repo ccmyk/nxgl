@@ -1,0 +1,441 @@
+/* app/pages/projects/page.module.pcss */
+
+.project .backto {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 57;
+  pointer-events: none;
+}
+
+:root.D .project .backto {
+  top: 8rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project .backto {
+    top: 8rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .project .backto {
+    top: 12rem;
+  }
+}
+
+.project .backto .Awrite {
+  white-space: nowrap;
+  pointer-events: all;
+  --dark: #8a8a8a;
+  --light: #000;
+}
+
+:root.D .project .backto .Awrite {
+  margin-left: 59rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project .backto .Awrite {
+    margin-left: 59rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .project .backto .Awrite {
+    margin-left: 8.2rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .project .backto .Awrite {
+    margin-left: 9.3rem;
+  }
+}
+
+.project_intro {
+  padding-top: 35vh;
+  position: relative;
+}
+
+.project_intro .iO.iO-outin {
+  height: 20vh;
+  top: 0;
+  left: 0;
+  width: 10px;
+  background: yellow;
+  position: absolute;
+}
+
+.project_intro .cnt {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.project_intro .cnt_n {
+  flex-shrink: 0;
+}
+
+:root.D .project_intro .cnt_n {
+  width: 59rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_intro .cnt_n {
+    width: 59rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .project_intro .cnt_n {
+    width: 4.3rem;
+  }
+}
+
+:root.D .project_intro .cnt_mn {
+  width: 34.6rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_intro .cnt_mn {
+    width: 34.6rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .project_intro .cnt_mn {
+    width: 34.6rem;
+    margin-left: 4rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .project_intro .cnt_mn {
+    width: 27.2rem;
+    margin-left: 5rem;
+  }
+}
+
+.project_intro .cnt .tt3 {
+  opacity: 0;
+  transform: scaleX(1.2);
+  transition:
+    0.6s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    0.7s transform 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+  transform-origin: left center;
+}
+
+.project_intro .cnt .tt3.stview {
+  opacity: 1;
+  transform: scaleX(1);
+  transition:
+    0.8s opacity 0.1s cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.project_intro .cnt .tt3.notran {
+  opacity: 1;
+  transform: scaleX(1);
+  transition: none;
+}
+
+:root.D .project_intro .cnt_x {
+  margin-top: 10rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_intro .cnt_x {
+    margin-top: 10rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .project_intro .cnt_x {
+    margin-top: 8rem;
+  }
+}
+
+.project_intro .cnt_cr {
+  margin-top: 4rem;
+}
+
+.project_intro .cnt_cr_el {
+  width: 100%;
+}
+
+.project_intro .cnt_cr_el + .cnt_cr_el {
+  margin-top: min(2px, 0.2rem);
+}
+
+.project_intro .cnt_cr .Awrite {
+  display: inline;
+  line-height: 1.27;
+}
+
+.project_intro .cnt_cr .Awrite:first-child {
+  --dark: #8a8a8a;
+  --light: #f8f6f2;
+}
+
+.project_intro .cnt_cr .Awrite .word {
+  white-space: nowrap;
+}
+
+.project_intro .cnt_l {
+  margin-top: 4rem;
+}
+
+.project_intro .cnt_l .Awrite {
+  --dark: #8a8a8a;
+  --light: #000;
+}
+
+.project_intro .cnt_l .Awrite .iO {
+  width: 1px;
+}
+
+.project_intro .cnt_l .Awrite i {
+  width: 0.8rem;
+  margin-left: 0.4rem;
+  display: inline-flex;
+}
+
+.project_intro .cnt_l .Awrite i svg {
+  width: 100%;
+}
+
+.project_intro .cnt_l .Awrite i svg path {
+  fill: #000;
+}
+
+:root.D .project_els .cnt {
+  margin-top: 30rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_els .cnt {
+    margin-top: 30rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .project_els .cnt {
+    margin-top: 20rem;
+  }
+}
+
+.project_els .cnt_els {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.project_els .cnt_el {
+  position: relative;
+}
+
+:root.D .project_els .cnt_el {
+  width: 105rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_els .cnt_el {
+    width: 105rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .project_els .cnt_el {
+    width: 58.2rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .project_els .cnt_el {
+    width: 100%;
+  }
+}
+
+.project_els .cnt_el .iO {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.project_els .cnt_el img,
+.project_els .cnt_el video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition:
+    0.6s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    1s filter cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.project_els .cnt_el img:not(.Ldd),
+.project_els .cnt_el video:not(.Ldd) {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+.project_els .cnt_el img:not(.Ldd) ~ .iO,
+.project_els .cnt_el video:not(.Ldd) ~ .iO {
+  top: 6rem;
+}
+
+.project_els .cnt_el img:not(.Ldd) + button,
+.project_els .cnt_el video:not(.Ldd) + button {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.project_els .cnt_el button {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  height: 16px;
+  width: 64px;
+  transition: 0.6s opacity 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+  --light: #000;
+  --dark: #f8f6f2;
+  --dark: #8a8a8a;
+  mix-blend-mode: screen;
+}
+
+.project_els .cnt_el button .Awrite {
+  white-space: nowrap;
+}
+
+.project_els .cnt_el button .on,
+.project_els .cnt_el button .off {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+:root.D .project_els .cnt_el + .cnt_el {
+  margin-top: 1rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_els .cnt_el + .cnt_el {
+    margin-top: 1rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .project_els .cnt_el + .cnt_el {
+    margin-top: 0.8rem;
+  }
+}
+
+.project_nxt {
+  height: 100vh;
+  padding-top: 35vh;
+  position: relative;
+}
+
+.project_nxt .iO-nxt {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 50vh;
+  width: 10px;
+  background: blue;
+}
+
+.project_nxt .top {
+  position: absolute;
+  left: 0;
+  top: 4rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  --dark: #8a8a8a;
+}
+
+:root.D .project_nxt .top_sc {
+  width: 34.6rem;
+  margin-left: 59rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_nxt .top_sc {
+    width: 34.6rem;
+    margin-left: 59rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .project_nxt .top_sc {
+    margin-left: 8.2rem;
+    width: 13rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .project_nxt .top_sc {
+    margin-left: 9.5rem;
+    width: 13rem;
+  }
+}
+
+.project_nxt .top_sc .Awrite {
+  white-space: nowrap;
+}
+
+.project_nxt .cnt {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.project_nxt .cnt_n {
+  flex-shrink: 0;
+}
+
+:root.D .project_nxt .cnt_n {
+  width: 59rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_nxt .cnt_n {
+    width: 59rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .project_nxt .cnt_n {
+    width: 4.3rem;
+  }
+}
+
+:root.D .project_nxt .cnt_mn {
+  width: 34.6rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .project_nxt .cnt_mn {
+    width: 34.6rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .project_nxt .cnt_mn {
+    width: 34.6rem;
+    margin-left: 4rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .project_nxt .cnt_mn {
+    width: 27.2rem;
+    margin-left: 5rem;
+  }
+}

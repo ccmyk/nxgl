@@ -1,4 +1,4 @@
-// components/webgl/effects/Bg.jsx
+// components/webgl/Bg.jsx
 'use client';
 
 import React, { useRef, useEffect } from 'react';

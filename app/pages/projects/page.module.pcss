@@ -1,0 +1,1243 @@
+/* app/pages/projects/page.module.pcss */
+
+.projects_intro {
+  padding-top: calc(50vh - 17rem);
+  position: relative;
+}
+
+.projects_intro .Size {
+  top: 0;
+  left: 0;
+  height: 35vh;
+  position: absolute;
+  width: 1px;
+}
+
+.projects_intro .cnt_tp {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.projects_intro .cnt_t {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_t {
+    margin-left: 8.5rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_t {
+    margin-left: 9.3rem;
+  }
+}
+
+.projects_intro .cnt_t_comp {
+  display: flex;
+  transform: translateY(-0.1rem);
+}
+
+.projects_intro .cnt_t_comp .Atitle + .Atitle {
+  margin-left: 2rem;
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_t_comp .Atitle + .Atitle {
+    margin-left: 1.2rem;
+  }
+}
+
+.projects_intro .cnt_t .Atitle {
+  pointer-events: none !important;
+}
+
+:root.AND .projects_intro .cnt_t .Atitle .tt1 {
+  opacity: 1;
+}
+
+.projects_intro .cnt_t .Atitle .Oi {
+  top: 16rem;
+  height: 10px;
+}
+
+:root.D .projects_intro .cnt_t .Atitle .cCover {
+  left: -2rem;
+  right: -2rem;
+  top: -2rem;
+  bottom: -2rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_t .Atitle .cCover {
+    left: -2rem;
+    right: -2rem;
+    top: -2rem;
+    bottom: -2rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_t .Atitle .cCover {
+    left: -0.2rem;
+    right: -0.2rem;
+    top: -1rem;
+    bottom: -1rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_t .Atitle .cCover {
+    left: 0;
+    right: 0;
+    top: -1rem;
+    bottom: -1rem;
+  }
+}
+
+.projects_intro .cnt_t .Awrite {
+  --dark: rgba(0, 0, 0, 0.5);
+}
+
+:root.D .projects_intro .cnt_t .Awrite {
+  margin-bottom: 1rem;
+  margin-left: 1.6rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_t .Awrite {
+    margin-bottom: 1rem;
+    margin-left: 1.6rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_t .Awrite {
+    margin-bottom: 0.6rem;
+    margin-left: 0.8rem;
+  }
+}
+
+.projects_intro .cnt_t .Awrite .iO {
+  height: 10px;
+  width: 10px;
+}
+
+:root.D .projects_intro .cnt_t .Awrite .iO {
+  top: 9.1rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_t .Awrite .iO {
+    top: 9.1rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_t .Awrite .iO {
+    top: 4rem;
+  }
+}
+
+.projects_intro .cnt_ctr {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 24rem;
+  padding-left: 0.6rem;
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_ctr {
+    display: none;
+  }
+}
+
+.projects_intro .cnt_ctr .iO {
+  top: 16rem;
+  height: 10px;
+}
+
+.projects_intro .cnt_ctr h3 {
+  --dark: #8a8a8a;
+}
+
+.projects_intro .cnt_ctr button {
+  margin: 0 0.4rem 0 0.8rem;
+}
+
+.projects_intro .cnt_ctr button + button {
+  margin: 0 0.4rem;
+}
+
+.projects_intro .cnt_ctr button i {
+  flex-shrink: 0;
+  margin-left: 0.4rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid #8a8a8a;
+  display: inline-block;
+  position: relative;
+}
+
+.projects_intro .cnt_ctr button i:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0);
+  background: #000;
+  transform-origin: right center;
+  transition: 0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_ctr button.act {
+  pointer-events: none;
+}
+
+.projects_intro .cnt_ctr button.act i:before {
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition: 0.6s transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_els {
+  position: relative;
+}
+
+:root.D .projects_intro .cnt_els {
+  padding-bottom: 20rem;
+  margin-top: 11.6rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_els {
+    padding-bottom: 20rem;
+    margin-top: 11.6rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_els {
+    padding-bottom: 10rem;
+    margin-top: 5.6rem;
+  }
+}
+
+.projects_intro .cnt_els_sld {
+  position: absolute;
+  left: 0;
+  top: calc(-50vh + 17.4rem);
+  right: 50%;
+  z-index: 5;
+  pointer-events: none;
+  bottom: -3rem;
+}
+
+.projects_intro .cnt_els_sld .Oi {
+  position: absolute;
+  left: 0;
+  top: calc(50vh - 17.4rem);
+  width: 10px;
+}
+
+.projects_intro .cnt_els_sld .Oi .elh {
+  width: 10px;
+  height: 100vh;
+}
+
+.projects_intro .cnt_els_sld .Oi .elh:last-child {
+  display: none;
+}
+
+.projects_intro .cnt_els .stck_hold {
+  position: sticky;
+  height: 100vh;
+  top: 0;
+  left: var(--pgrid);
+  width: 46.4rem;
+}
+
+.projects_intro .cnt_els .stck_hold .single {
+  aspect-ratio: 464/348;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+}
+
+.projects_intro .cnt_els .stck_hold .single img,
+.projects_intro .cnt_els .stck_hold .single video {
+  display: none;
+}
+
+.projects_intro .cnt_els .stck_hold .cRoll {
+  aspect-ratio: 464/348;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+}
+
+.projects_intro .cnt_els .stck_hold canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition:
+    0.4s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s filter 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_els .stck_hold canvas.hideme {
+  opacity: 0;
+  filter: blur(6px);
+  transition:
+    0.4s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s filter 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_el {
+  position: relative;
+  transition: 0.6s margin-top cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_el:after {
+  content: "";
+  width: 1px;
+  height: 21.4rem;
+  display: block;
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el:after {
+    height: 30vw;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_el:after {
+    height: 55.93vw;
+  }
+}
+
+.projects_intro .cnt_el > .iO {
+  position: absolute;
+  left: 0;
+  top: 11rem;
+  width: 10px;
+  height: 10px;
+}
+
+.projects_intro .cnt_el .Oi {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  width: 100vw;
+  height: 34.8rem;
+  bottom: 0;
+  z-index: 12;
+  background: red;
+  opacity: 0.1;
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el .Oi {
+    height: 30vw;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_el .Oi {
+    height: 55.93vw;
+  }
+}
+
+.projects_intro .cnt_el .sldGuide {
+  opacity: 0.1;
+  position: absolute;
+  bottom: 0;
+  height: 34.8rem;
+  left: calc(-1 * var(--pgrid));
+  right: calc(-1 * var(--pgrid));
+}
+
+.projects_intro .cnt_el + .cnt_el {
+  margin-top: 50vh;
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el + .cnt_el {
+    margin-top: 30vh;
+  }
+}
+
+.projects_intro .cnt_el + .cnt_el .Oiwatch {
+  background: blue;
+  left: 30px;
+}
+
+.projects_intro .cnt_el_nfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+:root.D .projects_intro .cnt_el_nfo {
+  padding-bottom: 18.4rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_nfo {
+    padding-bottom: 18.4rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_el_nfo {
+    padding-bottom: 6.6rem;
+    flex-wrap: wrap;
+  }
+}
+
+.projects_intro .cnt_el_nfo .nfo_n {
+  flex-shrink: 0;
+}
+
+:root.D .projects_intro .cnt_el_nfo .nfo_n {
+  width: 23.6rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_n {
+    width: 23.6rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_n {
+    width: 3.5rem;
+  }
+}
+
+.projects_intro .cnt_el_nfo .nfo_t {
+  flex-shrink: 0;
+}
+
+:root.D .projects_intro .cnt_el_nfo .nfo_t {
+  width: 34.6rem;
+  padding-left: 1rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_t {
+    width: 34.6rem;
+    padding-left: 1rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_t {
+    width: 27.2rem;
+    position: relative;
+    overflow-x: clip;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_t {
+    margin-left: 4rem;
+    padding-left: 0.8rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_t {
+    margin-left: 5rem;
+    padding-left: 0.8rem;
+  }
+}
+
+.projects_intro .cnt_el_nfo .nfo_x {
+  flex-shrink: 0;
+}
+
+:root.D .projects_intro .cnt_el_nfo .nfo_x {
+  width: 34.6rem;
+  padding-left: 1rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_x {
+    width: 34.6rem;
+    padding-left: 1rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_x {
+    margin-top: 2.4rem;
+    width: 100%;
+  }
+
+  :root.T .projects_intro .cnt_el_nfo .nfo_x .linkXS {
+    display: block;
+    margin-top: 2.4rem;
+    color: #8a8a8a;
+    opacity: 0;
+    text-transform: uppercase;
+    line-height: 1.27;
+    transition: 0.6s opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+  }
+
+  :root.T .projects_intro .cnt_el_nfo .nfo_x .Aline.stview + .linkXS {
+    opacity: 1;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_x {
+    padding-left: 8.5rem;
+  }
+
+  :root.T .projects_intro .cnt_el_nfo .nfo_x .Aline {
+    max-width: 34.6rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_x {
+    padding-left: 9.4rem;
+  }
+}
+
+.projects_intro .cnt_el_nfo .nfo_l {
+  width: 100%;
+}
+
+:root.D .projects_intro .cnt_el_nfo .nfo_l {
+  padding-left: 1rem;
+  margin-left: 24rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_l {
+    padding-left: 1rem;
+    margin-left: 24rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_l {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding-left: 8.2rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_l {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding-left: 9.4rem;
+  }
+}
+
+.projects_intro .cnt_el_nfo .nfo_l .Awrite {
+  --dark: #8a8a8a;
+  --light: #000;
+}
+
+.projects_intro .cnt_el_nfo .nfo_l .Awrite .iO {
+  width: 1px;
+}
+
+:root.D .projects_intro .cnt_el_nfo .nfo_l .Awrite .iO {
+  top: 11rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_l .Awrite .iO {
+    top: 11rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_intro .cnt_el_nfo .nfo_l .Awrite .iO {
+    top: 0;
+  }
+}
+
+.projects_intro .cnt_el_nfo .nfo_l .Awrite i {
+  width: 0.8rem;
+  margin-left: 0.4rem;
+  display: inline-flex !important;
+  overflow: hidden;
+  position: relative;
+  transition: 0.3s opacity cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_el_nfo .nfo_l .Awrite i svg {
+  width: 100%;
+}
+
+.projects_intro .cnt_el_nfo .nfo_l .Awrite i svg path {
+  fill: #000;
+}
+
+.projects_intro .cnt_el_nfo .nfo_l .Awrite:not(.ivi) i {
+  opacity: 0;
+}
+
+.projects_intro .cnt_el_sld {
+  width: 100%;
+  height: 34.8rem;
+  margin-top: 4rem;
+  display: block;
+  position: absolute;
+  left: 0;
+}
+
+:root.D .projects_intro .cnt_el_sld {
+  bottom: 0;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_intro .cnt_el_sld {
+    bottom: 0;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_intro .cnt_el_sld {
+    height: 30vw;
+    bottom: 3.5rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_intro .cnt_el_sld {
+    height: 55.93vw;
+    bottom: 3.5rem;
+  }
+}
+
+:root.AND .projects_intro .cnt_el_sld {
+  overflow-x: scroll;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.projects_intro .cnt_el_sld .cCover {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.projects_intro .cnt_el_sld canvas {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  transition:
+    0.4s opacity 0.2s cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s filter cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_intro .cnt_el_sld canvas.hideme {
+  opacity: 0;
+  filter: blur(6px);
+}
+
+.projects_intro .cnt_el_sld canvas.fCanvas {
+  opacity: 0;
+  filter: blur(6px);
+}
+
+.projects_intro .cnt_el_sld img,
+.projects_intro .cnt_el_sld video {
+  display: none;
+}
+
+:root.AND .projects_intro .cnt_el_sld img,
+:root.AND .projects_intro .cnt_el_sld video {
+  display: block;
+  width: 75vw;
+  height: 55.93vw;
+  object-fit: cover;
+}
+
+:root.AND .projects_intro .cnt_el_sld img + img,
+:root.AND .projects_intro .cnt_el_sld img + video,
+:root.AND .projects_intro .cnt_el_sld video + img,
+:root.AND .projects_intro .cnt_el_sld video + video {
+  margin-left: 0.8rem;
+}
+
+.projects_intro .cnt_el .tt3 {
+  transition:
+    0.8s opacity 0.1s cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+  transform-origin: left center;
+}
+
+.projects_intro .cnt_el:not(.stview) .tt3 {
+  transition: 0.6s all cubic-bezier(0.55, 0, 0.1, 1);
+  opacity: 0;
+  transform: scaleX(1.2);
+}
+
+.projects_intro .cnt_el:not(.stview) .linkXS {
+  opacity: 0 !important;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1) !important;
+}
+
+.projects_intro .cnt_el.noOut .tt3 {
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
+}
+
+.projects_intro .cnt_el.noOut .linkXS {
+  opacity: 0 !important;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1) !important;
+}
+
+.projects_intro .cnt_el-singlemod {
+  margin-top: 0 !important;
+  padding-bottom: 17rem;
+}
+
+.projects_intro .cnt_el-singlemod .cnt_el_nfo {
+  position: sticky;
+  top: calc(50vh - 17rem);
+}
+
+.projects_intro .cnt_el-singlemod .Oi {
+  height: 50vh;
+}
+
+.projects_intro .cnt_el-singlemod:last-child {
+  height: auto !important;
+}
+
+.projects_intro .cnt_el-singlemod:last-child .cnt_el_sld {
+  position: static;
+}
+
+.projects_intro .cnt_el-singlemod:last-child .Oi {
+  transform: translate(-50%);
+  top: 50vh;
+}
+
+.projects_intro .cnt_el-singlemod .cnt_el_sld {
+  pointer-events: none !important;
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc + .footer {
+    margin-top: 10rem;
+  }
+}
+
+.projects_arc .cnt_t {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+:root.D .projects_arc .cnt_t {
+  margin-left: 59rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_t {
+    margin-left: 59rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_arc .cnt_t {
+    margin-left: 8.5rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_arc .cnt_t {
+    margin-left: 9.3rem;
+  }
+}
+
+.projects_arc .cnt_t .Atitle {
+  pointer-events: none !important;
+}
+
+:root.AND .projects_arc .cnt_t .Atitle .tt1 {
+  opacity: 1;
+}
+
+:root.D .projects_arc .cnt_t .Atitle .Oi {
+  top: 16rem;
+  height: 10px;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_t .Atitle .Oi {
+    top: 16rem;
+    height: 10px;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_t .Atitle .Oi {
+    top: 16rem;
+    height: 10px;
+  }
+}
+
+:root.D .projects_arc .cnt_t .Atitle .cCover {
+  left: -2rem;
+  right: -2rem;
+  top: -2rem;
+  bottom: -2rem;
+  transform: translate(-0.2rem);
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_t .Atitle .cCover {
+    left: -2rem;
+    right: -2rem;
+    top: -2rem;
+    bottom: -2rem;
+    transform: translate(-0.2rem);
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_arc .cnt_t .Atitle .cCover {
+    left: -0.2rem;
+    right: -0.2rem;
+    top: -1rem;
+    bottom: -1rem;
+    transform: translate(-0.1rem, -0.1rem);
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_arc .cnt_t .Atitle .cCover {
+    left: 0;
+    right: 0;
+    top: -1rem;
+    bottom: -1rem;
+    transform: translate(-0.1rem, -0.1rem);
+  }
+}
+
+.projects_arc .cnt_b {
+  margin-top: 8rem;
+}
+
+.projects_arc .cnt_arc {
+  position: relative;
+  display: block;
+  pointer-events: none;
+}
+
+.projects_arc .cnt_arc > .iO {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 10px;
+  height: 10px;
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc > .iO {
+    top: 50%;
+  }
+}
+
+.projects_arc .cnt_arc + .cnt_arc {
+  margin-top: 8.4rem;
+}
+
+.projects_arc .cnt_arc_nfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo {
+    flex-wrap: wrap;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_n {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_n {
+  width: 23.6rem;
+  transform: translate(47.4rem);
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_n {
+    width: 23.6rem;
+    transform: translate(47.4rem);
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_n {
+    width: 3.5rem;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_t {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.projects_arc .cnt_arc_nfo .nfo_t .tt3 {
+  opacity: 0;
+  transform: scaleX(1.2);
+  transition:
+    0.8s opacity 0.1s cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+  transform-origin: left center;
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_t {
+  width: 34.6rem;
+  padding-left: 1rem;
+  transform: translate(34.6rem);
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_t {
+    width: 34.6rem;
+    padding-left: 1rem;
+    transform: translate(34.6rem);
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_t {
+    width: 27.2rem;
+    position: relative;
+    overflow-x: clip;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_t {
+    margin-left: 4rem;
+    padding-left: 0.8rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_t {
+    margin-left: 5rem;
+    padding-left: 0.8rem;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_x {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_x {
+  width: 34.6rem;
+  padding-left: 1rem;
+  padding-top: 3.2rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x {
+    width: 34.6rem;
+    padding-left: 1rem;
+    padding-top: 3.2rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x {
+    margin-top: 2.4rem;
+    width: 100%;
+  }
+
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x .linkXS {
+    display: block;
+    margin-top: 2.4rem;
+    color: #8a8a8a;
+    opacity: 0;
+    text-transform: uppercase;
+    line-height: 1.27;
+    transition: 0.6s opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+  }
+
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x .Aline.stview + .linkXS {
+    opacity: 1;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x {
+    padding-left: 8.5rem;
+  }
+
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x .Aline {
+    max-width: 34.6rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_x {
+    padding-left: 9.4rem;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_x .iO {
+  top: 0%;
+  height: 100%;
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_sld {
+  width: 100%;
+  padding-left: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 1rem;
+  overflow-x: clip;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld {
+    width: 100%;
+    padding-left: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 1rem;
+    overflow-x: clip;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld {
+    margin-top: 2.4rem;
+    width: 28rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld {
+    padding-left: 8.6rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld {
+    padding-left: 9.4rem;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_sld .md {
+  position: relative;
+  width: 100%;
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_sld .md {
+  max-width: 11rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld .md {
+    max-width: 11rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld .md {
+    display: none;
+  }
+
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld .md:first-child {
+    display: block;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_sld .md .iO {
+  position: absolute;
+  left: 0;
+  bottom: 50%;
+  z-index: 5;
+  background: blue;
+  width: 10px;
+  height: 10px;
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_sld .md .iO {
+  display: none;
+}
+
+.projects_arc .cnt_arc_nfo .nfo_sld .md_h {
+  position: relative;
+  width: 100%;
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_sld .md_h {
+  aspect-ratio: 110/83;
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld .md_h {
+    aspect-ratio: 110/83;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc_nfo .nfo_sld .md_h {
+    aspect-ratio: 184/139;
+  }
+}
+
+.projects_arc .cnt_arc_nfo .nfo_sld .md_h img,
+.projects_arc .cnt_arc_nfo .nfo_sld .md_h video {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform, filter, opacity;
+  transition:
+    0.6s filter cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    0s transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+  opacity: 0;
+  filter: blur(4px);
+}
+
+:root.D .projects_arc .cnt_arc_nfo .nfo_sld .md_h img,
+:root.D .projects_arc .cnt_arc_nfo .nfo_sld .md_h video {
+  transform: translate(2.4rem);
+}
+
+:root.T .projects_arc .cnt_arc_nfo .nfo_sld .md_h img,
+:root.T .projects_arc .cnt_arc_nfo .nfo_sld .md_h video {
+  transform: translateY(1.2rem);
+}
+
+:root.T .projects_arc .cnt_arc_nfo .nfo_sld .md_h img.Ldd,
+:root.T .projects_arc .cnt_arc_nfo .nfo_sld .md_h video.Ldd {
+  transition:
+    1.2s filter cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+  opacity: 1;
+  transform: translate(0);
+  filter: blur(0);
+}
+
+.projects_arc .cnt_arc:not(.stview) .linkXS {
+  opacity: 0 !important;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1) !important;
+}
+
+.projects_arc .cnt_arc.stview .nfo_n,
+.projects_arc .cnt_arc.stview .nfo_t {
+  opacity: 1;
+}
+
+.projects_arc .cnt_arc.stview .nfo_t .tt3 {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.projects_arc .cnt_arc.stview .nfo_x {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.projects_arc .cnt_arc.stview .nfo_sld {
+  pointer-events: all;
+}
+
+.projects_arc .cnt_arc.noOut .nfo_n,
+.projects_arc .cnt_arc.noOut .nfo_t {
+  opacity: 1 !important;
+}
+
+.projects_arc .cnt_arc.noOut .nfo_t .tt3 {
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
+}
+
+.projects_arc .cnt_arc.noOut .nfo .linkXS {
+  opacity: 0 !important;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1) !important;
+}
+
+@media (orientation: portrait) {
+  :root.T .projects_arc .cnt_arc.noOut .nfo .md img,
+  :root.T .projects_arc .cnt_arc.noOut .nfo .md video {
+    opacity: 0 !important;
+    filter: blur(4px) !important;
+  }
+}
+
+.projects_arc .cnt_arc:hover .nfo_n,
+.projects_arc .cnt_arc:hover .nfo_t,
+.projects_arc .cnt_arc:hover .nfo_x {
+  opacity: 0.5;
+}
+
+:root.D .projects_arc .cnt_arc:hover .nfo_sld .iO {
+  display: block;
+}
+
+:root.D .projects_arc .cnt_arc:hover .nfo_sld .Ldd {
+  opacity: 1;
+  transform: translate(0);
+  filter: blur(0);
+  transition:
+    1.2s filter cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s opacity cubic-bezier(0.55, 0, 0.1, 1),
+    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+@media (orientation: landscape) {
+  :root.T .projects_arc .cnt_arc:hover .nfo_sld .iO {
+    display: block;
+  }
+
+  :root.T .projects_arc .cnt_arc:hover .nfo_sld .Ldd {
+    opacity: 1;
+    transform: translate(0);
+    filter: blur(0);
+    transition:
+      1.2s filter cubic-bezier(0.55, 0, 0.1, 1),
+      0.6s opacity cubic-bezier(0.55, 0, 0.1, 1),
+      0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
+  }
+}

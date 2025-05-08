@@ -1,4 +1,4 @@
-// components/webgl/effects/Base.jsx
+// components/webgl/Base.jsx
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback,forwardRef } from 'react';

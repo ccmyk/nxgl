@@ -1,4 +1,4 @@
-// components/webgl/effects/Tt.jsx
+// components/webgl/Tt.jsx
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';

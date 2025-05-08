@@ -2,7 +2,6 @@
 
 /* --- 1. CSS Variables --- */
 :root {
-  /* Copy --ck_... variables from original <html> style */
   --ck_hvar: 558px; /* Example - Update if dynamic */
   --ck_multiL: 10; /* Example - Update if dynamic */
   --ck_multiP: 7.088625261688765; /* Example - Update if dynamic */
@@ -11,13 +10,13 @@
   --ck_hscr: 558px; /* Example - Update if dynamic */
   --ck_hmin: 558px; /* Example - Update if dynamic */
 
-  /* Define theme colors based on index.css body/defaults */
+  /* Define theme colors */
   --dark: #000; /* Or #050505 ? Check usage */
   --light: #f8f6f2;
   --bg: #f8f6f2;
   --gray: #8a8a8a;
 
-  /* Swiper variables if needed globally, otherwise move to component */
+  /* Swiper variables */
   :root {
     --swiper-theme-color: #1b2126;
   }
@@ -951,11 +950,10 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body { margin: 0; }
-/* ... (Include the rest of Normalize.css rules) ... */
+
 td, th { padding: 0; }
 
-/* --- 3. Base Styles --- */
-/* Copy base styles (approx lines 277-300+) */
+/* Base Styles */
 html {
   box-sizing: border-box;
   overscroll-behavior: none;
@@ -997,7 +995,7 @@ input, textarea { -webkit-appearance: none; -moz-appearance: none; appearance: n
 /* Screen reader class */
 .scr_read { /* ... styles from index_css.txt line 356 ... */ }
 
-/* --- 4. Basic Typography --- */
+/* Basic Typography */
 /* Set base body font-size (start with desktop, responsiveness later) */
 body {
   /* Using rem based on typical 10px = 1rem setup, adjust if needed */
@@ -1005,25 +1003,92 @@ body {
   font-size: 1.1rem; /* Start with desktop base */
 }
 
-/* Define base heading styles IF they are truly global, otherwise style in components */
-/* Example:
-h1, .ttj { font-family: montreal, sans-serif; }
-h1 { font-size: 2em; margin: 0.67em 0; } // From normalize
-.ttj { font-size: 18rem; line-height: 0.9; letter-spacing: -0.02em; } // Desktop base for ttj
-.tt1 { font-size: 8rem; letter-spacing: -0.02em; font-family: montreal, sans-serif; } // Desktop base for tt1
-.tt3 { font-size: 1.6rem; letter-spacing: -0.01em; font-family: montreal, sans-serif; } // Desktop base for tt3
-*/
+/* Define base heading styles */
+
+h1,
+.ttj {
+  font-family: montreal, sans-serif;
+}
+
+// From normalize
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+// Desktop base for ttj
+.ttj {
+  font-size: 18rem;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+// Desktop base for tt1
+.tt1 {
+  font-size: 8rem;
+  letter-spacing: -0.02em;
+  font-family: montreal, sans-serif;
+}
+
+// Desktop base for tt3
+.tt3 {
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  font-family: montreal, sans-serif;
+}
+
 /* NOTE: We will handle the complex responsive font size logic later */
 
-/* --- 5. Lenis Base Styles --- */
-/* (From lines 364-367) */
-html.lenis { height: auto; -ms-overflow-style: none; scrollbar-width: none; }
-html.lenis::-webkit-scrollbar { display: none; }
-/* html.lenis:scrollbar { display: none; } */ /* scrollbar pseudo-element is non-standard */
-.lenis.lenis-smooth { scroll-behavior: auto; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: hidden; }
-.lenis.lenis-scrolling iframe { pointer-events: none; }
+/* Lenis */
+
+html.lenis {
+  height: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html.lenis::-webkit-scrollbar {
+  display: none;
+}
+
+html.lenis:scrollbar {
+  display: none;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+.scrBar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 600;
+  opacity: 0.2;
+}
+
+.scrBar_prg {
+  position: absolute;
+  width: 3px;
+  right: 0;
+  top: 0;
+  background: #000;
+}
+
+
 
 /* --- Other Global Helpers --- */
 .pHide { /* Style from index_css.txt line 375 */
@@ -1037,4 +1102,1467 @@ body {
 }
 a, button { /* Override specifically if needed, but default should be none */
   cursor: none;
+}
+
+
+/* Awrite styles */
+.Awrite,
+.Atext {
+  position: relative;
+  text-transform: uppercase;
+}
+
+.Awrite .iO,
+.Atext .iO {
+  position: absolute;
+  left: 0;
+  top: 150%;
+  height: 10px;
+  pointer-events: none;
+}
+
+.Awrite .char,
+.Atext .char {
+  position: relative;
+  pointer-events: none;
+}
+
+.Awrite .char .b,
+.Atext .char .b {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--dark);
+  width: 1.1rem;
+  height: 1.1rem;
+  display: none;
+}
+
+.Awrite .char .n,
+.Atext .char .n {
+  opacity: 0;
+  color: var(--dark);
+}
+
+.Awrite .char .f,
+.Atext .char .f {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  color: var(--light);
+  z-index: 1;
+  background: var(--dark);
+  display: none;
+  transform-origin: left center;
+}
+
+.Awrite.nono,
+.Atext.nono {
+  color: var(--dark);
+}
+
+.Awrite-inv,
+.Atext-inv {
+  color: var(--light);
+  padding: 2px 4px 1px;
+  background: var(--dark);
+}
+
+.Awrite-inv .char .n,
+.Atext-inv .char .n,
+.Awrite-inv.nono,
+.Atext-inv.nono {
+  color: var(--light);
+}
+
+.Atext {
+  text-transform: uppercase;
+  position: relative;
+  line-height: 1.27;
+  pointer-events: none;
+}
+
+.Atext a {
+  pointer-events: all;
+}
+
+.Atext p + p {
+  margin-top: 1.8rem;
+}
+
+.Atext .char .f {
+  background: transparent;
+}
+
+.Atext .iO {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  top: 150%;
+  height: 10px;
+}
+
+.Atext.stview .iO {
+  top: 0%;
+  height: 100%;
+}
+
+.Aline {
+  text-transform: uppercase;
+  position: relative;
+  line-height: 1.27;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.Aline a {
+  pointer-events: all;
+}
+
+.Aline p + p {
+  margin-top: 1.8rem;
+}
+
+.Aline.stview .iO {
+  top: 0%;
+  height: 100%;
+}
+
+.Atitle {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-start;
+}
+
+.Atitle .cCover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.Atitle .Oi {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 1 !important;
+}
+
+.Atitle .tt1 {
+  opacity: 0;
+}
+
+.Atitle canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* wysi */
+.wysi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  --wysil: 8rem;
+  --wysim: 2rem;
+  --wysis: 2rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  :root.T .wysi {
+    --wysil: 4.8rem;
+    --wysim: 2rem;
+    --wysis: 2rem;
+  }
+}
+
+.wysi img {
+  width: 100%;
+  height: auto;
+  max-width: 77.6rem;
+  position: relative;
+  border-radius: 3.2rem;
+}
+
+.wysi img + ul,
+.wysi img + ol {
+  margin-top: var(--wysil);
+}
+
+.wysi img + img {
+  margin-top: var(--wysil);
+}
+
+.wysi img + p {
+  margin-top: var(--wysil);
+}
+
+.wysi img + h1,
+.wysi img + h2,
+.wysi img + h3 {
+  margin-top: var(--wysil);
+}
+
+.wysi img + h4,
+.wysi img + h5,
+.wysi img + h6,
+.wysi img + h7 {
+  margin-top: var(--wysil);
+}
+
+.wysi img + blockquote {
+  margin-top: var(--wysil);
+}
+
+.wysi p {
+  font-size: 1.8rem;
+  line-height: 1.56;
+  width: 100%;
+  max-width: 57.5rem;
+}
+
+.wysi p a {
+  text-decoration: underline;
+  color: #e63642;
+}
+
+.wysi p strong,
+.wysi p b {
+  font-weight: 700;
+}
+
+.wysi p + ul,
+.wysi p + ol {
+  margin-top: var(--wysim);
+}
+
+.wysi p + img {
+  margin-top: var(--wysil);
+}
+
+.wysi p + p {
+  margin-top: var(--wysis);
+}
+
+.wysi p + h1,
+.wysi p + h2,
+.wysi p + h3 {
+  margin-top: 4rem;
+}
+
+.wysi p + h4,
+.wysi p + h5,
+.wysi p + h6,
+.wysi p + h7 {
+  margin-top: var(--wysim);
+}
+
+.wysi p + blockquote {
+  margin-top: var(--wysim);
+}
+
+.wysi ul {
+  width: 100%;
+  max-width: 57.5rem;
+}
+
+.wysi ul li {
+  font-size: 1.8rem;
+  line-height: 1.56;
+  position: relative;
+}
+
+.wysi ul li:before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  display: inline-block;
+  margin-right: 1rem;
+  margin-bottom: 0.3rem;
+  background-color: #e63642;
+}
+
+.wysi ul li + li {
+  margin-top: 0.6rem;
+}
+
+.wysi ul li a {
+  text-decoration: underline;
+}
+
+.wysi ul + h1,
+.wysi ul + h2,
+.wysi ul + h3 {
+  margin-top: 4rem;
+}
+
+.wysi ul + h4,
+.wysi ul + h5,
+.wysi ul + h6,
+.wysi ul + h7 {
+  margin-top: var(--wysim);
+}
+
+.wysi ul + ul {
+  margin-top: var(--wysim);
+}
+
+.wysi ul + ol {
+  margin-top: var(--wysim);
+}
+
+.wysi ul + img {
+  margin-top: var(--wysil);
+}
+
+.wysi ul + p {
+  margin-top: var(--wysim);
+}
+
+.wysi ul + blockquote {
+  margin-top: var(--wysim);
+}
+
+.wysi ol {
+  width: 100%;
+  max-width: 57.5rem;
+  font-size: 1.8rem;
+  line-height: 1.56;
+}
+
+.wysi ol li {
+  position: relative;
+  counter-increment: step-counter;
+}
+
+.wysi ol li:before {
+  content: counter(step-counter);
+  margin-right: 1rem;
+  color: #e63642;
+}
+
+.wysi ol li + li {
+  margin-top: 0.6rem;
+}
+
+.wysi ol li a {
+  text-decoration: underline;
+}
+
+.wysi ol + ul {
+  margin-top: var(--wysim);
+}
+
+.wysi ol + ol {
+  margin-top: var(--wysim);
+}
+
+.wysi ol + img {
+  margin-top: var(--wysil);
+}
+
+.wysi ol + p {
+  margin-top: var(--wysim);
+}
+
+.wysi ol + h1,
+.wysi ol + h2,
+.wysi ol + h3 {
+  margin-top: 4rem;
+}
+
+.wysi ol + h4,
+.wysi ol + h5,
+.wysi ol + h6,
+.wysi ol + h7 {
+  margin-top: var(--wysim);
+}
+
+.wysi ol + blockquote {
+  margin-top: var(--wysim);
+}
+
+.wysi blockquote {
+  width: 100%;
+  max-width: 57.5rem;
+  font-size: 3.2rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@media only screen and (max-width: 1024px) {
+  :root.T .wysi blockquote {
+    font-size: 1.8rem;
+    line-height: 1.44;
+  }
+}
+
+.wysi blockquote p {
+  color: #000;
+}
+
+.wysi blockquote a {
+  text-decoration: underline;
+}
+
+.wysi blockquote + ul,
+.wysi blockquote + ol {
+  margin-top: var(--wysim);
+}
+
+.wysi blockquote + img {
+  margin-top: var(--wysil);
+}
+
+.wysi blockquote + h1,
+.wysi blockquote + h2,
+.wysi blockquote + h3 {
+  margin-top: 4rem;
+}
+
+.wysi blockquote + h4,
+.wysi blockquote + h5,
+.wysi blockquote + h6,
+.wysi blockquote + h7 {
+  margin-top: var(--wysim);
+}
+
+.wysi blockquote + blockquote {
+  margin-top: var(--wysim);
+}
+
+.wysi h1,
+.wysi h2,
+.wysi h3 {
+  font-size: 4rem;
+  line-height: 1.3;
+  font-weight: 600;
+  width: 100%;
+  max-width: 57.5rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  :root.T .wysi h1,
+  :root.T .wysi h2,
+  :root.T .wysi h3 {
+    font-size: 2.8rem;
+    line-height: 1.14;
+  }
+}
+
+.wysi h1 + p,
+.wysi h2 + p,
+.wysi h3 + p {
+  margin-top: 2rem;
+}
+
+.wysi h1 + ul,
+.wysi h1 + ol,
+.wysi h2 + ul,
+.wysi h2 + ol,
+.wysi h3 + ul,
+.wysi h3 + ol {
+  margin-top: 2rem;
+}
+
+.wysi h1 + img,
+.wysi h2 + img,
+.wysi h3 + img {
+  margin-top: 2rem;
+}
+
+.wysi h1 + blockquote,
+.wysi h2 + blockquote,
+.wysi h3 + blockquote {
+  margin-top: 2rem;
+}
+
+.wysi h1 + h1,
+.wysi h1 + h2,
+.wysi h1 + h3,
+.wysi h1 + h4,
+.wysi h1 + h5,
+.wysi h1 + h6,
+.wysi h1 + h7,
+.wysi h2 + h1,
+.wysi h2 + h2,
+.wysi h2 + h3,
+.wysi h2 + h4,
+.wysi h2 + h5,
+.wysi h2 + h6,
+.wysi h2 + h7,
+.wysi h3 + h1,
+.wysi h3 + h2,
+.wysi h3 + h3,
+.wysi h3 + h4,
+.wysi h3 + h5,
+.wysi h3 + h6,
+.wysi h3 + h7 {
+  margin-top: 2rem;
+}
+
+.wysi h4,
+.wysi h5,
+.wysi h6,
+.wysi h7 {
+  width: 100%;
+  max-width: 57.5rem;
+  font-size: 3.2rem;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+@media only screen and (max-width: 1024px) {
+  :root.T .wysi h4,
+  :root.T .wysi h5,
+  :root.T .wysi h6,
+  :root.T .wysi h7 {
+    font-size: 1.8rem;
+    line-height: 1.44;
+  }
+}
+
+.wysi h4 + p,
+.wysi h5 + p,
+.wysi h6 + p,
+.wysi h7 + p {
+  margin-top: 2rem;
+}
+
+.wysi h4 + ul,
+.wysi h4 + ol,
+.wysi h5 + ul,
+.wysi h5 + ol,
+.wysi h6 + ul,
+.wysi h6 + ol,
+.wysi h7 + ul,
+.wysi h7 + ol {
+  margin-top: 2rem;
+}
+
+.wysi h4 + img,
+.wysi h5 + img,
+.wysi h6 + img,
+.wysi h7 + img {
+  margin-top: 2rem;
+}
+
+.wysi h4 + blockquote,
+.wysi h5 + blockquote,
+.wysi h6 + blockquote,
+.wysi h7 + blockquote {
+  margin-top: 2rem;
+}
+
+.wysi h4 + h1,
+.wysi h4 + h2,
+.wysi h4 + h3,
+.wysi h5 + h1,
+.wysi h5 + h2,
+.wysi h5 + h3,
+.wysi h6 + h1,
+.wysi h6 + h2,
+.wysi h6 + h3,
+.wysi h7 + h1,
+.wysi h7 + h2,
+.wysi h7 + h3 {
+  margin-top: 2rem;
+}
+
+.wysi h4 + h4,
+.wysi h4 + h5,
+.wysi h4 + h6,
+.wysi h4 + h7,
+.wysi h5 + h4,
+.wysi h5 + h5,
+.wysi h5 + h6,
+.wysi h5 + h7,
+.wysi h6 + h4,
+.wysi h6 + h5,
+.wysi h6 + h6,
+.wysi h6 + h7,
+.wysi h7 + h4,
+.wysi h7 + h5,
+.wysi h7 + h6,
+.wysi h7 + h7 {
+  margin-top: 2rem;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 32px;
+    padding-bottom: 80px;
+  }
+
+  .main {
+    align-items: center;
+  }
+
+  .main ol {
+    text-align: center;
+  }
+
+  .ctas {
+    flex-direction: column;
+  }
+
+  .ctas a {
+    font-size: 14px;
+    height: 40px;
+    padding: 0 16px;
+  }
+
+  a.secondary {
+    min-width: auto;
+  }
+
+  .footer {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .logo {
+    filter: invert();
+  }
+}
+
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+[hidden],
+template {
+  display: none;
+}
+
+a {
+  background-color: transparent;
+}
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+dfn {
+  font-style: italic;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+img {
+  border: 0;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+figure {
+  margin: 1em 40px;
+}
+
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+pre {
+  overflow: auto;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+button {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+input {
+  line-height: normal;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+legend {
+  border: 0;
+  padding: 0;
+}
+
+textarea {
+  overflow: auto;
+}
+
+optgroup {
+  font-weight: 700;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ul {
+  list-style: none;
+}
+
+html {
+  box-sizing: border-box;
+  overscroll-behavior: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -webkit-text-size-adjust: none;
+}
+
+svg title {
+  font-size: 0;
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  -webkit-user-select: none;
+  user-select: none;
+  outline: none;
+  -webkit-touch-callout: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:focus {
+  outline: none;
+}
+
+::-moz-focus-inner {
+  border: 0;
+}
+
+a {
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  border-radius: none;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  pointer-events: auto;
+}
+
+img {
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+svg {
+  max-width: 100%;
+}
+
+input,
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  pointer-events: auto;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#content {
+  z-index: 3;
+}
+
+
+html.touch body main {
+  position: relative;
+  overflow: clip;
+}
+
+@media only screen and (min-width: 1441px) {
+  html.D {
+    font-size: calc(0.0694444444vw * var(--ck_multiL));
+    --pgrid: calc(50vw - 70.4rem);
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  html.D {
+    font-size: 0.6944444444vw;
+    --pgrid: calc(50vw - 70.4rem);
+  }
+}
+
+@media (orientation: landscape) {
+  html.T {
+    font-size: 0.6944444444vw;
+    --pgrid: calc(50vw - 70.4rem);
+  }
+}
+
+@media only screen and (orientation: portrait) and (min-width: 744px) {
+  html.T {
+    --pgrid: calc(50vw - 36.8rem);
+    font-size: 1.3020833333vw;
+  }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 745px) {
+  html.T {
+    --pgrid: 0.8rem;
+    font-size: calc(0.2564102564vw * var(--ck_multiP));
+  }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 390px) {
+  html.T {
+    font-size: 2.5641025641vw;
+  }
+}
+
+.pHide {
+  position: fixed;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+.iO,
+.Oi,
+.OiAlt {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+html:not(.dev) .iO,
+html:not(.dev) .Oi,
+html:not(.dev) .OiChange,
+html:not(.dev) .OiAlt {
+  background: transparent !important;
+}
+
+section.fake {
+  height: 110vh;
+}
+
+#gl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#glLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 32;
+}
+
+#glBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.move {
+  will-change: transform;
+}
+
+.canvas {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.checkfix {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  font-size: 12px;
+  z-index: 1000;
+  background: #333;
+  color: #fff;
+  font-family: Arial;
+  padding: 12px;
+  opacity: 0.1;
+}
+
+.checkfix:hover {
+  opacity: 1;
+}
+
+.imgP {
+  opacity: 0;
+  height: auto;
+  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.imgP.Ldd {
+  opacity: 1;
+}
+
+.glMedia {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@font-face {
+  font-family: montreal;
+  font-display: swap;
+  src: url(./public/fonts/montreal.woff2) format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: montrealbook;
+  font-display: swap;
+  src: url(./public/fonts/montrealbook.woff2) format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: montrealbook;
+  color: #000;
+  background: #f8f6f2;
+  font-weight: 400;
+  line-height: 1;
+  font-variant-numeric: slashed-zero;
+}
+
+:root.D body {
+  font-size: max(11px, 1.1rem);
+}
+
+@media (orientation: landscape) {
+  :root.T body {
+    font-size: max(11px, 1.1rem);
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T body {
+    font-size: clamp(9px, 13px, 0.55rem);
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T body {
+    font-size: clamp(9px, 13px, 1.1rem);
+  }
+}
+
+.Mbg {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  opacity: 0.15;
+  max-height: 0;
+  max-height: 100vh;
+  pointer-events: none;
+  transition: 2s max-height cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+:root.D .Mbg {
+  padding: 0 var(--pgrid);
+}
+
+@media (orientation: landscape) {
+  :root.T .Mbg {
+    padding: 0 var(--pgrid);
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .Mbg {
+    padding: 0 var(--pgrid);
+  }
+}
+
+.Mbg_col {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+:root.D .Mbg_col {
+  width: 1rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .Mbg_col {
+    width: 1rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .Mbg_col {
+    width: 1rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .Mbg_col {
+    width: max(3px, 0.5rem);
+  }
+}
+
+.Mbg_col_el {
+  width: 1px;
+  display: block;
+  background: linear-gradient(to bottom, transparent 50%, #9c9c9c 50%);
+  background-size: 100% 8px;
+}
+
+.Mbg_col:first-child {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.Mbg_col:last-child {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.checkBG {
+  position: fixed;
+  z-index: 123481231;
+  background: black;
+  top: 0;
+  right: 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  display: none !important;
+}
+
+.checkBG input[type="checkbox"] {
+  background: Red;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  appearance: auto;
+}
+
+.checkBG input[type="number"] {
+  color: #000;
+  background: white;
+}
+
+.checkBG span {
+  display: block;
+  margin-bottom: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.ctrsCK {
+  display: none !important;
+}
+
+.faketit {
+  position: fixed;
+  left: 0;
+  top: 35vh;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.faketit .nfo_n {
+  flex-shrink: 0;
+}
+
+:root.D .faketit .nfo_n {
+  width: 23.6rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .faketit .nfo_n {
+    width: 23.6rem;
+  }
+}
+
+@media (orientation: portrait) {
+  :root.T .faketit .nfo_n {
+    width: 3.5rem;
+  }
+}
+
+.faketit .nfo_t {
+  flex-shrink: 0;
+}
+
+:root.D .faketit .nfo_t {
+  width: 34.6rem;
+  padding-left: 1rem;
+}
+
+@media (orientation: landscape) {
+  :root.T .faketit .nfo_t {
+    width: 34.6rem;
+    padding-left: 1rem;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 744px) {
+  :root.T .faketit .nfo_t {
+    padding-left: 0.8rem;
+    width: 34.6rem;
+    margin-left: 4rem;
+    position: relative;
+    overflow-x: clip;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 745px) {
+  :root.T .faketit .nfo_t {
+    width: 27.2rem;
+    padding-left: 0.8rem;
+    margin-left: 5rem;
+    position: relative;
+    overflow-x: clip;
+  }
+}
+
+html {
+  --dark: #000;
+  --light: #f8f6f2;
+  --bg: #f8f6f2;
+}
+
+.c-vw {
+  margin: 0 auto;
+  width: 100%;
+  padding-left: var(--pgrid);
+  padding-right: var(--pgrid);
+}
+
+.c-vw-s {
+  margin: 0 auto;
+  width: 100%;
+  padding-left: var(--sgrid);
+  padding-right: var(--sgrid);
+}
+
+.c-fs {
+  margin: 0 auto;
+  width: 100%;
+  padding-left: var(--fgrid);
+  padding-right: var(--fgrid);
 }

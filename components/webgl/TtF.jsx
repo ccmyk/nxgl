@@ -1,4 +1,4 @@
-// components/webgl/effects/TtA.jsx
+// components/webgl/TtF.jsx
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -6,12 +6,12 @@ import { useWebGL } from '@/contexts/WebGLContext';
 import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2 } from 'ogl';
 import gsap from 'gsap';
 import SplitType from 'split-type';
-import styles from './TtA.module.pcss';
+import styles from './TtF.module.pcss';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import fragmentShaderSource from '@/shaders/tta/msdf.frag.glsl';
-import parentFragmentShaderSource from '@/shaders/tta/parent.frag.glsl';
+import fragmentShaderSource from '@/shaders/ttf/msdf.frag.glsl';
+import parentFragmentShaderSource from '@/shaders/ttf/parent.frag.glsl';
 
-export default function TtA({
+export default function TtF({
   text,
   fontJson,
   fontTexture,
