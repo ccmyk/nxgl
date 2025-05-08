@@ -1,45 +1,58 @@
 // contexts/WebGLContext.jsx
 'use client';
 
-import React, { createContext, useContext, useRef, useEffect, useState, useMemo, useCallback } from 'react';
-import { Renderer, Camera, Transform } from 'ogl'; // Import core OGL components
-import { useViewport } from '@/hooks/useViewport'; // Import our viewport hook
+import React, {
+  createContext,
+  useContext,
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
+import { Renderer, Camera, Transform, Vec2 } from 'ogl'; // Import necessary OGL components
+import { useViewport } from '@/hooks/useViewport'; // Hook to get window dimensions
 
 // Create the context
 const WebGLContext = createContext(null);
 
 // Create Provider Component
 export function WebGLProvider({ children }) {
-  const canvasRef = useRef(null);
-  const rendererInstance = useRef(null); // Using Ref to hold the instance
+  const canvasRef = useRef(null); // Ref for the shared background canvas
+  const rendererInstance = useRef(null);
   const glContext = useRef(null);
   const sceneInstance = useRef(null);
   const cameraInstance = useRef(null);
-  const glViewport = useRef({ width: 1, height: 1 }); // OGL viewport size {width, height}
-  const viewportUnits = useRef({ width: 1, height: 1 }); // Viewport units {width, height}
+  const glViewport = useRef({ width: 1, height: 1 }); // OGL pixel dimensions
+  const viewportUnits = useRef({ width: 1, height: 1 }); // OGL world units
+  const rafIdRef = useRef(null); // Ref for the requestAnimationFrame ID
 
   const [isInitialized, setIsInitialized] = useState(false);
   const reactViewport = useViewport(); // Get { width, height } from our hook
 
-  // Initialization Effect (runs once after canvas ref exists and viewport is > 0)
+  // --- Initialization Effect ---
   useEffect(() => {
+    // Only run once when canvas is available and viewport is valid
     if (!canvasRef.current || !reactViewport.width || !reactViewport.height || isInitialized) {
-      return; // Wait for canvas and valid viewport, only run once
+      return;
     }
 
     try {
+      // --- Setup derived from main🐙🐙🐙/index.js initApp ---
       const renderer = new Renderer({
         canvas: canvasRef.current,
-        alpha: true, // Transparent background
-        dpr: Math.min(window.devicePixelRatio, 2),
-        // antialias: true, // Optional: might improve edges
+        alpha: true, // Match legacy - likely transparent background needed
+        dpr: Math.min(window.devicePixelRatio, 2), // Performance optimization
+        // antialias: true, // Optional: consider for smoother edges
       });
       const gl = renderer.gl;
-      // gl.clearColor(0, 0, 0, 0); // Ensure transparent clear
+      // gl.clearColor(0, 0, 0, 0); // Explicitly set clear color to transparent
 
-      const camera = new Camera(gl, { fov: 45 });
-      camera.position.z = 7; // Default camera Z pos
+      // --- Setup from gl🌊🌊🌊/create.js createCamera ---
+      const camera = new Camera(gl, { fov: 45 }); // Default FOV, can be adjusted
+      camera.position.z = 7; // Default camera Z pos from TtA/TtF base.js
 
+      // --- Setup from gl🌊🌊🌊/create.js createScene ---
       const scene = new Transform(); // OGL scene graph root
 
       // Store instances in refs
@@ -49,18 +62,20 @@ export function WebGLProvider({ children }) {
       cameraInstance.current = camera;
 
       console.log('WebGL Context Initialized');
-      setIsInitialized(true);
+      setIsInitialized(true); // Mark as initialized
 
     } catch (e) {
-        console.error("Failed to initialize WebGL Context:", e);
-        // Handle WebGL context creation error gracefully if needed
-        // Maybe set an error state in context?
+      console.error("Failed to initialize WebGL Context:", e);
+      // Handle potential WebGL context loss or errors
     }
 
     // Cleanup on unmount
     return () => {
       console.log('WebGL Context Cleanup');
-      rendererInstance.current?.dispose(); // OGL cleanup
+      cancelAnimationFrame(rafIdRef.current); // Stop the render loop
+      // OGL cleanup methods
+      rendererInstance.current?.dispose();
+      // Note: Geometry/Program disposal should happen in the components using them
       rendererInstance.current = null;
       glContext.current = null;
       sceneInstance.current = null;
@@ -68,35 +83,70 @@ export function WebGLProvider({ children }) {
       setIsInitialized(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reactViewport.width, reactViewport.height]); // Depend on viewport size to ensure valid init
+  }, [reactViewport.width, reactViewport.height]); // Depend on viewport size for initial setup
 
-  // Resize Handler Effect
-  useEffect(() => {
+  // --- Resize Handler Effect ---
+  const handleResize = useCallback(() => {
     if (!isInitialized || !rendererInstance.current || !cameraInstance.current || !reactViewport.width || !reactViewport.height) {
-      return;
+      return; // Ensure everything is ready
     }
 
     const renderer = rendererInstance.current;
     const camera = cameraInstance.current;
     const { width, height } = reactViewport;
 
-    // Update Renderer
+    // Update Renderer size
     renderer.setSize(width, height);
 
-    // Update Camera
+    // Update Camera aspect ratio
     camera.perspective({ aspect: width / height });
 
-    // Calculate viewport units
+    // Calculate viewport units (same as legacy main/events.js onResize)
     const fov = camera.fov * (Math.PI / 180);
     const viewportHeight = 2 * Math.tan(fov / 2) * camera.position.z;
     const viewportWidth = viewportHeight * camera.aspect;
 
+    // Store both pixel and world unit dimensions
     glViewport.current = { width, height };
     viewportUnits.current = { width: viewportWidth, height: viewportHeight };
 
-  }, [isInitialized, reactViewport]); // Update on viewport change after init
+    // console.log('WebGL Resized:', glViewport.current, viewportUnits.current);
 
-  // Memoize the context value
+  }, [isInitialized, reactViewport]); // Depend on init state and viewport changes
+
+  useEffect(() => {
+    handleResize(); // Call resize initially after setup
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [handleResize]); // Manage resize listener
+
+  // --- Render Loop ---
+  // This loop is simplified. In a real app, you might integrate this with GSAP's ticker
+  // or use a library like react-three-fiber's useFrame for more control.
+  // This basic loop just renders the scene. Components needing updates within
+  // the loop would need a way to register their update functions (more advanced context).
+  useEffect(() => {
+    if (!isInitialized) return; // Don't start loop until ready
+
+    const render = () => {
+      if (!isInitialized || !rendererInstance.current || !sceneInstance.current || !cameraInstance.current) {
+         // Stop loop if context is lost or unmounted
+         cancelAnimationFrame(rafIdRef.current);
+         return;
+      }
+      // Core render call
+      rendererInstance.current.render({ scene: sceneInstance.current, camera: cameraInstance.current });
+      rafIdRef.current = requestAnimationFrame(render);
+    };
+
+    rafIdRef.current = requestAnimationFrame(render);
+
+    return () => {
+      cancelAnimationFrame(rafIdRef.current);
+    };
+  }, [isInitialized]); // Start/stop loop based on initialization
+
+  // Memoize the context value to prevent unnecessary re-renders
   const value = useMemo(() => ({
     gl: glContext.current,
     renderer: rendererInstance.current,
@@ -109,7 +159,8 @@ export function WebGLProvider({ children }) {
 
   return (
     <WebGLContext.Provider value={value}>
-      {/* This canvas is for background effects / shared scene elements */}
+      {/* This canvas is primarily for effects needing a shared background canvas like Bg.jsx */}
+      {/* Other components might create their own canvases or render to this one */}
       <canvas
         ref={canvasRef}
         style={{
@@ -118,9 +169,9 @@ export function WebGLProvider({ children }) {
           left: 0,
           width: '100%',
           height: '100%',
-          zIndex: 0, // Behind main content
-          pointerEvents: 'none',
-          // background: 'transparent', // Ensure CSS doesn't override alpha
+          zIndex: 0, // Ensure it's behind other content
+          pointerEvents: 'none', // Typically background effects don't need interaction
+          // background: 'transparent', // Ensure CSS doesn't interfere
         }}
       />
       {/* Render children components */}
@@ -132,7 +183,8 @@ export function WebGLProvider({ children }) {
 // Custom hook for consuming the context
 export function useWebGL() {
   const context = useContext(WebGLContext);
-  if (context === null) { // Check for null specifically
+  if (context === null) {
+    // This error is helpful during development.
     throw new Error('useWebGL must be used within a WebGLProvider');
   }
   return context;

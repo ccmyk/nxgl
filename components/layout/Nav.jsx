@@ -2,14 +2,14 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import Link from 'next/link'; // Use Next.js Link for client-side routing
 import gsap from 'gsap';
 import styles from './Nav.module.pcss';
-import { useTextAnimation } from '@/hooks/useTextAnimation'; // Assuming hook is correct now
+import { useTextAnimation } from '@/hooks/useTextAnimation'; // Import the hook
 
 export default function Nav() {
-  const [timeString, setTimeString] = useState('');
-  const [clockActive, setClockActive] = useState(false); // To mimic clockact flag
+  const [timeString, setTimeString] = useState('00:00AM'); // Initial placeholder
+  const [clockActive, setClockActive] = useState(false); // Control when clock animations run
   const navRef = useRef(null);
   const logoRef = useRef(null);
   const cityRef = useRef(null);
@@ -20,9 +20,12 @@ export default function Nav() {
   const aboutLinkRef = useRef(null);
   const playgroundLinkRef = useRef(null);
   const contactLinkRef = useRef(null);
-  // Refs for clock parts needed for update animations
-  const hoursAnimTrigger = useRef(0); // Use refs to trigger update animation
+
+  // Refs to track if clock parts need re-animation
+  const hoursAnimTrigger = useRef(0);
   const minutesAnimTrigger = useRef(0);
+  const ampmAnimTrigger = useRef(0);
+  const prevTimeString = useRef(''); // Store previous time to detect changes
 
   // --- Clock Update Logic ---
   useEffect(() => {
@@ -34,108 +37,115 @@ export default function Nav() {
       let displayH = currentH;
 
       if (displayH >= 12) { ampm = 'PM'; if (displayH > 12) displayH -= 12; }
-      if (displayH === 0) displayH = 12;
+      if (displayH === 0) displayH = 12; // Handle midnight
 
-      const newTimeString = `${String(displayH).padStart(2, '0')}:${String(currentM).padStart(2, '0')}${ampm}`;
+      const newH = String(displayH).padStart(2, '0');
+      const newM = String(currentM).padStart(2, '0');
+      const newTimeString = `${newH}:${newM}${ampm}`;
 
-      // Trigger animation only if time changed AND clock is active
-      if (clockActive && newTimeString !== timeString) {
-        // Increment trigger refs to re-run animation effects
-        // (Alternatively, pass timeString as dependency, but might trigger too often)
-        // A more robust way might involve comparing old/new digits
-        if (timeString.substring(0, 2) !== newTimeString.substring(0, 2)) hoursAnimTrigger.current++;
-        if (timeString.substring(3, 5) !== newTimeString.substring(3, 5)) minutesAnimTrigger.current++;
-        // AM/PM change is less frequent, could check specifically
-         if (timeString.substring(5) !== newTimeString.substring(5)) hoursAnimTrigger.current++; // Re-trigger H+AMPM
+      // Trigger animation *only if digits change* and clock is active
+      if (clockActive && newTimeString !== prevTimeString.current) {
+        if (prevTimeString.current.substring(0, 2) !== newH) hoursAnimTrigger.current++;
+        if (prevTimeString.current.substring(3, 5) !== newM) minutesAnimTrigger.current++;
+        if (prevTimeString.current.substring(5) !== ampm) ampmAnimTrigger.current++; // Trigger AM/PM change
 
-        setTimeString(newTimeString);
-      } else if (!clockActive) {
-         // Update time state even if not animating yet
+        setTimeString(newTimeString); // Update state
+        prevTimeString.current = newTimeString; // Store new time
+      } else if (!clockActive && newTimeString !== timeString) {
+         // Update state initially even if not animating yet
          setTimeString(newTimeString);
+         prevTimeString.current = newTimeString;
       }
     };
 
-    updateClock();
-    const intervalId = setInterval(updateClock, 1000); // Check every second for minute change
-    return () => clearInterval(intervalId);
-  }, [timeString, clockActive]); // Depend on timeString and clockActive status
+    updateClock(); // Initial call
+    const intervalId = setInterval(updateClock, 1000); // Check every second
+    return () => clearInterval(intervalId); // Cleanup interval
+  }, [clockActive, timeString]); // Depend on clockActive status
 
   // --- Initial Nav Fade In & Animation Activation ---
   useEffect(() => {
     if (navRef.current) {
-      // Fade in Nav slightly after mount
       gsap.to(navRef.current, {
         opacity: 1,
-        duration: 0.1,
-        delay: 0.1, // Small delay for fade
+        duration: 0.1, // Quick fade
+        delay: 0.1, // Small delay
         onComplete: () => {
-          // Set clock active *after* initial animations might have run
-          // This mimics the original this.clockact = 1 happening at the end of show()
+          // Activate clock animations *after* initial text reveals start
           setClockActive(true);
         }
       });
-       // Fade in clock separator ':' after a delay matching clock text
-       gsap.to(`.${styles.clock_s}`, { opacity: 1, duration: 0.1, delay: 0.4 });
+      // Fade in clock separator ':' - adjust delay as needed
+      gsap.to(`.${styles.nav_clock_s}`, { opacity: 1, duration: 0.1, delay: 0.5 }); // Example delay
     }
   }, []);
 
   // --- Apply Text Animations ---
   // isActive is true for initial load animations.
-  // Delays are derived from the sequencing in the original Nav.show() method
-  // (ignoring commented-out timeouts means minimal delay between groups).
+  // Delays based on legacy sequence (minimal staggering)
   const navBaseDelay = 0.2; // Start delay after nav fade-in
-  const clockStartDelay = navBaseDelay + 0.1; // Minimal stagger after logo
-  const linksStartDelay = clockStartDelay + 0.2; // Minimal stagger after clock
+  const clockStartDelay = navBaseDelay + 0.05;
+  const linksStartDelay = clockStartDelay + 0.15;
 
-  // Hook Usage: Pass `isActive: true` for initial reveal.
-  // Params object only includes delay calculated from original sequence.
+  // Logo and City - standard reveal
   useTextAnimation(logoRef, true, { params: { delay: navBaseDelay } });
   useTextAnimation(cityRef, true, { params: { delay: clockStartDelay } });
 
-  // For clock parts that update, add triggerDependency based on state change
+  // Clock parts - use triggerDependencies to re-animate on change
   useTextAnimation(hoursRef, true, {
       params: { delay: clockStartDelay + 0.05 },
-      triggerDependencies: [hoursAnimTrigger.current] // Re-run if trigger changes
+      triggerDependencies: [hoursAnimTrigger.current]
   });
   useTextAnimation(minutesRef, true, {
       params: { delay: clockStartDelay + 0.10 },
-      triggerDependencies: [minutesAnimTrigger.current] // Re-run if trigger changes
+      triggerDependencies: [minutesAnimTrigger.current]
   });
    useTextAnimation(ampmRef, true, {
       params: { delay: clockStartDelay + 0.15 },
-      triggerDependencies: [hoursAnimTrigger.current] // Re-run if AM/PM changes
+      triggerDependencies: [ampmAnimTrigger.current] // Triggered by hour/ampm change
   });
 
+  // Links - standard reveal
   useTextAnimation(indexLinkRef, true, { params: { delay: linksStartDelay } });
   useTextAnimation(aboutLinkRef, true, { params: { delay: linksStartDelay + 0.05 } });
   useTextAnimation(playgroundLinkRef, true, { params: { delay: linksStartDelay + 0.10 } });
-  useTextAnimation(contactLinkRef, true, { params: { delay: linksStartDelay + 0.15 } }); // Applying same stagger
+  useTextAnimation(contactLinkRef, true, { params: { delay: linksStartDelay + 0.15 }, className: 'Awrite Awrite-inv' }); // Add inverted class
 
   return (
-    <nav ref={navRef} className={styles.nav} style={{ opacity: 0 }}>
+    <nav ref={navRef} className={styles.nav} style={{ opacity: 0 }}> {/* Start hidden */}
+      {/* Blur effect div - purely presentational */}
       <div className={styles.nav_blur}><div></div><div></div><div></div><div></div></div>
-      <div className={`${styles.top} ${styles.c_vw}`}>
-        <div className={styles.left}>
-          {/* Attach refs directly to text containers */}
-          <Link ref={logoRef} className={styles.logo} href="/" data-type="index">
-             CHRIS HALL
+
+      {/* Top row container */}
+      <div className={`${styles.nav_top} c-vw`}> {/* Use global padding class */}
+        {/* Left side: Logo and Clock */}
+        <div className={styles.nav_left}>
+          {/* Logo - Apply ref to the Link/span */}
+          <Link ref={logoRef} className={`${styles.nav_logo} Awrite`} href="/" data-type="index"> {/* Add Awrite class */}
+             CHRIS HALL {/* Plain text, animation handled by hook */}
           </Link>
-          <div className={styles.sep}></div>
-          <div className={styles.clock}>
-             <span ref={cityRef} className={styles.clock_p}>BCN</span>
-             <span ref={hoursRef} className={styles.clock_h}>{timeString.substring(0,2)}</span>
-             <div className={styles.clock_s}>{/* Colon style managed in CSS */}</div>
-             <span ref={minutesRef} className={styles.clock_m}>{timeString.substring(3,5)}</span>
-             <span ref={ampmRef} className={styles.clock_a}>{timeString.substring(5)}</span>
+          <div className={styles.sep}></div> {/* Separator */}
+          {/* Clock */}
+          <div className={styles.nav_clock}>
+             {/* Apply refs to spans containing text */}
+             <span ref={cityRef} className={`${styles.nav_clock_p} Awrite`}>LAX</span>
+             <span ref={hoursRef} className={`${styles.nav_clock_h} Awrite`}>{timeString.substring(0,2)}</span>
+             <div className={styles.nav_clock_s}>:</div> {/* Colon */}
+             <span ref={minutesRef} className={`${styles.nav_clock_m} Awrite`}>{timeString.substring(3,5)}</span>
+             <span ref={ampmRef} className={`${styles.nav_clock_a} Awrite`}>{timeString.substring(5)}</span>
           </div>
         </div>
-        <div className={styles.right}>
-          <div className={styles.right_ops}>
-            <Link ref={indexLinkRef} href="/index/" data-type="projects">INDEX</Link>
-            <Link ref={aboutLinkRef} href="/about/" data-type="about">ABOUT</Link>
-            <Link ref={playgroundLinkRef} href="/playground/" data-type="playground">PLAYGROUND</Link>
+
+        {/* Right side: Links */}
+        <div className={styles.nav_right}>
+          <div className={styles.nav_right_ops}>
+            {/* Apply refs to Links */}
+            <Link ref={indexLinkRef} className="Awrite" href="/index/" data-type="projects">INDEX</Link>
+            <Link ref={aboutLinkRef} className="Awrite" href="/about/" data-type="about">ABOUT</Link>
+            <Link ref={playgroundLinkRef} className="Awrite" href="/playground/" data-type="playground">PLAYGROUND</Link>
           </div>
-          <a ref={contactLinkRef} className={styles.inverted} href="mailto:chris@chrishall.io">
+          {/* Contact Link - Apply ref and inverted class */}
+          <a ref={contactLinkRef} className="Awrite Awrite-inv" href="mailto:chris@chrishall.io">
              LETS TALK
           </a>
         </div>

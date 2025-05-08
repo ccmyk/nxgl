@@ -1,255 +1,338 @@
 // app/page.jsx
-
 'use client';
 
-import React, { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
+import React, { useRef, useEffect, useState, Suspense } from 'react';
+import Link from 'next/link';
+import styles from './page.module.pcss';
+import { useTextAnimation } from '@/hooks/useTextAnimation';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useWebGL } from '@/contexts/WebGLContext';
+import { useLenis } from '@/hooks/useLenis';
 
-import { useInView } from '@/hooks/useIntersectionObserver';
-import { useSplitText } from '@/hooks/useSplitText';
-import Title from '@/components/webgl/Tt';
+// Import WebGL Components
+import Tt from '@/components/webgl/Tt';
+import TtA from '@/components/webgl/TtA';
+import TtF from '@/components/webgl/TtF';
+import Base from '@/components/webgl/Base';
+import Bg from '@/components/webgl/Bg';
 
-import Footer from '@/components/layout/Footer';
-import { useWebGLContext } from '@/contexts/WebGLContext';
+// Import Shared Components (Assume LazyMedia exists)
+import LazyMedia from '@/components/shared/LazyMedia';
 
-export default function HomeHero() {
-  const heroRef = useRef(null);
-  const ttRef = useRef(null);
-  const subTitleRef = useRef(null);
-  const portfolioRef = useRef(null);
-  const scrollRef = useRef(null);
-  const linksRef = useRef(null);
-  const { registerWebGLElement } = useWebGLContext();
+// --- Data (Replace with actual data fetching/props) ---
+const heroData = { /* ... as before ... */ };
+const projectsData = { /* ... as before ... */ };
+const aboutData = { /* ... as before ... */ };
+// --- ---
 
-  // Register this view for WebGL interactions
+export default function HomePage() {
+  // --- Refs ---
+  // Hero Section
+  const heroRef = useRef(null); // IO Trigger for the whole section
+  const heroTitleInteractionRef = useRef(null); // Interaction element for Tt
+  const heroSubtitleRef = useRef(null);
+  const heroPortfolioTagRef = useRef(null);
+  const heroScrollIndicatorRef = useRef(null);
+  const heroLinksRef = useRef(null); // Container for links animation
+
+  // Projects Section
+  const projectsRef = useRef(null); // IO Trigger for the section
+  const projectsTitleRef = useRef(null); // IO & Interaction for Tt
+  const projectsCountRef = useRef(null);
+  const projectItemRefs = useRef(projectsData.items.map(() => React.createRef())); // Refs for each project container (IO/Interaction trigger for Base)
+  const projectMediaRefs = useRef(projectsData.items.map(() => React.createRef())); // Refs for actual media elements
+  const projectsViewAllRef = useRef(null);
+
+  // About Section
+  const aboutRef = useRef(null); // IO Trigger for the section
+  const aboutTitle1InteractionRef = useRef(null); // Interaction for TtA
+  const aboutTitle2InteractionRef = useRef(null); // Interaction for TtA
+  const aboutTitle1IoRef = useRef(null); // IO for TtA
+  const aboutTitle2IoRef = useRef(null); // IO for TtA
+  const aboutTextRef = useRef(null);
+  const aboutTextIoRef = useRef(null); // IO for text animation
+  const aboutImageTriggerRef = useRef(null); // IO/Interaction trigger for Base
+  const aboutImageRef = useRef(null); // Ref for the media element
+  const aboutReadMoreRef = useRef(null);
+  const aboutBgIoRef = useRef(null); // IO trigger for Bg effect
+
+  // --- Contexts and Hooks ---
+  const { fontJson, fontTexture, isInitialized: webglReady } = useWebGL();
+  const { lenis } = useLenis();
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isTouchDevice, setIsTouchDevice] = useState(false); // Detect touch
+
   useEffect(() => {
-    if (heroRef.current) {
-      registerWebGLElement('hero', heroRef.current);
-    }
-    
-    // Set up scroll indicator animation
-    const scrollAnim = gsap.to(scrollRef.current, {
-      opacity: 0.6,
-      yoyo: true,
-      repeat: -1,
-      duration: 1.2,
-      ease: 'cubic-bezier(.55, 0, .1, 1)',
-      paused: true
-    });
-    
-    return () => {
-      scrollAnim.kill();
-    };
-  }, [registerWebGLElement]);
+    // Basic touch detection on mount
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
 
-  // Track when component enters viewport
-  const entry = useInView(heroRef, { threshold: 0.1 });
-  const inView = entry?.isIntersecting;
-
-  // Apply split text to subtitle for animation
-  useSplitText(subTitleRef, {
-    types: 'lines',
-    linesClass: 'tt3_line'
+  // --- IO Observers ---
+  const [heroInView] = useIntersectionObserver(heroRef, { threshold: 0.1 }, true);
+  const [projectsTitleInView] = useIntersectionObserver(projectsTitleRef, { threshold: 0.1 }, true);
+  const [projectsViewAllInView] = useIntersectionObserver(projectsViewAllRef, { threshold: 0.1 }, true);
+  const [aboutBgInView] = useIntersectionObserver(aboutBgIoRef, { threshold: 0.05 }); // Don't freeze Bg
+  const [aboutTextInView] = useIntersectionObserver(aboutTextIoRef, { threshold: 0.1 }, true);
+  const [aboutReadMoreInView] = useIntersectionObserver(aboutReadMoreRef, { threshold: 0.1 }, true);
+  // IO for individual project items (used to trigger their Base component)
+  const projectItemIOStates = projectsData.items.map((_, index) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [inView] = useIntersectionObserver(projectItemRefs.current[index], { threshold: 0.2 }, true);
+      return inView;
   });
+  const aboutImageIOState = useIntersectionObserver(aboutImageTriggerRef, { threshold: 0.2 }, true)[0];
 
-  // Animation sequence
+
+  // --- Text Animations ---
+  // Hero
+  useTextAnimation(heroPortfolioTagRef, heroInView, { params: { delay: 1.6 } });
+  useTextAnimation(heroScrollIndicatorRef, heroInView, { params: { delay: 1.8 }, loop: true });
+  useTextAnimation(heroLinksRef, heroInView, { params: { delay: 2.0 }, splitType: 'lines' });
+  // Projects
+  useTextAnimation(projectsCountRef, projectsTitleInView, { params: { delay: 0.2 } });
+  projectsData.items.forEach((item, index) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useTextAnimation(projectItemRefs.current[index]?.current?.querySelector('h3'), projectItemIOStates[index], { params: { delay: 0.1 } });
+  });
+  useTextAnimation(projectsViewAllRef, projectsViewAllInView, { params: { delay: 0 } });
+  // About
+  useTextAnimation(aboutTextRef, aboutTextInView, { params: { delay: 0 }, splitType: 'lines' });
+  useTextAnimation(aboutReadMoreRef, aboutReadMoreInView, { params: { delay: 0.1 } });
+
+  // --- Scroll Progress for Background ---
   useEffect(() => {
-    if (!inView || !heroRef.current) return;
-
-    // Main timeline for sequencing
-    const tl = gsap.timeline({
-      defaults: {
-        ease: 'cubic-bezier(.55, 0, .1, 1)',
-        duration: 0.6
-      }
+    const lenisInstance = lenis?.current;
+    if (!lenisInstance) return;
+    const unsubscribe = lenisInstance.on('scroll', ({ progress }) => {
+      setScrollProgress(progress);
     });
+    return unsubscribe;
+  }, [lenis]);
 
-    // Subtitle animation - matches legacy timing
-    const lines = subTitleRef.current.querySelectorAll('.tt3_line');
-    tl.fromTo(
-      lines,
-      { y: 20, opacity: 0 },
-      { 
-        y: 0, 
-        opacity: 1, 
-        stagger: 0.1,
-      },
-      1.2 // Delayed start
+  // --- Manual GSAP Subtitle Animation ---
+  useEffect(() => {
+    if (!heroInView || !heroSubtitleRef.current) return;
+    const lines = Array.from(heroSubtitleRef.current.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''));
+    gsap.fromTo(lines,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: 'cubic-bezier(.55, 0, .1, 1)', delay: 1.2 }
     );
+  }, [heroInView]);
 
-    // Portfolio tag - matches legacy timing
-    tl.fromTo(
-      portfolioRef.current,
-      { opacity: 0 },
-      { opacity: 1 },
-      1.6
-    );
-
-    // Scroll indicator - matches legacy timing
-    tl.fromTo(
-      scrollRef.current,
-      { opacity: 0 },
-      { 
-        opacity: 1,
-        onComplete: () => {
-          // Start oscillating animation for scroll text
-          gsap.to(scrollRef.current, {
-            opacity: 0.6,
-            yoyo: true,
-            repeat: -1,
-            duration: 1.2,
-            ease: 'cubic-bezier(.55, 0, .1, 1)'
-          });
-        }
-      },
-      1.8
-    );
-
-    // Links - matches legacy timing
-    tl.fromTo(
-      linksRef.current.querySelectorAll('a'),
-      { opacity: 0, y: 10 },
-      { 
-        opacity: 1, 
-        y: 0,
-        stagger: 0.1,
-      },
-      2.0
-    );
-
-    return () => {
-      tl.kill();
-    };
-  }, [inView]);
-
-  const words = [
-    { text: 'Chris', l: '-0.022', idx: 0 },
-    { text: 'Hall', l: '-0.016', idx: 1 },
-  ];
-
+  // --- Render ---
   return (
-    <section ref={heroRef} className="home_hero">
-      <div className="c‑vw cnt">
-        <div className="cnt_hold">
-          {/** Main title with WebGL treatment **/}
-          <h2 ref={ttRef} className="cnt_tt">
-            {words.map(({ text, l, idx }) => (
-              <div key={idx} className="Atitle">
-                {/** Canvas container for WebGL title **/}
-                <div className="cCover">
-                  <Title text={text} index={idx} className="glF" />
+    <div className={styles.home}>
+
+      {/* --- WebGL Background --- */}
+      {webglReady && <Bg scrollProgress={scrollProgress} />}
+
+      {/* --- Hero Section --- */}
+      <section ref={heroRef} className={styles.home_hero}>
+        <div className="c-vw cnt">
+          <div className={styles.cnt_hold}>
+            {/* Title */}
+            <h2 ref={heroTitleInteractionRef} className={styles.cnt_tt}> {/* Ref for interaction */}
+              {heroData.titleWords.map(({ text, l, m, idx }) => (
+                <div key={idx} className="Atitle">
+                  <div className="cCover">
+                     {webglReady && fontJson && fontTexture && (
+                       <Tt
+                         text={text} fontJson={fontJson} fontTexture={fontTexture}
+                         interactionElementRef={heroTitleInteractionRef} // Pass H2 ref
+                         ioRefSelf={heroRef} isVisible={heroInView}
+                         letterSpacing={parseFloat(l)} size={parseFloat(m)}
+                       />
+                     )}
+                  </div>
+                  <span className={`${styles.ttj} Oiel act`}>{text}</span>
                 </div>
-                {/** Invisible placeholder for original DOM position **/}
-                <div
-                  className="Oi Oi-tt"
-                  data-temp="tt"
-                  data-l={l}
-                  data-m="5"
-                  data-text={text}
-                  data-oi={idx}
-                  style={{ visibility: 'hidden' }}
-                />
-                {/** Text overlay that will be animated **/}
-                <AnimatedWrite
-                  className="ttj Oiel act"
-                  data-temp="Oiel"
-                  data-oi={idx}
-                >
-                  {text}
-                </AnimatedWrite>
-              </div>
-            ))}
-          </h2>
-
-          {/** Subtitle section **/}
-          <div className="cnt_bt inview stview">
-            {/** Placeholder for intersection observer **/}
-            <div
-              className="iO"
-              data-io="0"
-              style={{ visibility: 'hidden' }}
-            />
-            {/** Animated subtitle **/}
-            <h3 ref={subTitleRef} className="tt3">
-              Art Director &amp; Designer<br/>
-              Living in Los Angeles
-            </h3>
-
-            {/** Portfolio tag **/}
-            <h4
-              ref={portfolioRef}
-              className="Awrite inview stview ivi"
-              data-params="1.6"
-            >
-              <div
-                className="iO iO-std"
-                data-io="1"
-                style={{ visibility: 'hidden' }}
-              />
-              <AnimatedWrite className="word" data-io="1">
-                PORTFOLIO_2025
-              </AnimatedWrite>
-            </h4>
+              ))}
+            </h2>
+            {/* Subtitle & Links */}
+            <div className={`${styles.cnt_bt} ${heroInView ? 'stview inview' : ''}`}>
+              <div className="iO" style={{ visibility: 'hidden' }} data-io="0"/>
+              <h3 ref={heroSubtitleRef} className={`${styles.tt3}`}>
+                {/* Ensure text nodes/spans exist for GSAP */}
+                <span>{heroData.subtitleLine1}</span><br/>
+                <span>{heroData.subtitleLine2}</span>
+              </h3>
+              <h4 ref={heroPortfolioTagRef} className="Awrite">
+                <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="1"/>
+                {heroData.portfolioTag}
+              </h4>
+            </div>
           </div>
-
-          {/** Scroll indicator **/}
-          <div className="cnt_sc">
-            <h4
-              ref={scrollRef}
-              className="Awrite inview stview okF"
-              data-params="1.6"
-              data-bucle="1"
-            >
-              <div
-                className="iO iO-std"
-                data-io="2"
-                style={{ visibility: 'hidden' }}
-              />
-              <AnimatedWrite className="word" data-io="2">
-                [Scroll to Explore]
-              </AnimatedWrite>
-            </h4>
+          {/* Scroll Indicator */}
+          <div className={styles.cnt_sc}>
+             <h4 ref={heroScrollIndicatorRef} className="Awrite okF" data-bucle="1">
+                 <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="2"/>
+                 {heroData.scrollIndicator}
+             </h4>
           </div>
-
-          {/** Links section **/}
-          <div ref={linksRef} className="cnt_lk">
-            {[
-              { href: 'https://drive.google.com/...', text: 'Resume',   io: 3 },
-              { href: 'https://linkedin.com/in/...', text: 'LinkedIn', io: 4 }
-            ].map(({ href, text, io }) => (
-              <a
-                key={io}
-                className="Awrite inview stview ivi"
-                data-params="0"
-                href={href}
-                target="_blank"
-                rel="noopener"
-              >
-                <div
-                  className="iO iO-std"
-                  data-io={io}
-                  style={{ visibility: 'hidden' }}
-                />
-                <AnimatedWrite className="word" data-io={io}>
-                  {text}
-                </AnimatedWrite>
-                <i style={{ display: 'inline-block', position: 'relative' }}>
-                  <svg
-                    viewBox="0 0 7 7"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ display: 'inline-block', position: 'relative' }}
-                  >
-                    <path
-                      d="M6.49194 3.516H5.67594L5.67594 2.052L5.74794 1.272L5.71194 1.26L4.94394 2.124L0.911938 6.156L0.335937 5.58L4.36794 1.548L5.23194 0.78L5.21994 0.743999L4.43994 0.816L2.97594 0.816V0L6.49194 0L6.49194 3.516Z"
-                      fill="black"
-                    />
-                  </svg>
-                </i>
-              </a>
-            ))}
+          {/* Links */}
+          <div ref={heroLinksRef} className={styles.cnt_lk}>
+             {heroData.links.map(link => (
+                 <a key={link.io} href={link.href} className="Awrite" target="_blank" rel="noopener noreferrer">
+                     <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io={link.io}/>
+                     {link.text}
+                     <i>{/* SVG Icon */}</i>
+                 </a>
+             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* --- Projects Section --- */}
+      <section ref={projectsRef} className={styles.home_prjs}>
+          <div className="c-vw cnt">
+              <div ref={projectsTitleRef} className={styles.cnt_t}>
+                  <div className="Atitle">
+                      <div className="cCover">
+                          {webglReady && fontJson && fontTexture && (
+                              <Tt
+                                  text={projectsData.sectionTitle} fontJson={fontJson} fontTexture={fontTexture}
+                                  interactionElementRef={projectsTitleRef} ioRefSelf={projectsTitleRef}
+                                  isVisible={projectsTitleInView} size={3.8} letterSpacing={-0.024}
+                                  className="tt1"
+                              />
+                          )}
+                      </div>
+                      <h2 className={`${styles.tt1} Oiel`}>{projectsData.sectionTitle}</h2>
+                  </div>
+                  <h3 ref={projectsCountRef} className="Awrite">
+                      <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="6"/>
+                      <span className="num">[{String(projectsData.items.length).padStart(2, '0')}]</span>
+                  </h3>
+              </div>
+
+              <div className={styles.cnt_ft}>
+                  {projectsData.items.map((item, index) => (
+                      <Link
+                          ref={projectItemRefs.current[index]}
+                          key={item.id}
+                          href={item.link}
+                          className={`${styles.cnt_prj} ${styles[`cnt_prj-${index}`]} MW`}
+                          data-tt="See more"
+                      >
+                          <div className={styles.cnt_prj_im}>
+                              {/* IO placeholder for legacy compatibility? */}
+                              <div className="Oi" style={{ visibility: 'hidden' }} data-oi={item.id + 2}/>
+                              {/* Lazy Media */}
+                              <LazyMedia
+                                  ref={projectMediaRefs.current[index]}
+                                  src={item.src} type={item.type} alt={item.title}
+                                  aspectRatio={item.aspect} className={styles.mediaElement}
+                              />
+                              {/* WebGL Effect */}
+                              {webglReady && (
+                                  <Base
+                                    src={item.src}
+                                    triggerElementRef={projectItemRefs.current[index]} // Use link/container as trigger
+                                    mediaElementRef={projectMediaRefs.current[index]}
+                                    isVisible={projectItemIOStates[index]} // Control by individual IO state
+                                    touch={isTouchDevice}
+                                  />
+                              )}
+                          </div>
+                          <div className={styles.cnt_prj_t}>
+                              {/* Text animation applied via hook above */}
+                              <h3 className="Awrite">
+                                <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io={item.io}/>
+                                <span className="num">[{String(index + 1).padStart(2, '0')}]_</span>
+                                {item.title}
+                              </h3>
+                          </div>
+                      </Link>
+                  ))}
+              </div>
+
+              {/* View All Button Area */}
+              <div className={styles.cnt_st}>
+                 {/* Add placeholder project if needed for layout */}
+                 <div className={styles.cnt_btn}>
+                     <Link ref={projectsViewAllRef} href={projectsData.viewAllLink} className="Awrite Awrite-inv">
+                         <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="10"/>
+                         See index
+                     </Link>
+                 </div>
+              </div>
+          </div>
+      </section>
+
+       {/* --- About Section --- */}
+       <section ref={aboutRef} className={styles.home_about}>
+           {/* IO Trigger for Background Effect */}
+           <div ref={aboutBgIoRef} className="Oi Oi-bg" data-oi={aboutData.ioImage} style={{ position: 'absolute', top: '15vh', height: '50vh', width: '1px', left: 0 }}/>
+           {/* Background effect is rendered globally */}
+
+           <div className="c-vw cnt">
+               {/* Titles */}
+               <div className={styles.cnt_tp}>
+                   <div ref={aboutTitle1IoRef} className="Atitle">
+                       <div ref={aboutTitle1InteractionRef} className="cCover">
+                           {webglReady && fontJson && fontTexture && (
+                               <TtA
+                                   text={aboutData.titleLine1} fontJson={fontJson} fontTexture={fontTexture}
+                                   ioRefSelf={aboutTitle1IoRef} isVisible={isVisible} // Pass global visibility or specific IO
+                                   interactionElementRef={aboutTitle1InteractionRef}
+                                   color={1.0} // White text
+                               />
+                           )}
+                       </div>
+                       <h2 className={`${styles.tt1} Oiel`}>{aboutData.titleLine1}</h2>
+                   </div>
+                   <div ref={aboutTitle2IoRef} className="Atitle">
+                       <div ref={aboutTitle2InteractionRef} className="cCover">
+                          {webglReady && fontJson && fontTexture && (
+                               <TtA
+                                   text={aboutData.titleLine2} fontJson={fontJson} fontTexture={fontTexture}
+                                   ioRefSelf={aboutTitle2IoRef} isVisible={isVisible}
+                                   interactionElementRef={aboutTitle2InteractionRef}
+                                   color={1.0}
+                               />
+                           )}
+                       </div>
+                       <h2 className={`${styles.tt1} Oiel`}>{aboutData.titleLine2}</h2>
+                   </div>
+               </div>
+
+               {/* Text and Image */}
+               <div className={styles.cnt_bp}>
+                   <div ref={aboutTextIoRef} className={styles.cnt_x}>
+                       <div className="Atext">
+                           <div className="iO iO-std" data-io={aboutData.io} style={{ visibility: 'hidden' }}/>
+                           <p ref={aboutTextRef} className="Atext_el">
+                               {aboutData.text}
+                           </p>
+                       </div>
+                       <Link ref={aboutReadMoreRef} href={aboutData.link} className={`${styles.linkXS} Awrite`}>
+                           <span className="scr_read">About me</span>Read more
+                       </Link>
+                   </div>
+                   <Link
+                       ref={aboutImageTriggerRef}
+                       href={aboutData.link}
+                       className={`${styles.cnt_im} MW`}
+                       data-tt="Read more" data-w="1"
+                   >
+                       <div className="Oi" data-oi={aboutData.ioMedia} style={{ visibility: 'hidden' }}/>
+                       <LazyMedia
+                           ref={aboutImageRef} src={aboutData.imageSrc} type="image"
+                           alt="About Chris Hall" aspectRatio={aboutData.imageAspect}
+                       />
+                       {webglReady && (
+                           <Base
+                               src={aboutData.imageSrc}
+                               triggerElementRef={aboutImageTriggerRef}
+                               mediaElementRef={aboutImageRef}
+                               isVisible={aboutImageIOState} // Use specific IO state
+                               touch={isTouchDevice}
+                           />
+                       )}
+                   </Link>
+               </div>
+           </div>
+       </section>
+    </div>
   );
 }

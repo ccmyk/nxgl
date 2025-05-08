@@ -1,63 +1,80 @@
 // hooks/useIntersectionObserver.js
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 /**
  * Custom hook to track element visibility using Intersection Observer.
- * Based on the setup found in js🧠🧠🧠/page👁️/ios.js and gl🌊🌊🌊/ios.js
+ * @param {React.RefObject} elementRef - Ref to the DOM element to observe.
+ * @param {IntersectionObserverInit} options - Intersection Observer options (threshold, root, rootMargin).
+ * @param {boolean} freezeOnceVisible - If true, stops observing after the element becomes visible once.
+ * @param {boolean} startObserving - If false, observation won't start until the observe function is called.
+ * @returns {[boolean, IntersectionObserverEntry | null, () => void, () => void]} - [isIntersecting, entry, observe, unobserve]
  */
 export function useIntersectionObserver(
   elementRef,
-  options = { threshold: 0, root: null, rootMargin: '0px' },
-  freezeOnceVisible = false, // Option to stop observing after first intersection
-  startObserving = true // Option to delay observation start
+  options = { threshold: 0.1 }, // Default threshold slightly > 0
+  freezeOnceVisible = false,
+  startObserving = true
 ) {
-  const [entry, setEntry] = useState(null); // Stores the IntersectionObserverEntry
+  const [entry, setEntry] = useState(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const observerRef = useRef(null);
-  const frozenRef = useRef(false);
+  const frozenRef = useRef(false); // Tracks if observation is frozen
 
+  // Callback function for the Intersection Observer
+  const handleIntersection = useCallback(([entry]) => {
+    setEntry(entry); // Store the latest entry
+    const intersecting = entry.isIntersecting;
+    setIsIntersecting(intersecting);
+
+    // If freezeOnceVisible is true and the element is intersecting, disconnect
+    if (freezeOnceVisible && intersecting && observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = null; // Clear the observer ref
+      frozenRef.current = true; // Mark as frozen
+      // console.log('Intersection observer frozen for element:', elementRef.current);
+    }
+  }, [freezeOnceVisible, elementRef]); // elementRef added for potential logging/debugging
+
+  // Function to explicitly start observing
   const observe = useCallback(() => {
     const node = elementRef?.current;
+    // Don't start if no node, already frozen, or already observing
     if (!node || frozenRef.current || observerRef.current) return;
 
-    observerRef.current = new IntersectionObserver(([entry]) => {
-      setEntry(entry); // Store the full entry
-      const intersecting = entry.isIntersecting;
-      setIsIntersecting(intersecting);
-
-      if (freezeOnceVisible && intersecting && observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-        frozenRef.current = true;
-      }
-    }, options);
-
+    // console.log('Starting intersection observer for element:', node, options);
+    observerRef.current = new IntersectionObserver(handleIntersection, options);
     observerRef.current.observe(node);
-  }, [elementRef, options, freezeOnceVisible]); // useCallback dependencies
+  }, [elementRef, options, handleIntersection]); // Dependencies for observe
 
+  // Function to explicitly stop observing
   const unobserve = useCallback(() => {
     if (observerRef.current) {
+      // console.log('Stopping intersection observer for element:', elementRef.current);
       observerRef.current.disconnect();
       observerRef.current = null;
-      frozenRef.current = false;
-      setIsIntersecting(false);
-      setEntry(null);
     }
-  }, []); // No dependencies needed for unobserve
+    // Reset state if needed when manually unobserving
+    frozenRef.current = false;
+    setIsIntersecting(false);
+    setEntry(null);
+  }, [elementRef]); // elementRef added for potential logging/debugging
 
+  // Effect to manage the observer lifecycle
   useEffect(() => {
     if (startObserving) {
-      observe();
+      observe(); // Start observing if flag is true
     }
-    // Cleanup function
+    // Cleanup function: disconnect observer when component unmounts or dependencies change
     return () => {
-      unobserve();
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null; // Clear ref on cleanup too
+      }
     };
-    // Observe/Unobserve when startObserving flag changes or other deps change
-  }, [observe, unobserve, startObserving]);
+  }, [observe, startObserving]); // Re-run effect if observe function or startObserving flag changes
 
-  // Return state, entry, and control functions
+  // Return the intersecting state, the full entry, and control functions
   return [isIntersecting, entry, observe, unobserve];
 }

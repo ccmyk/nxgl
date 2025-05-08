@@ -1,65 +1,66 @@
 // components/webgl/Tt.jsx
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { useWebGL } from '@/contexts/WebGLContext';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2 } from 'ogl';
 import gsap from 'gsap';
 import SplitType from 'split-type';
-import styles from './Tt.module.pcss';
+import { useWebGL } from '@/contexts/WebGLContext';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import fragmentShaderSource from '@/shaders/tt/msdf.frag.glsl';
-import vertexShaderSource from '@/shaders/tt/msdf.vert.glsl';
-
-// Helper function - place in utils/math.js later
-function lerp(p1, p2, t) { return p1 + (p2 - p1) * t; }
+import fragmentShaderSource from '@/shaders/tt/msdf.frag.glsl'; // Base MSDF frag
+import vertexShaderSource from '@/shaders/tt/msdf.vert.glsl'; // Base MSDF vert
+import { lerp } from '@/lib/math'; // Import lerp
 
 export default function Tt({
   text = "DEFAULT TEXT",
-  fontJson, // MSDF Font JSON data (Required Prop)
-  fontTexture, // OGL Texture instance of the font atlas (Required Prop)
-  isVisible = true, // External visibility control (e.g., page loaded)
-  interactionElementRef, // Ref to the HTML element for mouse interaction (.Oiel) (Required Prop)
-  ioRefSelf, // Ref attached to the element triggering the IO (can be interactionElementRef.current?.parentNode)
+  fontJson, // REQUIRED: MSDF Font JSON data
+  fontTexture, // REQUIRED: OGL Texture instance of the font atlas
+  interactionElementRef, // REQUIRED: Ref to the HTML element for mouse interaction (.Oiel)
+  ioRefSelf, // REQUIRED: Ref to the element triggering the IO (e.g., parent container)
+  isVisible = true, // Optional: External visibility control
   align = 'center',
-  letterSpacing = -0.022, // Default from example usage
-  size = 5, // Default from example usage
+  letterSpacing = -0.022,
+  size = 5,
   width = undefined,
-  color = 0.0,
+  color = 0.0, // 0.0 for black, 1.0 for white (based on legacy)
   // Animation parameters derived from 💬/position.js start() -> animstart timeline
   animationParams = { durationIn: 0.8, durationPower: 2.0 },
+  ioOptions = { threshold: 0.1 }, // Default IO options
+  className = '', // Allow passing additional classes
 }) {
-
   const { gl, scene, camera, isInitialized: isWebGLInitialized, size: webglSize } = useWebGL();
   const meshRef = useRef(null);
-  const textDataRef = useRef(null); // Ref for OGL Text data object
+  const textDataRef = useRef(null);
   const programRef = useRef(null);
   const geometryRef = useRef(null);
   const splitInstanceRef = useRef(null);
-  const animationTimelineRef = useRef(null); // Ref for GSAP reveal animation
-  const interactionTimelineInRef = useRef(null); // Ref for GSAP mouse IN animation
-  const interactionTimelineOutRef = useRef(null); // Ref for GSAP mouse OUT animation
+  const animationTimelineRef = useRef(null);
+  const interactionTimelineInRef = useRef(null);
+  const interactionTimelineOutRef = useRef(null);
+  const charBoundsRef = useRef([]); // Store character bounds for interaction
 
+  // Interaction state using useState for reactivity
   const [interactionData, setInteractionData] = useState({
-    targetIndex: -1, mouseX: 0, powers: [], needsUpdate: false, lerpFactor: 0.6 // Store lerp factor from base.js
+    targetIndex: -1, // Currently hovered character index (-1 if none)
+    mouseX: 0, // Mouse position relative to the element width (-0.5 to 0.5)
+    powers: [], // Per-character distortion power (lerped value)
+    targetPowers: [], // Target power based on hover
+    lerpFactor: 0.06, // Lerp speed (from legacy base.js)
   });
 
-  // Use IO hook on the passed ioRefSelf
-  const [isInView] = useIntersectionObserver(ioRefSelf, { threshold: 0.1 }, true); // Freeze once visible
+  // Use IO hook on the passed ioRefSelf, freeze once visible
+  const [isInView] = useIntersectionObserver(ioRefSelf, ioOptions, true);
   const combinedIsActive = isWebGLInitialized && isVisible && isInView;
 
   // --- Setup OGL Text Object and Mesh ---
   useEffect(() => {
-    if (!gl || !fontJson || !fontTexture || !isWebGLInitialized || !text) return;
+    if (!gl || !scene || !fontJson || !fontTexture || !isWebGLInitialized || !text) return;
 
-    let mesh;
-    let program;
-    let geometry;
+    let mesh, program, geometry;
 
     try {
-      // --- Setup from 💬/base.js constructor ---
       const oglText = new OGLText({ font: fontJson, text, width, align, letterSpacing, size, lineHeight: 1 });
-      textDataRef.current = oglText; // Store text data
+      textDataRef.current = oglText;
 
       geometry = new Geometry(gl, {
         position: { size: 3, data: oglText.buffers.position },
@@ -70,21 +71,22 @@ export default function Tt({
       geometry.computeBoundingBox();
       geometryRef.current = geometry;
 
-      const charCount = oglText.meta.chars.length || 1; // Prevent division by zero if text is empty
+      const charCount = oglText.meta.chars.length || 1;
       const processedFragmentSource = fragmentShaderSource.replace(/PITO/g, charCount.toString());
 
       program = new Program(gl, {
-        vertex: vertexShaderSource,
+        vertex: vertexShaderSource, // Use standard MSDF vertex shader
         fragment: processedFragmentSource,
         uniforms: {
           uTime: { value: 0 },
-          uScreen: { value: [webglSize.width, webglSize.height] },
-          uMouse: { value: new Vec2(0, 0) },
-          uPower: { value: 0.5 }, // Start value from animstart
-          uCols: { value: 1.5 },
-          uColor: { value: color },
-          uStart: { value: 1 }, // Start value from animstart
-          uKey: { value: -1 },
+          // uScreen: { value: [webglSize.width, webglSize.height] }, // Not used in base MSDF shader
+          uMouse: { value: new Vec2(0, 0) }, // Used for interaction offset
+          uPower: { value: 0.5 }, // Overall interaction power (animated in/out)
+          uCols: { value: 1.5 }, // From legacy shader
+          uColor: { value: color }, // Text color (0=black, 1=white)
+          uStart: { value: 1 }, // Reveal animation progress
+          uKey: { value: -1 }, // Hovered character index
+          // Initialize uPowers with default state (0.5 means no distortion)
           uPowers: { value: new Float32Array(charCount).fill(0.5) },
           tMap: { value: fontTexture },
         },
@@ -94,14 +96,16 @@ export default function Tt({
 
       mesh = new Mesh(gl, { geometry, program });
       mesh.setParent(scene);
+      // Center the text mesh (from legacy base.js)
       mesh.position.x = oglText.width * -0.5;
-      mesh.position.y = oglText.height * 0.58; // From base.js
+      mesh.position.y = oglText.height * 0.58;
       meshRef.current = mesh;
 
-      // Initialize interaction state based on text length
+      // Initialize interaction state arrays based on actual char count
       setInteractionData(prev => ({
         ...prev,
         powers: new Float32Array(charCount).fill(0.5),
+        targetPowers: new Float32Array(charCount).fill(0.5),
       }));
 
       console.log('Tt Initialized:', text);
@@ -113,44 +117,49 @@ export default function Tt({
       scene?.removeChild(mesh);
       program?.gl?.deleteProgram(program.program);
       geometry?.dispose();
+      interactionTimelineInRef.current?.kill();
+      interactionTimelineOutRef.current?.kill();
+      animationTimelineRef.current?.kill();
       console.log("Tt Cleanup:", text);
     };
-  // Re-run if essential props like text content or font data change
-  }, [gl, scene, isWebGLInitialized, fontJson, fontTexture, text, width, align, letterSpacing, size, color, webglSize.width, webglSize.height]);
+  // Ensure effect re-runs if critical props change
+  }, [gl, scene, isWebGLInitialized, fontJson, fontTexture, text, width, align, letterSpacing, size, color]);
 
   // --- Setup Interaction Element & GSAP interaction timelines ---
   useEffect(() => {
     const interactionNode = interactionElementRef?.current;
-    if (!interactionNode || !textDataRef.current) return; // Need OGL Text for char count
+    if (!interactionNode || !textDataRef.current || !programRef.current) return;
 
-     // --- Setup GSAP interaction timelines from base.js initEvents ---
-     interactionTimelineInRef.current = gsap.timeline({ paused: true })
-         .to(programRef.current.uniforms.uPower, { value: 1, duration: 0.36, ease: 'power4.inOut' }, 0);
+    // --- GSAP Timelines for mouse interaction power (uPower) ---
+    interactionTimelineInRef.current = gsap.timeline({ paused: true })
+      .to(programRef.current.uniforms.uPower, { value: 1, duration: 0.36, ease: 'power4.inOut' }, 0);
 
-     interactionTimelineOutRef.current = gsap.timeline({ paused: true })
-         .to(programRef.current.uniforms.uPower, { value: 0, duration: 0.6, ease: 'none',
-             onComplete: () => { if(programRef.current) programRef.current.uniforms.uKey.value = -1; }
-          }, 0);
+    interactionTimelineOutRef.current = gsap.timeline({ paused: true })
+      .to(programRef.current.uniforms.uPower, { value: 0, duration: 0.6, ease: 'none',
+          onComplete: () => { if(programRef.current) programRef.current.uniforms.uKey.value = -1; } // Reset key on out complete
+       }, 0);
 
-    // --- SplitType & Event Listeners from base.js initEvents ---
+    // --- SplitType & Event Listeners ---
     let splitInstance;
-    let charBounds = [];
+    const bounds = []; // Local variable for bounds calculation
     try {
+      splitInstanceRef.current?.revert(); // Revert previous if any
       splitInstance = new SplitType(interactionNode, { types: 'chars,words', tagName: 'span' });
       splitInstanceRef.current = splitInstance;
-      // Add index and calculate bounds
+
+      const parentRect = interactionNode.getBoundingClientRect();
       (splitInstance.chars || []).forEach((el, idx) => {
-          el.dataset.charIndex = idx; // Ensure index is stored
-          const rect = el.getBoundingClientRect();
-          // Store bounds relative to the interactionNode's origin
-          const parentRect = interactionNode.getBoundingClientRect();
-          charBounds.push({ left: rect.left - parentRect.left, width: rect.width, index: idx });
+        el.dataset.charIndex = idx;
+        const rect = el.getBoundingClientRect();
+        bounds.push({ left: rect.left - parentRect.left, width: rect.width, index: idx });
       });
-    } catch (e) { console.error("SplitType error on interaction element:", e); return; }
+      charBoundsRef.current = bounds; // Store calculated bounds in ref
+
+    } catch (e) { console.error("SplitType Error on interaction element:", e, interactionNode); return; }
 
     const findHoveredChar = (mouseX) => {
       const relativeX = mouseX - interactionNode.getBoundingClientRect().left;
-      for (const bound of charBounds) {
+      for (const bound of charBoundsRef.current) { // Use ref here
         if (relativeX >= bound.left && relativeX <= bound.left + bound.width) {
           return bound.index;
         }
@@ -161,26 +170,28 @@ export default function Tt({
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const targetIndex = findHoveredChar(clientX);
       const relativeX = (clientX - interactionNode.getBoundingClientRect().left) / interactionNode.clientWidth;
-      setInteractionData(prev => ({ ...prev, targetIndex, mouseX: clamp(-0.5, 0.5, relativeX - 0.5), needsUpdate: true })); // Center mouseX around 0
+      // Update state: target index, mouse position (-0.5 to 0.5), and flag for update
+      setInteractionData(prev => ({
+          ...prev,
+          targetIndex,
+          mouseX: clamp(-0.5, 0.5, relativeX - 0.5),
+      }));
     };
 
     const handleInteractionEnter = (e) => {
-        setInteractionData(prev => ({ ...prev, lerpFactor: 0.06 })); // Faster lerp on enter - from base.js
-        interactionTimelineOutRef.current?.pause();
-        interactionTimelineInRef.current?.play();
-        // Initial calculation on enter
-        handleInteractionMove(e);
+      setInteractionData(prev => ({ ...prev, lerpFactor: 0.06 })); // Faster lerp
+      interactionTimelineOutRef.current?.pause();
+      interactionTimelineInRef.current?.play();
+      handleInteractionMove(e); // Initial calculation
     };
 
-     const handleInteractionLeave = (e) => {
-        setInteractionData(prev => ({ ...prev, lerpFactor: 0.03 })); // Slower lerp on leave - from base.js
-        interactionTimelineInRef.current?.pause();
-        interactionTimelineOutRef.current?.play(); // Play fade out power animation
-        // Set targetIndex to -1 immediately to start lerping powers back
-         setInteractionData(prev => ({ ...prev, targetIndex: -1, needsUpdate: true }));
+    const handleInteractionLeave = (e) => {
+      setInteractionData(prev => ({ ...prev, lerpFactor: 0.03, targetIndex: -1 })); // Slower lerp, reset target
+      interactionTimelineInRef.current?.pause();
+      interactionTimelineOutRef.current?.play(); // Play fade out power animation
     };
 
-    // Attach listeners derived from base.js initEvents
+    // Attach listeners
     interactionNode.addEventListener('mouseenter', handleInteractionEnter);
     interactionNode.addEventListener('mousemove', handleInteractionMove);
     interactionNode.addEventListener('mouseleave', handleInteractionLeave);
@@ -188,7 +199,7 @@ export default function Tt({
     interactionNode.addEventListener('touchmove', handleInteractionMove, { passive: true });
     interactionNode.addEventListener('touchend', handleInteractionLeave);
 
-    return () => { // Cleanup listeners and SplitType
+    return () => { // Cleanup
       interactionNode.removeEventListener('mouseenter', handleInteractionEnter);
       interactionNode.removeEventListener('mousemove', handleInteractionMove);
       interactionNode.removeEventListener('mouseleave', handleInteractionLeave);
@@ -199,48 +210,62 @@ export default function Tt({
       interactionTimelineInRef.current?.kill();
       interactionTimelineOutRef.current?.kill();
     };
-  }, [interactionElementRef, textDataRef]); // Rerun if interaction element changes
-
+  }, [interactionElementRef, textDataRef, programRef]); // Rerun if interaction element or program changes
 
   // --- Effect to Lerp and Update uPowers Uniform ---
   useEffect(() => {
-    if (!programRef.current || !textDataRef.current) return; // Ensure program and text data are ready
+    if (!programRef.current || !textDataRef.current) return;
 
-    const currentPowers = programRef.current.uniforms.uPowers.value;
-    if(interactionData.powers.length !== currentPowers.length) return; // Mismatch guard
-
-    let needsUpdate = false;
-    const newPowers = new Float32Array(currentPowers.length);
+    const currentPowers = interactionData.powers;
+    const targetPowers = interactionData.targetPowers;
     const hoverIndex = interactionData.targetIndex;
     const lerpFactor = interactionData.lerpFactor;
+    const charCount = textDataRef.current.meta.chars.length;
 
-    // Calculate target powers based on hoverIndex (from base.js calcChars)
-    for (let i = 0; i < currentPowers.length; i++) {
-        let targetPower = 0.5; // Default non-hovered state
-        if (hoverIndex !== -1) {
-             const distFactor = Math.abs(i - hoverIndex);
-             targetPower = Math.max(0, 1.0 - distFactor * 0.2); // Proximity effect
-        }
-        newPowers[i] = lerp(currentPowers[i], targetPower, lerpFactor);
-        // Check if value actually changed significantly
-        if (Math.abs(newPowers[i] - currentPowers[i]) > 0.001) {
-            needsUpdate = true;
-        }
+    // Ensure arrays are initialized and have the correct length
+    if (currentPowers.length !== charCount || targetPowers.length !== charCount) {
+       setInteractionData(prev => ({
+           ...prev,
+           powers: new Float32Array(charCount).fill(0.5),
+           targetPowers: new Float32Array(charCount).fill(0.5),
+       }));
+       return; // Skip update this cycle, will run again after state update
     }
 
-    // Only update uniforms if values changed
-    if (needsUpdate) {
-        programRef.current.uniforms.uPowers.value = newPowers;
+    let needsUniformUpdate = false;
+
+    // Calculate target powers based on hoverIndex (logic from base.js calcChars)
+    for (let i = 0; i < charCount; i++) {
+      let targetPower = 0.5; // Default non-hovered state
+      if (hoverIndex !== -1) {
+        const distFactor = Math.abs(i - hoverIndex);
+        // Simple proximity effect: 1 at hover, decreasing linearly
+        targetPower = Math.max(0, 1.0 - distFactor * 0.2); // Adjust multiplier (0.2) for spread
+      }
+      targetPowers[i] = targetPower; // Update target array
     }
-     // Update key and mouse regardless of power change, driven by state
+
+    // Lerp current powers towards target powers
+    const newPowers = new Float32Array(charCount);
+    for (let i = 0; i < charCount; i++) {
+      newPowers[i] = lerp(currentPowers[i], targetPowers[i], lerpFactor);
+      // Check if value actually changed significantly to warrant uniform update
+      if (Math.abs(newPowers[i] - currentPowers[i]) > 0.001) {
+        needsUniformUpdate = true;
+      }
+    }
+
+    // Update uniforms and state only if values changed
+    if (needsUniformUpdate) {
+      programRef.current.uniforms.uPowers.value = newPowers;
+      // Update state to store the new lerped values for the next frame
+      setInteractionData(prev => ({ ...prev, powers: newPowers }));
+    }
+     // Update key and mouse uniforms directly from state
     programRef.current.uniforms.uKey.value = interactionData.targetIndex;
     programRef.current.uniforms.uMouse.value.x = interactionData.mouseX;
 
-  // This effect doesn't need requestAnimationFrame because the main
-  // render loop (external or internal via useFrame) will pick up the uniform changes.
-  // We run it whenever interactionData changes.
-  }, [interactionData]);
-
+  }, [interactionData]); // Run whenever interactionData changes
 
   // --- Reveal Animation Trigger ---
   useEffect(() => {
@@ -251,24 +276,26 @@ export default function Tt({
     const tl = gsap.timeline({ paused: true });
     tl.fromTo(programRef.current.uniforms.uStart, { value: 1 }, { value: 0, duration: durationIn, ease: 'power4.inOut' }, 0)
       .fromTo(programRef.current.uniforms.uPower, { value: 0.5 }, { value: 0, duration: durationPower, ease: 'power2.inOut' }, 0)
-      .set(programRef.current.uniforms.uKey, { value: -1 }, '>');
+      .set(programRef.current.uniforms.uKey, { value: -1 }, '>'); // Reset key after reveal
 
     animationTimelineRef.current = tl;
     tl.play();
 
-  }, [combinedIsActive, programRef, animationParams]); // Trigger on combined active state
+    // Add 'act' class to interaction element after animation (like legacy)
+    gsap.delayedCall(durationIn + durationPower, () => { // Adjust delay if needed
+        interactionElementRef?.current?.classList.add('act');
+    });
 
 
-  // Update resolution uniform on resize
-  useEffect(() => {
-    if (programRef.current && webglSize.width && webglSize.height) {
-        programRef.current.uniforms.uScreen.value = [webglSize.width, webglSize.height];
-        // Original also updated camera perspective & viewport calculation here,
-        // but that's now handled globally by WebGLProvider reacting to useViewport
-    }
-  }, [webglSize]);
+  }, [combinedIsActive, programRef, animationParams, interactionElementRef]);
 
+  // Update resolution uniform on resize (handled by WebGLContext)
+  // useEffect(() => {
+  //   if (programRef.current && webglSize.width && webglSize.height) {
+  //       programRef.current.uniforms.uScreen.value = [webglSize.width, webglSize.height];
+  //   }
+  // }, [webglSize]);
 
-  // This component adds its mesh to the shared scene, doesn't render directly
+  // This component renders its mesh into the shared scene via the context
   return null;
 }
