@@ -1,0 +1,109 @@
+/* components/layout/Footer.module.pcss */
+
+.footer {
+  padding-top: 1.6rem;
+  padding-bottom: 5.6rem;
+  width: 100%;
+  /* margin-top needed? Or handled by page layout? */
+  position: relative;
+  overflow: hidden;
+}
+
+.footer_cm {
+  width: 100%;
+}
+
+.Atitle { /* Base style for the title link container */
+  display: inline-flex; /* Or block? */
+  margin-left: var(--pgrid); /* Use global variable */
+  position: relative;
+}
+
+.cCover { /* Container for the WebGL canvas */
+  position: absolute;
+  /* Use original positioning/sizing, adjusted for local context if needed */
+  left: -2rem; right: -2rem; top: -2rem; bottom: -2rem;
+  pointer-events: none;
+  transform: translateY(-2.2rem); /* Base desktop transform */
+  /* Add responsive styles */
+}
+
+.ttj { /* Base style for the h2 text inside Atitle */
+  font-size: 27.7rem; /* Base desktop */
+  opacity: 1; /* Show static text */
+  font-family: montreal, sans-serif; /* Assuming */
+  letter-spacing: -0.02em; /* From original */
+  line-height: 0.9; /* From original */
+}
+.Oiel{} /* Placeholder if needed */
+.MW{} /* Placeholder if needed */
+
+/* Add responsive styles for ttj */
+
+.cnt { /* Container for bottom part */
+  margin-top: 8.5rem; /* Base desktop */
+  /* .c_vw handles padding */
+}
+.c_vw { /* Reusable global class for padding */
+  padding-left: var(--pgrid);
+  padding-right: var(--pgrid);
+}
+/* Add responsive margin-top for cnt */
+
+.cnt_lk {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.4rem 1rem;
+  margin-left: 70.9rem; /* Base desktop */
+  width: 54.9rem; /* Base desktop */
+}
+.cnt_lk_el {
+  width: calc(50% - 0.5rem);
+}
+.cnt_lk a { /* Style links within */
+  text-transform: uppercase;
+}
+.cnt_lk i {
+  width: 0.8rem;
+  margin-left: 0.4rem;
+  display: inline-flex;
+  vertical-align: baseline;
+  /* Style SVG inside later */
+}
+
+.cnt_cr {
+  margin-left: 70.9rem; /* Base desktop */
+  width: 54.9rem; /* Base desktop */
+  margin-top: 3.2rem;
+}
+.cnt_cr_el {
+  width: 100%;
+  display: flex;
+}
+.cnt_cr_el + .cnt_cr_el { margin-top: min(2px, 0.2rem); }
+
+.cnt_cp {
+  margin-left: 70.9rem; /* Base desktop */
+  width: 54.9rem; /* Base desktop */
+  margin-top: 3.2rem;
+}
+
+/* Placeholders for Awrite styles */
+.AwritePlaceholder { text-transform: uppercase; }
+.linkText {}
+.creditLabel { color: var(--gray); }
+.creditName {}
+.copyright { color: var(--gray); }
+
+/* Add responsive layout styles for cnt_lk, cnt_cr, cnt_cp later */
+
+/* Add theme adjustments if needed, e.g. */
+:global(.home) .footer { /* Example targeting footer only on home */
+  /* background: black; */
+  /* Overrides for text colors etc */
+  .linkText { color: var(--gray); } /* Adjust as per original .home .footer .Awrite */
+  .creditLabel { color: var(--gray); }
+  /* etc */
+}

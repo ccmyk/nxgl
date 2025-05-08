@@ -1,0 +1,114 @@
+/* components/layout/Loader.module.pcss */
+
+.loader {
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: left top;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loader_bg { /* renamed to loaderBg maybe? */
+  background: #000;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Using original name loader_cnt for consistency with JS if preferred, */
+/* or rename to loaderCnt and update JSX className */
+.loader_cnt {
+  height: 100vh; /* Use vh, svh might require polyfill/checks */
+  color: #f8f6f2;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  /* Base styles = Desktop/Landscape */
+  align-items: flex-start;
+  padding-top: 0.8rem;
+  padding-bottom: 4rem;
+
+  /* Responsive Overrides */
+  /* :root.T selector indicates Touch device. We might handle */
+  /* this via a body class added by JS or media queries directly */
+
+  /* Assuming .T class exists on html for Touch */
+  :global(html.T) & {
+    /* Base styles for Touch Portrait */
+    @media (orientation: portrait) {
+      max-height: var(--ck_hmin); /* Use variable */
+    }
+  }
+}
+
+/* If composing global padding class */
+.c_vw {
+  padding-left: var(--pgrid);
+  padding-right: var(--pgrid);
+}
+
+
+.loader_tp { /* Renamed to loaderTp maybe? */
+  font-family: montreal, sans-serif; /* Add fallback */
+  font-variant-numeric: tabular-nums lining-nums;
+  font-kerning: none;
+  /* Base styles = Desktop/Landscape */
+  font-size: 28rem;
+  margin-left: 59.2rem;
+
+  /* Responsive Overrides */
+  :global(html.T) & {
+    @media (orientation: portrait) and (min-width: 744px) {
+        font-size: 28rem; /* Same as desktop? Check original */
+        letter-spacing: -0.02em;
+        margin-left: 8.5rem;
+    }
+    @media (orientation: portrait) and (max-width: 745px) {
+        font-size: 16.7rem;
+        letter-spacing: -0.02em;
+        margin-left: 3.7rem;
+    }
+  }
+}
+
+.loader_bp { /* Renamed to loaderBp maybe? */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  /* Base styles = Desktop/Landscape */
+  margin-left: 59.2rem;
+
+   /* Child Awrite elements need specific variables */
+   /* Instead of targeting .Awrite, style h1/h2 directly */
+  & h1, & h2 {
+     /* Define theme within this scope */
+    --light: #000; /* Check if correct */
+    --dark: #f8f6f2; /* Check if correct */
+     color: var(--dark); /* Ensure text is light on dark background */
+     /* Add other base styles if needed, text-transform etc? */
+  }
+
+  & h1 + h2 { /* Use direct descendant or adjust selector */
+    margin-top: 0.2rem;
+  }
+
+  /* Responsive Overrides */
+  :global(html.T) & {
+     @media (orientation: portrait) and (min-width: 744px) {
+        width: 29rem;
+        margin-left: 8.5rem;
+     }
+      @media (orientation: portrait) and (max-width: 745px) {
+        width: 29rem;
+        margin-left: 4.5rem;
+     }
+  }
+}

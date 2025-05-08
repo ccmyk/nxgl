@@ -1,0 +1,56 @@
+/* components/MouseCursor.module.pcss */
+
+.mouse {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000; /* Ensure it's above most things */
+  pointer-events: none;
+  /* Add base size/shape/color if different from default browser */
+  width: 10px;
+  height: 10px;
+  background-color: var(--dark); /* Example */
+  border-radius: 50%;
+  transform: translate(-50%, -50%); /* Center on cursor pos */
+  mix-blend-mode: difference; /* Or other blend modes if used */
+}
+
+.hoverElement {
+  position: absolute;
+  left: 15px; /* Adjust positioning based on original */
+  top: -8px; /* Adjust positioning */
+  overflow: hidden; /* Needed for width animation */
+  white-space: nowrap;
+  background-color: transparent; /* Or style as needed */
+  width: 0; /* Controlled by GSAP */
+}
+
+/* Placeholder for Awrite styles until hook is ready */
+.AwritePlaceholder {
+  display: inline-block; /* Needed for layout */
+  text-transform: uppercase;
+  /* Define base colors - these might be overridden by .inverted */
+  color: var(--dark);
+  background-color: transparent; /* Or var(--light) ? */
+  padding: 2px 4px 1px; /* From original .Awrite-inv */
+  white-space: nowrap;
+}
+
+.inverted {
+  /* Styles matching original .Awrite-inv */
+  color: var(--light);
+  background: var(--dark);
+}
+
+/* Hide cursor on touch devices if desired */
+@media (hover: none) {
+  .mouse {
+    display: none;
+  }
+}
+
+/* Global class added on mouse down */
+:global(.mouse-down) .mouse {
+  /* Optional: style changes when mouse is pressed */
+  /* transform: translate(-50%, -50%) scale(0.8); */
+}
