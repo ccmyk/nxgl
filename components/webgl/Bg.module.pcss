@@ -1,1 +1,13 @@
-/* components/webgl/Base.module.pcss */
+/* components/webgl/Bg.module.pcss */
+
+.canvasElement {
+  position: fixed; /* Covers the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Use viewport units for full coverage */
+  height: 100vh;
+  pointer-events: none; /* Background shouldn't block interactions */
+  z-index: 0; /* Position behind most content (matches legacy #glBg) */
+  opacity: 1; /* Base opacity */
+  transition: opacity 0.5s ease-out; /* Example fade if needed */
+}

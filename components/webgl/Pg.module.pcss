@@ -1,1 +1,19 @@
-/* components/webgl/Base.module.pcss */
+/* components/webgl/Pg.module.pcss */
+
+/* Styles the shared <canvas> rendered by the Pg component */
+.canvasElement {
+  position: fixed; /* Covers the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Canvas itself doesn't need events */
+  z-index: 1; /* Position behind UI elements but above background */
+  opacity: 0; /* Start hidden, fade in when active */
+  transition: opacity 0.5s ease; /* Simple fade transition */
+}
+
+/* Class to add when the component becomes active */
+.active {
+  opacity: 1;
+}
