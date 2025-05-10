@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useRef } from 'react';
-import Link from 'next/link';
 import styles from './Footer.module.pcss';
 import { useTextAnimation } from '@/hooks/useTextAnimation';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
@@ -24,8 +23,6 @@ export default function Footer() {
 
   const designedByRef = useRef(null);
   const nameRef = useRef(null);
-  const developedByRef = useRef(null); // Ref for "Developed by" if needed
-  const csskillerRef = useRef(null); // Ref for "CSSKILLER" if needed
   const copyrightRef = useRef(null);
 
   // Use Intersection Observer for the whole footer to trigger animations

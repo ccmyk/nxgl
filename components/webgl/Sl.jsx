@@ -50,7 +50,9 @@ const Sl = forwardRef(({
   const currentScrollY = useRef(0);
   useEffect(() => {
     const lenisInstance = lenis?.current;
-    if (!lenisInstance) return;
+    if (!lenisInstance) {
+      return;
+    }
     const unsubscribe = lenisInstance.on('scroll', ({ scroll }) => {
       currentScrollY.current = scroll;
     });
@@ -61,8 +63,8 @@ const Sl = forwardRef(({
   useEffect(() => {
     // Guard clauses
     if (!canvasRef.current || !isInitialized || mediaSources.length === 0 || !contextCamera) {
-        console.warn("Sl: Initialization prerequisites not met.", {isInitialized, canvas: !!canvasRef.current, sources: mediaSources.length, camera: !!contextCamera});
-        return;
+      console.warn("Sl: Initialization prerequisites not met.", {isInitialized, canvas: !!canvasRef.current, sources: mediaSources.length, camera: !!contextCamera});
+      return;
     }
     isMountedRef.current = true;
 
@@ -117,18 +119,22 @@ const Sl = forwardRef(({
         };
 
         if (isVideo) {
-            element.muted = true; element.loop = true; element.playsInline = true;
-            element.autoplay = false; element.preload = 'metadata';
-            // Use 'loadedmetadata' for videos
-            element.onloadedmetadata = () => updateTextureAndSize(element);
-            // Check if src is already set (if using passed ref)
-            if (!element.src) element.src = media.src;
-            element.load();
+          element.muted = true; element.loop = true; element.playsInline = true;
+          element.autoplay = false; element.preload = 'metadata';
+          // Use 'loadedmetadata' for videos
+          element.onloadedmetadata = () => updateTextureAndSize(element);
+          // Check if src is already set (if using passed ref)
+          if (!element.src) {
+            element.src = media.src;
+          }
+          element.load();
         } else {
-            element.onload = () => updateTextureAndSize(element);
-            element.onerror = () => console.error("Sl: Failed to load image:", media.src);
-            // Check if src is already set
-            if (!element.src) element.src = media.src;
+          element.onload = () => updateTextureAndSize(element);
+          element.onerror = () => console.error("Sl: Failed to load image:", media.src);
+          // Check if src is already set
+          if (!element.src) {
+            element.src = media.src;
+          }
         }
       });
       // Assign meshes to ref after loop
@@ -183,15 +189,17 @@ const Sl = forwardRef(({
     const camera = contextCamera; // Use global camera
     const canvas = canvasRef.current;
     const parentContainer = canvas?.parentNode; // Get parent for sizing
-    if (!renderer || !camera || !parentContainer || meshesRef.current.length === 0) return;
+    if (!renderer || !camera || !parentContainer || meshesRef.current.length === 0) {
+      return;
+    }
 
     const width = parentContainer.offsetWidth;
     const height = parentContainer.offsetHeight;
 
     // Check for zero dimensions
     if (width === 0 || height === 0) {
-        console.warn("Sl: Resize called with zero dimensions for parent.");
-        return;
+      console.warn("Sl: Resize called with zero dimensions for parent.");
+      return;
     }
 
 
@@ -211,7 +219,9 @@ const Sl = forwardRef(({
     // Position and scale meshes (example: simple horizontal layout)
     const meshWidth = viewportWidth / meshesRef.current.length;
     meshesRef.current.forEach((meshData, i) => { // Assuming meshesRef holds objects { mesh: Mesh, ... }
-        if (!meshData || !meshData.mesh) return; // Guard against undefined mesh
+        if (!meshData || !meshData.mesh) {
+          return;
+        } // Guard against undefined mesh
         const mesh = meshData.mesh;
         mesh.scale.x = meshWidth * 0.9; // Example scaling
         mesh.scale.y = viewportHeight * 0.9;
@@ -222,13 +232,13 @@ const Sl = forwardRef(({
     // Recalculate scroll trigger points
     const triggerElement = ioRefSelf?.current; // Use the IO trigger element
     if (triggerElement) {
-        const bound = triggerElement.getBoundingClientRect();
-        const screenH = window.innerHeight;
-        const elementH = bound.height;
-        let calc = 0;
-        let fix = touch ? 0 : screenH * 0.1;
-        scrollControlRef.current.start = parseInt(bound.top - screenH + window.scrollY + fix);
-        scrollControlRef.current.limit = parseInt(elementH + calc + fix);
+      const bound = triggerElement.getBoundingClientRect();
+      const screenH = window.innerHeight;
+      const elementH = bound.height;
+      let calc = 0;
+      let fix = touch ? 0 : screenH * 0.1;
+      scrollControlRef.current.start = parseInt(bound.top - screenH + window.scrollY + fix);
+      scrollControlRef.current.limit = parseInt(elementH + calc + fix);
     }
 
   }, [contextCamera, ioRefSelf, touch]); // Dependencies
@@ -248,7 +258,9 @@ const Sl = forwardRef(({
       // Play videos only when active
       meshesRef.current.forEach(m => {
           const tex = m.texture; // Access texture from meshData object
-          if (tex?.image?.tagName === 'VIDEO') tex.image.play().catch(e => console.warn("Sl: Vid play fail", e));
+          if (tex?.image?.tagName === 'VIDEO') {
+            tex.image.play().catch(e => console.warn("Sl: Vid play fail", e));
+          }
       });
       console.log('Sl activated');
     } else if (!isInView && isActive) {
@@ -257,7 +269,9 @@ const Sl = forwardRef(({
       // Pause videos when inactive
       meshesRef.current.forEach(m => {
           const tex = m.texture;
-          if (tex?.image?.tagName === 'VIDEO') tex.image.pause();
+          if (tex?.image?.tagName === 'VIDEO') {
+            tex.image.pause();
+          }
       });
        // Optionally reset scroll progress on exit?
        // scrollControlRef.current.timeline?.progress(0);
@@ -267,7 +281,9 @@ const Sl = forwardRef(({
 
   // --- Render Loop ---
   useEffect(() => {
-    if (!isMountedRef.current) return;
+    if (!isMountedRef.current) {
+      return;
+    }
 
     const renderLoop = (time) => {
       rafIdRef.current = requestAnimationFrame(renderLoop);

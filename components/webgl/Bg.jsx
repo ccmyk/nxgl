@@ -1,7 +1,7 @@
 // components/webgl/Bg.jsx
 'use client';
 
-import React, { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect } from 'react';
 import { Program, Mesh, Triangle, Vec2 } from 'ogl';
 import gsap from 'gsap';
 import { useWebGL } from '@/contexts/WebGLContext'; // Use the shared context

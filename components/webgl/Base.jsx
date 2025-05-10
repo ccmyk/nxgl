@@ -14,7 +14,6 @@ import { clamp, lerp } from '@/lib/math'; // Math utils
 // ForwardRef allows parent components to potentially call methods on this component if needed
 const Base = forwardRef(({
   src, // REQUIRED: URL for the image or video
-  isVisible = true, // Optional: External visibility control
   ioOptions = { threshold: 0.2 }, // IO options, trigger slightly later
   // Pass a ref to the element that should trigger IO and mouse events
   // This could be the parent div or the media element itself
@@ -22,7 +21,7 @@ const Base = forwardRef(({
   touch = false, // Pass touch detection result
   isOppositeAnim = false, // Determines initial uStart value for reveal direction
   className = '', // Allow passing additional classes to the canvas
-}, ref) => {
+}, ) => {
   const canvasRef = useRef(null);
   const rendererRef = useRef(null);
   const meshRef = useRef(null);

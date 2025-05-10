@@ -53,7 +53,7 @@ export default function TtF({
 
   // --- Initialize ---
   useEffect(() => {
-    if (!gl || !fontJson || !fontTexture || !isInitialized || !text || !canvasRef.current) return;
+    if (!gl || !fontJson || !fontTexture || !isInitialized || !text || !canvasRef.current) {return;}
 
     let mesh, program, geometry, post, scene, renderer;
 
@@ -142,11 +142,11 @@ export default function TtF({
 
   // --- Resize Handler ---
   const handleResize = useCallback(() => {
-    if (!rendererRef.current || !camera || !textDataRef.current || !canvasRef.current) return;
+    if (!rendererRef.current || !camera || !textDataRef.current || !canvasRef.current) {return;}
     const renderer = rendererRef.current;
     const canvas = canvasRef.current;
     const parentContainer = canvas.parentNode;
-    if(!parentContainer) return;
+    if(!parentContainer) {return;}
     const width = parentContainer.offsetWidth;
     const height = parentContainer.offsetHeight;
     canvas.style.width = `${width}px`;
@@ -172,7 +172,7 @@ export default function TtF({
   // --- Hover Interaction ---
   useEffect(() => {
     const interactionNode = interactionElementRef?.current; // The <a> tag
-    if (!interactionNode || !hoverAnimationRef.current) return;
+    if (!interactionNode || !hoverAnimationRef.current) {return;}
 
     const handleMouseEnter = () => hoverAnimationRef.current.play();
     const handleMouseLeave = () => hoverAnimationRef.current.reverse();
@@ -189,22 +189,22 @@ export default function TtF({
 
   // --- Reveal/Hide Animation ---
   useEffect(() => {
-     if (!postRef.current) return;
+     if (!postRef.current) {return;}
      // Use combinedIsActive to control the main reveal/hide (uOut uniform)
      gsap.to(postRef.current.passes[0].uniforms.uOut, {
          value: combinedIsActive ? 1.0 : -0.2, // Animate to -0.2 to hide (from legacy removeEvents)
          duration: combinedIsActive ? 0.8 : 1.0, // Adjust durations as needed
          ease: 'power2.inOut',
          delay: combinedIsActive ? 0.2 : 0, // Delay reveal slightly
-         onStart: () => { if (combinedIsActive && canvasRef.current) canvasRef.current.style.opacity = 1; },
-         onComplete: () => { if (!combinedIsActive && canvasRef.current) canvasRef.current.style.opacity = 0; }
+         onStart: () => { if (combinedIsActive && canvasRef.current) {canvasRef.current.style.opacity = 1;} },
+         onComplete: () => { if (!combinedIsActive && canvasRef.current) {canvasRef.current.style.opacity = 0;} }
      });
   }, [combinedIsActive]);
 
 
   // --- Render Loop ---
   useEffect(() => {
-    if (!isInitialized || !rendererRef.current || !sceneRef.current || !camera || !postRef.current) return;
+    if (!isInitialized || !rendererRef.current || !sceneRef.current || !camera || !postRef.current) {return;}
     let rafId;
     const render = (time) => {
       if (!rendererRef.current) { cancelAnimationFrame(rafId); return; }

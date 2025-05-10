@@ -48,7 +48,9 @@ export default function Roll({
   const currentScrollY = useRef(0);
   useEffect(() => {
     const lenisInstance = lenis?.current;
-    if (!lenisInstance) return;
+    if (!lenisInstance) {
+      return;
+    }
     const unsubscribe = lenisInstance.on('scroll', ({ scroll }) => {
       currentScrollY.current = scroll;
     });
@@ -57,7 +59,9 @@ export default function Roll({
 
   // --- Initialization ---
   useEffect(() => {
-    if (!canvasRef.current || !scrollTriggerRef?.current || mediaSources.length < 2) return;
+    if (!canvasRef.current || !scrollTriggerRef?.current || mediaSources.length < 2) {
+      return;
+    }
     isMountedRef.current = true;
 
     let renderer, mesh, program, geometry;
@@ -98,12 +102,12 @@ export default function Roll({
         if (isVideo) {
             element.muted = true; element.loop = true; element.playsInline = true;
             element.autoplay = false; element.preload = 'metadata';
-            element.onloadedmetadata = () => updateTextureAndSize(element);
+            element.onloadedmetadata = () => { updateTextureAndSize(element); };
             element.src = media.src;
             element.load();
         } else {
-            element.onload = () => updateTextureAndSize(element);
-            element.onerror = () => console.error("Failed to load image:", media.src);
+            element.onload = () => { updateTextureAndSize(element); };
+            element.onerror = () => { console.error("Failed to load image:", media.src); };
             element.src = media.src;
         }
       });
@@ -194,7 +198,9 @@ export default function Roll({
     const canvas = canvasRef.current;
     const parentContainer = canvasContainerRef?.current; // Use the dedicated container
     const triggerElement = scrollTriggerRef?.current;
-    if (!renderer || !program || !parentContainer || !triggerElement) return;
+    if (!renderer || !program || !parentContainer || !triggerElement) {
+      return;
+    }
 
     const width = parentContainer.offsetWidth;
     const height = parentContainer.offsetHeight;
@@ -227,14 +233,20 @@ export default function Roll({
       // Play the *currently relevant* videos when entering view
       const currentTex = texturesRef.current[currentTextureIndex];
       const nextTex = texturesRef.current[currentTextureIndex + 1];
-      if (currentTex?.image?.tagName === 'VIDEO') currentTex.image.play().catch(e=>console.warn("Vid play fail"));
-      if (nextTex?.image?.tagName === 'VIDEO') nextTex.image.play().catch(e=>console.warn("Vid play fail"));
+      if (currentTex?.image?.tagName === 'VIDEO') {
+        currentTex.image.play().catch(e=>console.warn("Vid play fail"));
+      }
+      if (nextTex?.image?.tagName === 'VIDEO') {
+        nextTex.image.play().catch(e=>console.warn("Vid play fail"));
+      }
       console.log('Roll activated');
     } else if (!isInView && isActive) {
       setIsActive(false);
       // Pause all videos when leaving view
       texturesRef.current.forEach(tex => {
-          if (tex?.image?.tagName === 'VIDEO') tex.image.pause();
+          if (tex?.image?.tagName === 'VIDEO') {
+            tex.image.pause();
+          }
       });
       console.log('Roll deactivated');
     }
@@ -242,7 +254,9 @@ export default function Roll({
 
   // --- Render Loop ---
   useEffect(() => {
-    if (!isMountedRef.current) return;
+    if (!isMountedRef.current) {
+      return;
+    }
 
     const renderLoop = () => {
       rafIdRef.current = requestAnimationFrame(renderLoop);

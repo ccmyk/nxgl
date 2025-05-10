@@ -1,7 +1,7 @@
 // components/MouseCursor.jsx
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import styles from './MouseCursor.module.pcss';
 import { useTextAnimation } from '@/hooks/useTextAnimation'; // Import the hook
@@ -91,12 +91,12 @@ export default function MouseCursor() {
       document.body.removeEventListener('mouseout', handleMouseLeave);
       hoverContainerAnimRef.current?.kill();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [isHovering, hoverText]); // Add dependencies that affect hover logic
 
   // Effect for animating the hover text *container* (width animation)
   useEffect(() => {
-    if (hoverContainerAnimRef.current) hoverContainerAnimRef.current.kill();
+    if (hoverContainerAnimRef.current) {hoverContainerAnimRef.current.kill();}
 
     if (isHovering && hoverText && hoverElementRef.current) {
       // Animate in

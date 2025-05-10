@@ -16,7 +16,7 @@ const LazyMedia = forwardRef(({
   ...props // Spread other props like autoPlay, loop, muted for video
 }, ref) => {
   const elementRef = useRef(null); // Ref for the IO target (usually the wrapper div)
-  const [isInView, entry] = useIntersectionObserver(elementRef, ioOptions, true); // Freeze once visible
+  const [isInView] = useIntersectionObserver(elementRef, ioOptions, true); // Freeze once visible
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(null);
 

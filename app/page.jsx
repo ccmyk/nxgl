@@ -1,7 +1,7 @@
 // app/page.jsx
 'use client';
 
-import React, { useRef, useEffect, useState, Suspense } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import styles from './page.module.pcss';
@@ -9,7 +9,6 @@ import { useTextAnimation } from '@/hooks/useTextAnimation';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useWebGL } from '@/contexts/WebGLContext';
 import { useLenis } from '@/hooks/useLenis';
-import { clamp, lerp } from '@/lib/math';
 
 // Import WebGL Components
 import Tt from '@/components/webgl/Tt';

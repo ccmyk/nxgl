@@ -9,18 +9,15 @@ import fragmentShader from '@/shaders/pg/main.frag.glsl'; // Import shaders
 import vertexShader from '@/shaders/pg/main.vert.glsl';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useLenis } from '@/hooks/useLenis';
-import { clamp, lerp } from '@/lib/math';
 import { useViewport } from '@/hooks/useViewport'; // Use viewport hook
 
 // This component expects refs to the individual grid item divs (.el)
 // and potentially their media elements if textures are dynamic per item.
 export default function Pg({
   gridItems = [], // Array of { id: string|number, mediaSrc: string, mediaType: 'image'|'video', elementRef: RefObject }
-  isVisible = true,
   ioRefSelf, // Ref for the main grid container IO trigger
   ioOptions = { threshold: 0 }, // Trigger early
   touch = false,
-  device = 0, // Pass device type (0=desktop, 1=tabletL, 2=tabletS, 3=mobile)
   className = '',
 }) {
   const canvasRef = useRef(null); // Shared canvas for the grid
@@ -49,7 +46,9 @@ export default function Pg({
   const currentScrollY = useRef(0);
   useEffect(() => {
     const lenisInstance = lenis?.current;
-    if (!lenisInstance) return;
+    if (!lenisInstance) {
+      return;
+    }
     const unsubscribe = lenisInstance.on('scroll', ({ scroll }) => {
       currentScrollY.current = scroll;
     });
@@ -58,7 +57,9 @@ export default function Pg({
 
   // --- Initialization ---
   useEffect(() => {
-    if (!canvasRef.current || !isInitialized || gridItems.length === 0) return;
+    if (!canvasRef.current || !isInitialized || gridItems.length === 0) {
+      return;
+    }
     isMountedRef.current = true;
 
     let renderer, scene, camera, geometry, program;
@@ -142,19 +143,27 @@ export default function Pg({
         if (isVideo) {
             element.muted = true; element.loop = true; element.playsInline = true;
             element.autoplay = false; element.preload = 'metadata';
-            element.onloadedmetadata = () => updateTextureAndSize(element);
+            element.onloadedmetadata = () => {
+              updateTextureAndSize(element);
+            };
             element.src = item.mediaSrc;
             element.load();
         } else {
-            element.onload = () => updateTextureAndSize(element);
-            element.onerror = () => console.error("Failed to load image:", item.mediaSrc);
+            element.onload = () => {
+              updateTextureAndSize(element);
+            };
+            element.onerror = () => {
+              console.error("Failed to load image:", item.mediaSrc);
+            };
             element.src = item.mediaSrc;
         }
       });
 
       console.log('Pg Initialized');
 
-    } catch (e) { console.error("Error initializing Pg:", e); }
+    } catch (e) { 
+      console.error("Error initializing Pg:", e); 
+    }
 
     // Cleanup
     return () => {
@@ -179,7 +188,9 @@ export default function Pg({
     const renderer = rendererRef.current;
     const camera = cameraRef.current;
     const canvas = canvasRef.current;
-    if (!renderer || !camera || !canvas || meshesRef.current.length === 0) return;
+    if (!renderer || !camera || !canvas || meshesRef.current.length === 0) {
+      return;
+    }
 
     const width = window.innerWidth; // Use full window size for renderer
     const height = window.innerHeight;
@@ -195,7 +206,9 @@ export default function Pg({
     // Update mesh positions and scales based on their DOM elements
     meshesRef.current.forEach(item => {
       const el = item.elRef?.current;
-      if (!el) return;
+      if (!el) {
+        return;
+      }
       const bound = el.getBoundingClientRect();
       item.bounds = { x: bound.left, y: bound.top, width: bound.width, height: bound.height };
 
@@ -226,7 +239,9 @@ export default function Pg({
     if (!isInView) {
         // Pause videos when container is out of view
         meshesRef.current.forEach(item => {
-            if (item.texture?.image?.tagName === 'VIDEO') item.texture.image.pause();
+            if (item.texture?.image?.tagName === 'VIDEO') {
+              item.texture.image.pause();
+            }
         });
     }
   }, [isInView]);
@@ -236,7 +251,9 @@ export default function Pg({
       const observers = [];
       meshesRef.current.forEach((item, index) => {
           const node = item.elRef?.current;
-          if (!node) return;
+          if (!node) {
+            return;
+          }
 
           const observer = new IntersectionObserver(([entry]) => {
               if (entry.isIntersecting) {
@@ -264,7 +281,9 @@ export default function Pg({
 
   // --- Mouse Interaction ---
   useEffect(() => {
-    if (touch) return; // No hover on touch
+    if (touch) {
+      return;
+    } // No hover on touch
 
     const handleMouseMove = (e) => {
         mousePositionRef.current = { x: e.clientX, y: e.clientY };
@@ -295,7 +314,9 @@ export default function Pg({
 
   // --- Render Loop ---
   useEffect(() => {
-    if (!isMountedRef.current) return;
+    if (!isMountedRef.current) {
+      return;
+    }
 
     const renderLoop = (time) => {
       rafIdRef.current = requestAnimationFrame(renderLoop);
@@ -308,7 +329,9 @@ export default function Pg({
       // Update uniforms and render only active meshes
       activeItems.current.forEach(index => {
           const item = meshesRef.current[index];
-          if (!item) return;
+          if (!item) {
+            return;
+          }
 
           // Update position based on scroll (recalculate Y)
           const screenH = viewport.height;

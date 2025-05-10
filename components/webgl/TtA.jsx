@@ -50,7 +50,7 @@ export default function TtA({
 
   // --- Initialize ---
   useEffect(() => {
-    if (!gl || !fontJson || !fontTexture || !isInitialized || !text || !canvasRef.current) return;
+    if (!gl || !fontJson || !fontTexture || !isInitialized || !text || !canvasRef.current) {return;}
 
     let mesh, program, geometry, post, scene, renderer;
 
@@ -126,14 +126,14 @@ export default function TtA({
 
   // --- Resize Handler ---
   const handleResize = useCallback(() => {
-     if (!rendererRef.current || !camera || !textDataRef.current || !canvasRef.current) return;
+     if (!rendererRef.current || !camera || !textDataRef.current || !canvasRef.current) {return;}
 
      const renderer = rendererRef.current;
      const textData = textDataRef.current;
      const canvas = canvasRef.current;
      const parentContainer = canvas.parentNode; // Assuming canvas is inside the cCover div
 
-     if(!parentContainer) return;
+     if(!parentContainer) {return;}
 
      const width = parentContainer.offsetWidth;
      const height = parentContainer.offsetHeight;
@@ -165,7 +165,7 @@ export default function TtA({
   // --- Interaction Handlers (Mouse Ripple) ---
   useEffect(() => {
     const interactionNode = canvasRef.current?.parentNode; // Interact with the cCover div
-    if (!interactionNode || !postRef.current) return;
+    if (!interactionNode || !postRef.current) {return;}
 
     const moveFn = (e) => {
       const rect = interactionNode.getBoundingClientRect();
@@ -201,7 +201,7 @@ export default function TtA({
 
   // --- Lerp Mouse Interaction Uniform ---
   useEffect(() => {
-      if (!postRef.current) return;
+      if (!postRef.current) {return;}
       const currentVal = interactionData.mouseX;
       const targetVal = interactionData.targetMouseX;
       const lerpFactor = interactionData.lerpFactor;
@@ -215,7 +215,7 @@ export default function TtA({
 
   // --- Reveal Animation Trigger ---
   useEffect(() => {
-    if (!combinedIsActive || !postRef.current || animationTimelineRef.current?.isActive()) return;
+    if (!combinedIsActive || !postRef.current || animationTimelineRef.current?.isActive()) {return;}
 
     const { durationIn } = animationParams;
     const tl = gsap.timeline({ paused: true });
@@ -233,7 +233,7 @@ export default function TtA({
 
   // --- Render Loop ---
   useEffect(() => {
-      if (!isInitialized || !rendererRef.current || !sceneRef.current || !camera || !postRef.current) return;
+      if (!isInitialized || !rendererRef.current || !sceneRef.current || !camera || !postRef.current) {return;}
 
       let rafId;
       const render = (time) => {

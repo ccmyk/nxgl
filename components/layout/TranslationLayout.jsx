@@ -13,7 +13,7 @@ export default function TransitionLayout({ children }) {
 
   useEffect(() => {
     const pageElement = contentRef.current;
-    if (!pageElement) return;
+    if (!pageElement) {return;}
 
     const lenisInstance = lenis?.current;
 
