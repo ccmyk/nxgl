@@ -29,7 +29,9 @@ const Loader = forwardRef(({ onFadeOutComplete }, ref) => {
       } else {
         console.warn("Loader fade out called before animation ready.");
         // If animation isn't ready, immediately call complete callback
-        if (onFadeOutComplete) onFadeOutComplete();
+        if (onFadeOutComplete) {
+          onFadeOutComplete();
+        }
         setIsVisible(false); // Hide immediately if animation failed to init
       }
     }
@@ -37,7 +39,9 @@ const Loader = forwardRef(({ onFadeOutComplete }, ref) => {
 
   // --- Initialize WebGL and GSAP Timeline ---
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) {
+      return;
+    }
     isMountedRef.current = true; // Mark as mounted
 
     let renderer;
@@ -89,7 +93,9 @@ const Loader = forwardRef(({ onFadeOutComplete }, ref) => {
         onComplete: () => {
           console.log("Loader fade out complete.");
           setIsVisible(false); // Hide canvas via state after animation
-          if (onFadeOutComplete) onFadeOutComplete(); // Notify parent
+          if (onFadeOutComplete) {
+            onFadeOutComplete();
+          } // Notify parent
         }
       })
       // Replicate the animation targets and timings
@@ -106,7 +112,9 @@ const Loader = forwardRef(({ onFadeOutComplete }, ref) => {
       console.error("Failed to initialize Loader WebGL:", e);
       // If init fails, ensure component hides and calls complete callback
       setIsVisible(false);
-      if (onFadeOutComplete) onFadeOutComplete();
+      if (onFadeOutComplete) {
+        onFadeOutComplete();
+      }
     }
 
     // --- Cleanup ---
@@ -123,7 +131,9 @@ const Loader = forwardRef(({ onFadeOutComplete }, ref) => {
 
   // --- Render Loop (only runs while visible and mounted) ---
   useEffect(() => {
-    if (!isVisible || !isMountedRef.current) return; // Only run if visible and mounted
+    if (!isVisible || !isMountedRef.current) {
+      return; // Only run if visible and mounted
+    }
 
     const renderLoop = (time) => {
       // Double check refs and mount status inside the loop

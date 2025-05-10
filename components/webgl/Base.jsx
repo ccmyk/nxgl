@@ -54,7 +54,9 @@ const Base = forwardRef(({
   const currentScrollY = useRef(0);
   useEffect(() => {
     const lenisInstance = lenis?.current;
-    if (!lenisInstance) return;
+    if (!lenisInstance) {
+      return;
+    }
     const unsubscribe = lenisInstance.on('scroll', ({ scroll }) => {
       currentScrollY.current = scroll;
     });
@@ -63,7 +65,9 @@ const Base = forwardRef(({
 
   // --- Initialization Effect ---
   useEffect(() => {
-    if (!canvasRef.current || !src || !triggerElementRef?.current) return; // Need canvas, src, and trigger
+    if (!canvasRef.current || !src || !triggerElementRef?.current) {
+      return; // Need canvas, src, and trigger
+    }
     isMountedRef.current = true;
 
     let renderer, mesh, program, texture, geometry, tl;
@@ -168,7 +172,9 @@ const Base = forwardRef(({
     const renderer = rendererRef.current;
     const program = programRef.current;
     const triggerElement = triggerElementRef?.current; // Use the trigger element for bounds
-    if (!renderer || !program || !triggerElement) return;
+    if (!renderer || !program || !triggerElement) {
+      return;
+    }
 
     const bound = triggerElement.getBoundingClientRect();
     boundsRef.current = { x: bound.left, y: bound.top, width: bound.width, height: bound.height };
@@ -199,7 +205,9 @@ const Base = forwardRef(({
   // --- Mouse Interaction ---
   useEffect(() => {
     const node = triggerElementRef?.current;
-    if (!node || touch) return; // Only on non-touch
+    if (!node || touch) {
+      return; // Only on non-touch
+    }
 
     const moveFn = (e) => {
       mousePosRef.current.ease = 0.03; // Faster lerp on move
@@ -253,7 +261,9 @@ const Base = forwardRef(({
 
   // --- Render Loop ---
   useEffect(() => {
-    if (!isMountedRef.current) return; // Only run if mounted
+    if (!isMountedRef.current) {
+      return; // Only run if mounted
+    }
 
     const renderLoop = (time) => {
       rafIdRef.current = requestAnimationFrame(renderLoop);

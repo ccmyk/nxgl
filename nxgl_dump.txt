@@ -22,6 +22,12 @@
 │   ├── main.pcss
 │   ├── page.jsx
 │   └── page.module.pcss
+├── assets
+│   └── fonts
+│       └── source
+│           ├── PPAir-Medium.ttf
+│           ├── PPNeueMontreal-Medium.ttf
+│           └── PPNeueMontrealMono-Book.ttf
 ├── components
 │   ├── layout
 │   │   ├── Footer.jsx
@@ -33,6 +39,9 @@
 │   │   ├── Nav.jsx
 │   │   ├── Nav.module.pcss
 │   │   └── TranslationLayout.jsx
+│   ├── shared
+│   │   ├── LazyMedia.jsx
+│   │   └── LazyMedia.module.pcss
 │   └── webgl
 │       ├── Base.jsx
 │       ├── Base.module.pcss
@@ -64,14 +73,72 @@
 ├── lib
 │   ├── browser.js
 │   └── math.js
+├── node_modules
+│   ├── @eslint
+│   │   └── eslintrc -> ../.pnpm/@eslint+eslintrc@3.3.1/node_modules/@eslint/eslintrc
+│   ├── clsx -> .pnpm/clsx@2.1.1/node_modules/clsx
+│   ├── eslint -> .pnpm/eslint@9.26.0/node_modules/eslint
+│   ├── eslint-config-next -> .pnpm/eslint-config-next@15.3.1_eslint@9.26.0_typescript@5.8.3/node_modules/eslint-config-next
+│   ├── eslint-plugin-glsl -> .pnpm/eslint-plugin-glsl@0.0.0-wip/node_modules/eslint-plugin-glsl
+│   ├── eslint-plugin-jsdoc -> .pnpm/eslint-plugin-jsdoc@50.6.11_eslint@9.26.0/node_modules/eslint-plugin-jsdoc
+│   ├── gsap -> .pnpm/gsap@3.13.0/node_modules/gsap
+│   ├── lenis -> .pnpm/lenis@1.3.1_react@19.1.0/node_modules/lenis
+│   ├── next -> .pnpm/next@15.3.1_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next
+│   ├── ogl -> .pnpm/ogl@1.0.11/node_modules/ogl
+│   ├── postcss -> .pnpm/postcss@8.5.3/node_modules/postcss
+│   ├── postcss-import -> .pnpm/postcss-import@16.1.0_postcss@8.5.3/node_modules/postcss-import
+│   ├── postcss-preset-env -> .pnpm/postcss-preset-env@10.1.6_postcss@8.5.3/node_modules/postcss-preset-env
+│   ├── raw-loader -> .pnpm/raw-loader@4.0.2_webpack@5.99.8/node_modules/raw-loader
+│   ├── react -> .pnpm/react@19.1.0/node_modules/react
+│   ├── react-dom -> .pnpm/react-dom@19.1.0_react@19.1.0/node_modules/react-dom
+│   └── split-type -> .pnpm/split-type@0.3.4/node_modules/split-type
 ├── public
-│   └── fonts
-│       ├── PPAir-Medium.woff
-│       ├── PPAir-Medium.woff2
-│       ├── PPNeueMontreal-Medium.woff
-│       ├── PPNeueMontreal-Medium.woff2
-│       ├── PPNeueMontrealMono-Book.woff
-│       └── PPNeueMontrealMono-Book.woff2
+│   ├── fonts
+│   │   ├── msdf
+│   │   ├── PPAir-Medium.woff
+│   │   ├── PPAir-Medium.woff2
+│   │   ├── PPNeueMontreal-Medium.woff
+│   │   ├── PPNeueMontreal-Medium.woff2
+│   │   ├── PPNeueMontrealMono-Book.woff
+│   │   └── PPNeueMontrealMono-Book.woff2
+│   ├── images
+│   │   └── placeholders
+│   │       ├── 01_eva_sanchez_kids_agency_website-860x645.jpg
+│   │       ├── 01_eva_sanchez_paya_health_ecommerce_website-860x645.jpg
+│   │       ├── 01_eva_sanchez_vibia_landing_page_website-860x645.jpg
+│   │       ├── 02.2_eva_sanchez_ciclope_fest_website-860x645.jpg
+│   │       ├── 02_eva_sanchez_classe_website-860x645.jpg
+│   │       ├── 02_eva_sanchez_now_new_next_website-860x645.jpg
+│   │       ├── 02_eva_sanchez_paya_health_ecommerce_website-860x645.jpg
+│   │       ├── 02_eva_sanchez_vibia_landing_page_website-860x645.jpg
+│   │       ├── 03_eva_sanchez_classe_website-860x645.jpg
+│   │       ├── 03_eva_sanchez_kids_agency_website-860x645.jpg
+│   │       ├── 03_eva_sanchez_now_new_next_website-860x645.jpg
+│   │       ├── 03_eva_sanchez_vibia_landing_page_website-860x645.jpg
+│   │       ├── 04_eva_sanchez_now_new_next_website-860x645.jpg
+│   │       ├── 04_eva_sanchez_paya_health_ecommerce_website-860x645.jpg
+│   │       ├── 04_eva_sanchez_vibia_landing_page_website-860x645.jpg
+│   │       ├── 05_eva_sanchez_ciclope_fest_website-860x645.jpg
+│   │       ├── 05_eva_sanchez_classe_website-860x645.jpg
+│   │       ├── 05_eva_sanchez_paya_health_ecommerce_website-860x645.jpg
+│   │       ├── 06_eva_sanchez_classe_website-860x645.jpg
+│   │       ├── 06_eva_sanchez_paya_health_ecommerce_website-860x645.jpg
+│   │       └── 09_eva_sanchez_kids_agency_website-860x645.jpg
+│   └── videos
+│       └── placeholders
+│           ├── 00_eva_sanchez_kids_agency_cover_website.mp4
+│           ├── 00_eva_sanchez_vibia_landing_page_cover_website.mp4
+│           ├── 01_eva_sanchez_banjo_cover_soundscape_website.mp4
+│           ├── 01_eva_sanchez_ciclope_fest_cover_website.mp4
+│           ├── 01_eva_sanchez_classe_cover_website.mp4
+│           ├── 01_eva_sanchez_now_new_next_cover_website.mp4
+│           ├── 01_eva_sanchez_villalon_studio_cover_website.mp4
+│           ├── 02_eva_sanchez_banjo_cover_soundscape_website.mp4
+│           ├── 02_eva_sanchez_ciclope_fest_cover_website.mp4
+│           ├── 03_eva_sanchez_banjo_cover_soundscape_website.mp4
+│           ├── 03_eva_sanchez_now_new_next_cover_website.mp4
+│           ├── 04_eva_sanchez_kids_agency_cover_website.mp4
+│           └── 06_eva_sanchez_ciclope_fest_cover_website.mp4
 ├── shaders
 │   ├── base
 │   │   ├── main.frag.glsl
@@ -107,6 +174,7 @@
 ├── nxgl_dump.txt
 ├── package.json
 ├── pnpm-lock.yaml
+├── postcss.config.js
 └── README.md
 
 
@@ -121,63 +189,55 @@
 'use client';
 
 import React, { useState, useEffect, useRef, Suspense, useCallback } from 'react';
-import './main.pcss'; // Import global styles FIRST
+import './main.pcss';
 import { WebGLProvider } from '@/contexts/WebGLContext';
 import { LenisProvider } from '@/contexts/LenisContext';
-import browserCheck from '@/lib/browser'; // Import browser check utility
+import browserCheck from '@/lib/browser';
 
 // Import Layout Components
 import Nav from '@/components/layout/Nav';
 import Footer from '@/components/layout/Footer';
-import Loader from '@/components/layout/Loader'; // The DOM Loader component
+import Loader from '@/components/layout/Loader'; // DOM Loader
 import MouseCursor from '@/components/MouseCursor';
-// Import Transition Wrapper (Implement this separately for page transitions)
-// import TransitionLayout from '@/components/layout/TransitionLayout';
-// Import hook to manage page transitions functionally
-import { usePageTransition } from '@/hooks/usePageTransition';
+import TransitionLayout from '@/components/layout/TransitionLayout'; // Page transition wrapper
+import { usePageTransition } from '@/hooks/usePageTransition'; // Functional page transition logic
 
 export default function RootLayout({ children }) {
-  const [isLoading, setIsLoading] = useState(true); // Loader is visible initially
+  const [isLoading, setIsLoading] = useState(true);
   const [browserInfo, setBrowserInfo] = useState(null);
-  const loaderRef = useRef(null); // Ref for the DOM Loader
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track if it's the very first load
 
-  // 1. Browser Checks & Global Classes (from legacy start🏁🏁🏁)
+  // 1. Browser Checks & Global Classes
   useEffect(() => {
-    const info = browserCheck.browserCheck(); // Assuming this returns { deviceclass, isTouch, webgl, ... }
+    const info = browserCheck.browserCheck();
     setBrowserInfo(info);
-
-    // Add classes to HTML element
-    document.documentElement.classList.add(info.deviceclass || 'D'); // Default to Desktop if undefined
+    document.documentElement.classList.add(info.deviceclass || 'D');
     if (info.isTouch) document.documentElement.classList.add('touch');
     if (info.webgl === 0) document.documentElement.classList.add('NOGL');
-    // Add other classes like 'AND', 'CBff' based on browserCheck results if needed
     if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
         document.documentElement.classList.add('AND');
     }
-     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
         document.documentElement.classList.add('CBff');
-     }
-
+    }
   }, []);
 
   // 2. Loader completion callback
   const handleLoadComplete = useCallback(() => {
     console.log("RootLayout: Loader sequence finished.");
-    setIsLoading(false); // Hide the DOM loader component
+    setIsLoading(false);
+    setIsInitialLoad(false); // Mark initial load as complete
   }, []);
 
-  // 3. Initialize Page Transition Logic
-  // Call the hook here so it runs once for the application lifecycle
-  usePageTransition();
+  // 3. Initialize Page Transition Logic Hook
+  usePageTransition(); // Call this to set up router event listeners
 
-  // Render minimal loading state until browser info is ready
   if (!browserInfo) {
     return (
        <html lang="en">
          <head>
              <meta name="viewport" content="width=device-width, initial-scale=1" />
-             <title>Loading...</title>
-             {/* Minimal styles for loading state could go here */}
+             <title>Loading Environment...</title>
          </head>
          <body><div>Detecting Environment...</div></body>
        </html>
@@ -188,43 +248,37 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
          <meta name="viewport" content="width=device-width, initial-scale=1" />
-         <title>Chris Hall - Art Director & Designer</title> {/* Update dynamically if needed */}
-         {/* Link fonts defined in main.pcss */}
-         {/* Example: <link rel="preload" href="/fonts/montreal.woff2" as="font" type="font/woff2" crossOrigin="anonymous"> */}
+         <title>Chris Hall - Art Director & Designer</title>
+         {/* Preload fonts defined in main.pcss */}
+         <link rel="preload" href="/fonts/PPNeueMontreal-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+         <link rel="preload" href="/fonts/montrealbook.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+         {/* Add other preloads if necessary */}
       </head>
       <body>
-        {/* Wrap everything in Context Providers */}
-        {/* Pass browserInfo to providers that need it */}
         <LenisProvider isTouch={browserInfo.isTouch}>
-          <WebGLProvider>
+          <WebGLProvider> {/* WebGLProvider now loads font assets */}
 
-            {/* Loader is rendered conditionally */}
-            {/* It manages its own fade-out and calls onLoaded */}
-            {isLoading && <Loader ref={loaderRef} onLoaded={handleLoadComplete} />}
+            {/* Render Loader only on the very first load of the application */}
+            {isInitialLoad && isLoading && <Loader onLoaded={handleLoadComplete} />}
 
             {/* Persistent Layout Components */}
             <Nav />
 
-            {/* Main Content Area */}
-            {/* TODO: Wrap with <TransitionLayout> when implemented */}
-            {/* <TransitionLayout> */}
+            <TransitionLayout> {/* Wraps page content for animations */}
               <div id="content">
-                {/* Suspense for potential code splitting / lazy loading of pages */}
                 <Suspense fallback={<div>Loading Page...</div>}>
-                  <main>{children}</main> {/* Page content renders here */}
+                  <main>{children}</main>
                 </Suspense>
               </div>
-            {/* </TransitionLayout> */}
+            </TransitionLayout>
 
             <Footer />
 
-            {/* Conditional Mouse Cursor */}
             {!browserInfo.isTouch && <MouseCursor />}
 
           </WebGLProvider>
         </LenisProvider>
 
-        {/* Legacy Helper Elements */}
         <div className="pHide"></div>
         <noscript>
           <style>{`.lazyload[data-src] { display: none !important; }`}</style>
@@ -2555,23 +2609,34 @@ section.fake {
 }
 
 @font-face {
-  font-family: montreal;
-  font-display: swap;
-  src: url(./public/fonts/montreal.woff2) format("woff2");
+      font-family: 'montreal'; /* Used for general text, tt1, ttj etc. */
+      src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2'),
+           url('/fonts/PPNeueMontreal-Medium.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+@font-face {
+  font-family: 'montrealbook';
+  src: url('/fonts/PPNeueMontrealMono-Book.woff2') format('woff2'),
+        url('/fonts/PPNeueMontrealMono-Book.woff') format('woff');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: montrealbook;
-  font-display: swap;
-  src: url(./public/fonts/montrealbook.woff2) format("woff2");
-  font-weight: 400;
+  font-family: 'air';
+  src: url('/fonts/PPAir-Medium.woff2') format('woff2'),
+        url('/fonts/PPAir-Medium.woff') format('woff');
+  font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 body {
-  font-family: montrealbook;
+  font-family: montrealbook, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #000;
   background: #f8f6f2;
   font-weight: 400;
@@ -2813,67 +2878,102 @@ html {
 
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
+import gsap from 'gsap';
 import styles from './page.module.pcss';
 import { useTextAnimation } from '@/hooks/useTextAnimation';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useWebGL } from '@/contexts/WebGLContext';
 import { useLenis } from '@/hooks/useLenis';
+import { clamp, lerp } from '@/lib/math';
 
 // Import WebGL Components
 import Tt from '@/components/webgl/Tt';
 import TtA from '@/components/webgl/TtA';
-import TtF from '@/components/webgl/TtF';
+// TtF (Footer Title) is rendered within the Footer component itself
 import Base from '@/components/webgl/Base';
 import Bg from '@/components/webgl/Bg';
 
-// Import Shared Components (Assume LazyMedia exists)
-import LazyMedia from '@/components/shared/LazyMedia';
+// Import Shared Components
+import LazyMedia from '@/components/shared/LazyMedia'; // Assume this component exists and forwards refs
 
-// --- Data (Replace with actual data fetching/props) ---
-const heroData = { /* ... as before ... */ };
-const projectsData = { /* ... as before ... */ };
-const aboutData = { /* ... as before ... */ };
+// --- Data (Ensure paths are relative to /public or are absolute URLs) ---
+const heroData = {
+  titleWords: [
+    { text: 'Chris', l: '-0.022', m: 5, fontKey: 'default', dataOi: 0 }, // Added fontKey and dataOi
+    { text: 'Hall', l: '-0.016', m: 5, fontKey: 'default', dataOi: 1 },
+  ],
+  subtitleLine1: "Art Director & Designer",
+  subtitleLine2: "Living in Los Angeles",
+  portfolioTag: "PORTFOLIO_2024",
+  scrollIndicator: "[scroll to explore]",
+  links: [
+    { href: 'https://drive.google.com/file/d/1wc46fxHbb2AgoNOu4dyDVxxVjjE_XZ1z/', text: 'Resume', io: 3 },
+    { href: 'https://www.linkedin.com/in/chrisryanhall/', text: 'LinkedIn', io: 4 },
+    // Add WNW link if it was present in legacy HTML:
+    // { href: 'https://workingnotworking.com/12028-chris', text: 'WorkingNotWorking', io: 5 },
+  ]
+};
+const projectsData = {
+  sectionTitle: "Featured works",
+  fontKey: 'default', // Font for the section title
+  items: [
+    { id: 1, title: "Banjo Soundscapes Portfolio", type: 'video', src: '/videos/placeholder/02_eva_sanchez_banjo_cover_soundscape_website.mp4', link: '/project/banjo', aspect: '720/540', io: 7, dataOi: 3 },
+    { id: 2, title: "Ciclope Fest Website", type: 'image', src: '/images/placeholder/02.2_eva_sanchez_ciclope_fest_cover_website.jpg', link: '/project/ciclope', aspect: '1164/1558', io: 8, dataOi: 4 },
+    { id: 3, title: "Kids Agency Website", type: 'video', src: '/videos/placeholder/00_eva_sanchez_kids_agency_cover_website.mp4', link: '/project/kids-agency', aspect: '720/540', io: 9, dataOi: 5 },
+  ],
+  viewAllLink: "/projects/" // Or "/index/" based on legacy nav
+};
+const aboutData = {
+  titleLine1: "Interactive Designer,",
+  titleLine2: "also Speaker & Teacher",
+  fontKey: 'default', // Font for these titles
+  text: `Enthusiastic about graphic design, typography, and the dynamic areas of motion and web-based animations. Specialized in translating brands into unique and immersive digital user experiences.`,
+  imageSrc: '/images/placeholder/00_eva_sanchez_abou_home_website-1366x2049.jpg',
+  imageAspect: '1387/2080',
+  link: '/about/',
+  ioText: 11,
+  ioBgTrigger: 6,
+  ioTitle1: 7,
+  ioTitle2: 8,
+  ioImageTrigger: 9,
+};
 // --- ---
 
 export default function HomePage() {
   // --- Refs ---
-  // Hero Section
-  const heroRef = useRef(null); // IO Trigger for the whole section
-  const heroTitleInteractionRef = useRef(null); // Interaction element for Tt
+  const heroRef = useRef(null);
+  const heroTitleInteractionRef = useRef(null); // For the <h2> wrapping Tt components
   const heroSubtitleRef = useRef(null);
   const heroPortfolioTagRef = useRef(null);
   const heroScrollIndicatorRef = useRef(null);
-  const heroLinksRef = useRef(null); // Container for links animation
+  const heroLinksContainerRef = useRef(null); // Ref for the container of links
 
-  // Projects Section
-  const projectsRef = useRef(null); // IO Trigger for the section
-  const projectsTitleRef = useRef(null); // IO & Interaction for Tt
+  const projectsRef = useRef(null);
+  const projectsTitleInteractionRef = useRef(null); // For the <div> wrapping Tt
   const projectsCountRef = useRef(null);
-  const projectItemRefs = useRef(projectsData.items.map(() => React.createRef())); // Refs for each project container (IO/Interaction trigger for Base)
-  const projectMediaRefs = useRef(projectsData.items.map(() => React.createRef())); // Refs for actual media elements
+  const projectItemContainersRef = useRef(projectsData.items.map(() => React.createRef())); // Refs for each project's <a> tag
+  const projectMediaElementsRef = useRef(projectsData.items.map(() => React.createRef())); // Refs for <LazyMedia> internal img/video
   const projectsViewAllRef = useRef(null);
 
-  // About Section
-  const aboutRef = useRef(null); // IO Trigger for the section
-  const aboutTitle1InteractionRef = useRef(null); // Interaction for TtA
-  const aboutTitle2InteractionRef = useRef(null); // Interaction for TtA
-  const aboutTitle1IoRef = useRef(null); // IO for TtA
-  const aboutTitle2IoRef = useRef(null); // IO for TtA
-  const aboutTextRef = useRef(null);
-  const aboutTextIoRef = useRef(null); // IO for text animation
-  const aboutImageTriggerRef = useRef(null); // IO/Interaction trigger for Base
-  const aboutImageRef = useRef(null); // Ref for the media element
+  const aboutRef = useRef(null);
+  const aboutTitle1InteractionRef = useRef(null); // For the first TtA's .cCover
+  const aboutTitle2InteractionRef = useRef(null); // For the second TtA's .cCover
+  const aboutTitle1IoRef = useRef(null); // For the first TtA's .Atitle container
+  const aboutTitle2IoRef = useRef(null); // For the second TtA's .Atitle container
+  const aboutTextContentRef = useRef(null); // For the <p> tag
+  const aboutTextIoRef = useRef(null); // For the .Atext container
+  const aboutImageInteractionRef = useRef(null); // For the <a> tag wrapping the image
+  const aboutImageMediaRef = useRef(null); // For the <LazyMedia> internal img
   const aboutReadMoreRef = useRef(null);
-  const aboutBgIoRef = useRef(null); // IO trigger for Bg effect
+  const aboutBgIoTriggerRef = useRef(null); // Specific empty div for Bg IO trigger
 
   // --- Contexts and Hooks ---
-  const { fontJson, fontTexture, isInitialized: webglReady } = useWebGL();
+  const { fonts, isInitialized: webglReady, assetsLoaded: webglAssetsReady } = useWebGL();
   const { lenis } = useLenis();
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isTouchDevice, setIsTouchDevice] = useState(false); // Detect touch
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    // Basic touch detection on mount
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
@@ -2881,32 +2981,30 @@ export default function HomePage() {
   const [heroInView] = useIntersectionObserver(heroRef, { threshold: 0.1 }, true);
   const [projectsTitleInView] = useIntersectionObserver(projectsTitleRef, { threshold: 0.1 }, true);
   const [projectsViewAllInView] = useIntersectionObserver(projectsViewAllRef, { threshold: 0.1 }, true);
-  const [aboutBgInView] = useIntersectionObserver(aboutBgIoRef, { threshold: 0.05 }); // Don't freeze Bg
+  const [aboutBgInView] = useIntersectionObserver(aboutBgIoTriggerRef, { threshold: 0.05 });
   const [aboutTextInView] = useIntersectionObserver(aboutTextIoRef, { threshold: 0.1 }, true);
   const [aboutReadMoreInView] = useIntersectionObserver(aboutReadMoreRef, { threshold: 0.1 }, true);
-  // IO for individual project items (used to trigger their Base component)
   const projectItemIOStates = projectsData.items.map((_, index) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [inView] = useIntersectionObserver(projectItemRefs.current[index], { threshold: 0.2 }, true);
+      const [inView] = useIntersectionObserver(projectItemContainersRef.current[index], { threshold: 0.2 }, true);
       return inView;
   });
-  const aboutImageIOState = useIntersectionObserver(aboutImageTriggerRef, { threshold: 0.2 }, true)[0];
-
+  const [aboutImageInView] = useIntersectionObserver(aboutImageInteractionRef, { threshold: 0.2 }, true);
+  const [aboutTitle1InView] = useIntersectionObserver(aboutTitle1IoRef, { threshold: 0.1 }, true);
+  const [aboutTitle2InView] = useIntersectionObserver(aboutTitle2IoRef, { threshold: 0.1 }, true);
 
   // --- Text Animations ---
-  // Hero
   useTextAnimation(heroPortfolioTagRef, heroInView, { params: { delay: 1.6 } });
   useTextAnimation(heroScrollIndicatorRef, heroInView, { params: { delay: 1.8 }, loop: true });
-  useTextAnimation(heroLinksRef, heroInView, { params: { delay: 2.0 }, splitType: 'lines' });
-  // Projects
+  useTextAnimation(heroLinksContainerRef, heroInView, { params: { delay: 2.0 }, splitType: 'lines' });
   useTextAnimation(projectsCountRef, projectsTitleInView, { params: { delay: 0.2 } });
   projectsData.items.forEach((item, index) => {
+      const h3Ref = projectItemContainersRef.current[index]?.current?.querySelector('h3');
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useTextAnimation(projectItemRefs.current[index]?.current?.querySelector('h3'), projectItemIOStates[index], { params: { delay: 0.1 } });
+      useTextAnimation(h3Ref, projectItemIOStates[index], { params: { delay: 0.1 } });
   });
   useTextAnimation(projectsViewAllRef, projectsViewAllInView, { params: { delay: 0 } });
-  // About
-  useTextAnimation(aboutTextRef, aboutTextInView, { params: { delay: 0 }, splitType: 'lines' });
+  useTextAnimation(aboutTextContentRef, aboutTextInView, { params: { delay: 0 }, splitType: 'lines' });
   useTextAnimation(aboutReadMoreRef, aboutReadMoreInView, { params: { delay: 0.1 } });
 
   // --- Scroll Progress for Background ---
@@ -2922,49 +3020,47 @@ export default function HomePage() {
   // --- Manual GSAP Subtitle Animation ---
   useEffect(() => {
     if (!heroInView || !heroSubtitleRef.current) return;
-    const lines = Array.from(heroSubtitleRef.current.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''));
-    gsap.fromTo(lines,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: 'cubic-bezier(.55, 0, .1, 1)', delay: 1.2 }
-    );
+    if (!heroSubtitleRef.current.dataset.animated) { // Prevent re-animating
+        const lines = heroSubtitleRef.current.innerHTML.split('<br>').map(line => `<span>${line.trim()}</span>`).join('');
+        heroSubtitleRef.current.innerHTML = lines;
+        gsap.fromTo(heroSubtitleRef.current.querySelectorAll('span'),
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: 'cubic-bezier(.55, 0, .1, 1)', delay: 1.2 }
+        );
+        heroSubtitleRef.current.dataset.animated = "true";
+    }
   }, [heroInView]);
+
+  const allAssetsReady = webglReady && webglAssetsReady && fonts?.default?.json && fonts?.default?.texture;
 
   // --- Render ---
   return (
     <div className={styles.home}>
+      {allAssetsReady && <Bg scrollProgress={scrollProgress} />}
 
-      {/* --- WebGL Background --- */}
-      {webglReady && <Bg scrollProgress={scrollProgress} />}
-
-      {/* --- Hero Section --- */}
       <section ref={heroRef} className={styles.home_hero}>
-        <div className="c-vw cnt">
+        <div className="c-vw cnt"> {/* Legacy .c-vw for global padding */}
           <div className={styles.cnt_hold}>
-            {/* Title */}
-            <h2 ref={heroTitleInteractionRef} className={styles.cnt_tt}> {/* Ref for interaction */}
-              {heroData.titleWords.map(({ text, l, m, idx }) => (
-                <div key={idx} className="Atitle">
-                  <div className="cCover">
-                     {webglReady && fontJson && fontTexture && (
+            <h2 ref={heroTitleInteractionRef} className={styles.cnt_tt}> {/* Interaction ref for Tt */}
+              {heroData.titleWords.map(({ text, l, m, idx, fontKey, dataOi }) => (
+                <div key={idx} className="Atitle" data-oi={dataOi}> {/* Legacy .Atitle and data-oi */}
+                  <div className="cCover"> {/* Legacy .cCover */}
+                     {allAssetsReady && (
                        <Tt
-                         text={text} fontJson={fontJson} fontTexture={fontTexture}
-                         interactionElementRef={heroTitleInteractionRef} // Pass H2 ref
-                         ioRefSelf={heroRef} isVisible={heroInView}
-                         letterSpacing={parseFloat(l)} size={parseFloat(m)}
+                         text={text} fontJson={fonts[fontKey]?.json} fontTexture={fonts[fontKey]?.texture}
+                         interactionElementRef={heroTitleInteractionRef} ioRefSelf={heroRef}
+                         isVisible={heroInView} letterSpacing={parseFloat(l)} size={parseFloat(m)}
                        />
                      )}
                   </div>
-                  <span className={`${styles.ttj} Oiel act`}>{text}</span>
+                  <span className={`${styles.ttj} Oiel act`}>{text}</span> {/* Legacy .Oiel.act */}
                 </div>
               ))}
             </h2>
-            {/* Subtitle & Links */}
-            <div className={`${styles.cnt_bt} ${heroInView ? 'stview inview' : ''}`}>
-              <div className="iO" style={{ visibility: 'hidden' }} data-io="0"/>
-              <h3 ref={heroSubtitleRef} className={`${styles.tt3}`}>
-                {/* Ensure text nodes/spans exist for GSAP */}
-                <span>{heroData.subtitleLine1}</span><br/>
-                <span>{heroData.subtitleLine2}</span>
+            <div className={`${styles.cnt_bt} ${heroInView ? 'stview inview' : ''}`}> {/* Legacy state classes */}
+              <div className="iO" style={{ visibility: 'hidden' }} data-io="0"/> {/* Legacy IO placeholder */}
+              <h3 ref={heroSubtitleRef} className="tt3"> {/* Legacy .tt3 */}
+                 {heroData.subtitleLine1}<br/>{heroData.subtitleLine2}
               </h3>
               <h4 ref={heroPortfolioTagRef} className="Awrite">
                 <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="1"/>
@@ -2972,38 +3068,39 @@ export default function HomePage() {
               </h4>
             </div>
           </div>
-          {/* Scroll Indicator */}
           <div className={styles.cnt_sc}>
              <h4 ref={heroScrollIndicatorRef} className="Awrite okF" data-bucle="1">
                  <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="2"/>
                  {heroData.scrollIndicator}
              </h4>
           </div>
-          {/* Links */}
-          <div ref={heroLinksRef} className={styles.cnt_lk}>
+          <div ref={heroLinksContainerRef} className={styles.cnt_lk}>
              {heroData.links.map(link => (
-                 <a key={link.io} href={link.href} className="Awrite" target="_blank" rel="noopener noreferrer">
+                 <a key={link.io} href={link.href} className="Awrite MW" target="_blank" rel="noopener noreferrer" data-tt={link.text}>
                      <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io={link.io}/>
                      {link.text}
-                     <i>{/* SVG Icon */}</i>
+                     <i>{/* SVG Icon (from legacy) */}
+                        <svg viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'inline-block', position: 'relative', width: '0.8rem', height: '0.8rem' }}>
+                            <path d="M6.49194 3.516H5.67594L5.67594 2.052L5.74794 1.272L5.71194 1.26L4.94394 2.124L0.911938 6.156L0.335937 5.58L4.36794 1.548L5.23194 0.78L5.21994 0.743999L4.43994 0.816L2.97594 0.816V0L6.49194 0L6.49194 3.516Z" fill="currentColor"/>
+                        </svg>
+                     </i>
                  </a>
              ))}
           </div>
         </div>
       </section>
 
-      {/* --- Projects Section --- */}
       <section ref={projectsRef} className={styles.home_prjs}>
           <div className="c-vw cnt">
-              <div ref={projectsTitleRef} className={styles.cnt_t}>
-                  <div className="Atitle">
-                      <div className="cCover">
-                          {webglReady && fontJson && fontTexture && (
-                              <Tt
-                                  text={projectsData.sectionTitle} fontJson={fontJson} fontTexture={fontTexture}
-                                  interactionElementRef={projectsTitleRef} ioRefSelf={projectsTitleRef}
-                                  isVisible={projectsTitleInView} size={3.8} letterSpacing={-0.024}
-                                  className="tt1"
+              <div ref={projectsTitleRef} className={styles.cnt_t}> {/* IO Trigger for title */}
+                  <div className="Atitle" data-oi="2"> {/* Legacy data-oi for Tt */}
+                      <div ref={projectsTitleInteractionRef} className="cCover"> {/* Interaction trigger for Tt */}
+                          {allAssetsReady && (
+                              <Tt text={projectsData.sectionTitle} fontJson={fonts[projectsData.fontKey]?.json} fontTexture={fonts[projectsData.fontKey]?.texture}
+                                interactionElementRef={projectsTitleInteractionRef} ioRefSelf={projectsTitleRef}
+                                isVisible={projectsTitleInView} size={3.8} letterSpacing={-0.024}
+                                width={33} // From legacy data-w
+                                className="tt1"
                               />
                           )}
                       </div>
@@ -3017,50 +3114,32 @@ export default function HomePage() {
 
               <div className={styles.cnt_ft}>
                   {projectsData.items.map((item, index) => (
-                      <Link
-                          ref={projectItemRefs.current[index]}
-                          key={item.id}
-                          href={item.link}
-                          className={`${styles.cnt_prj} ${styles[`cnt_prj-${index}`]} MW`}
-                          data-tt="See more"
-                      >
+                      <Link ref={projectItemContainersRef.current[index]} key={item.id} href={item.link}
+                          className={`${styles.cnt_prj} ${styles[`cnt_prj-${index}`]} MW`} data-tt="See more">
                           <div className={styles.cnt_prj_im}>
-                              {/* IO placeholder for legacy compatibility? */}
-                              <div className="Oi" style={{ visibility: 'hidden' }} data-oi={item.id + 2}/>
-                              {/* Lazy Media */}
-                              <LazyMedia
-                                  ref={projectMediaRefs.current[index]}
-                                  src={item.src} type={item.type} alt={item.title}
-                                  aspectRatio={item.aspect} className={styles.mediaElement}
-                              />
-                              {/* WebGL Effect */}
+                              <div className="Oi" style={{ visibility: 'hidden' }} data-oi={item.dataOi}/>
+                              <LazyMedia ref={projectMediaElementsRef.current[index]} src={item.src} type={item.type} alt={item.title}
+                                  aspectRatio={item.aspect} className={styles.mediaElement} />
                               {webglReady && (
-                                  <Base
-                                    src={item.src}
-                                    triggerElementRef={projectItemRefs.current[index]} // Use link/container as trigger
-                                    mediaElementRef={projectMediaRefs.current[index]}
-                                    isVisible={projectItemIOStates[index]} // Control by individual IO state
-                                    touch={isTouchDevice}
-                                  />
+                                  <Base src={item.src} triggerElementRef={projectItemContainersRef.current[index]}
+                                    mediaElementRef={projectMediaElementsRef.current[index]}
+                                    isVisible={projectItemIOStates[index]} touch={isTouchDevice} />
                               )}
                           </div>
                           <div className={styles.cnt_prj_t}>
-                              {/* Text animation applied via hook above */}
-                              <h3 className="Awrite">
+                              <h3 className="Awrite"> {/* Text animation applied via hook */}
                                 <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io={item.io}/>
                                 <span className="num">[{String(index + 1).padStart(2, '0')}]_</span>
-                                {item.title}
+                                <span>{item.title}</span>
                               </h3>
                           </div>
                       </Link>
                   ))}
               </div>
 
-              {/* View All Button Area */}
               <div className={styles.cnt_st}>
-                 {/* Add placeholder project if needed for layout */}
                  <div className={styles.cnt_btn}>
-                     <Link ref={projectsViewAllRef} href={projectsData.viewAllLink} className="Awrite Awrite-inv">
+                     <Link ref={projectsViewAllRef} href={projectsData.viewAllLink} className="Awrite Awrite-inv MW" data-tt="View All">
                          <div className="iO iO-std" style={{ visibility: 'hidden' }} data-io="10"/>
                          See index
                      </Link>
@@ -3069,36 +3148,30 @@ export default function HomePage() {
           </div>
       </section>
 
-       {/* --- About Section --- */}
        <section ref={aboutRef} className={styles.home_about}>
-           {/* IO Trigger for Background Effect */}
-           <div ref={aboutBgIoRef} className="Oi Oi-bg" data-oi={aboutData.ioImage} style={{ position: 'absolute', top: '15vh', height: '50vh', width: '1px', left: 0 }}/>
-           {/* Background effect is rendered globally */}
+           <div ref={aboutBgIoTriggerRef} className="Oi Oi-bg" data-oi={aboutData.ioBgTrigger} style={{ position: 'absolute', top: '15vh', height: '50vh', width: '1px', left: 0 }}/>
 
            <div className="c-vw cnt">
-               {/* Titles */}
                <div className={styles.cnt_tp}>
-                   <div ref={aboutTitle1IoRef} className="Atitle">
+                   <div ref={aboutTitle1IoRef} className="Atitle" data-oi={aboutData.ioTitle1}>
                        <div ref={aboutTitle1InteractionRef} className="cCover">
-                           {webglReady && fontJson && fontTexture && (
-                               <TtA
-                                   text={aboutData.titleLine1} fontJson={fontJson} fontTexture={fontTexture}
-                                   ioRefSelf={aboutTitle1IoRef} isVisible={isVisible} // Pass global visibility or specific IO
-                                   interactionElementRef={aboutTitle1InteractionRef}
-                                   color={1.0} // White text
+                           {allAssetsReady && (
+                               <TtA text={aboutData.titleLine1} fontJson={fonts[aboutData.fontKey]?.json} fontTexture={fonts[aboutData.fontKey]?.texture}
+                                   ioRefSelf={aboutTitle1IoRef} isVisible={aboutTitle1InView}
+                                   interactionElementRef={aboutTitle1InteractionRef} color={1.0}
+                                   letterSpacing={-0.024} size={3.8} // From legacy data-l, data-m
                                />
                            )}
                        </div>
                        <h2 className={`${styles.tt1} Oiel`}>{aboutData.titleLine1}</h2>
                    </div>
-                   <div ref={aboutTitle2IoRef} className="Atitle">
+                   <div ref={aboutTitle2IoRef} className="Atitle" data-oi={aboutData.ioTitle2}>
                        <div ref={aboutTitle2InteractionRef} className="cCover">
-                          {webglReady && fontJson && fontTexture && (
-                               <TtA
-                                   text={aboutData.titleLine2} fontJson={fontJson} fontTexture={fontTexture}
-                                   ioRefSelf={aboutTitle2IoRef} isVisible={isVisible}
-                                   interactionElementRef={aboutTitle2InteractionRef}
-                                   color={1.0}
+                          {allAssetsReady && (
+                               <TtA text={aboutData.titleLine2} fontJson={fonts[aboutData.fontKey]?.json} fontTexture={fonts[aboutData.fontKey]?.texture}
+                                   ioRefSelf={aboutTitle2IoRef} isVisible={aboutTitle2InView}
+                                   interactionElementRef={aboutTitle2InteractionRef} color={1.0}
+                                   letterSpacing={-0.032} size={3.8} // From legacy data-l, data-m
                                />
                            )}
                        </div>
@@ -3106,38 +3179,27 @@ export default function HomePage() {
                    </div>
                </div>
 
-               {/* Text and Image */}
                <div className={styles.cnt_bp}>
                    <div ref={aboutTextIoRef} className={styles.cnt_x}>
-                       <div className="Atext">
-                           <div className="iO iO-std" data-io={aboutData.io} style={{ visibility: 'hidden' }}/>
-                           <p ref={aboutTextRef} className="Atext_el">
+                       <div className="Atext"> {/* Wrapper for text animation */}
+                           <div className="iO iO-std" data-io={aboutData.ioText} style={{ visibility: 'hidden' }}/>
+                           <p ref={aboutTextContentRef} className="Atext_el">
                                {aboutData.text}
                            </p>
                        </div>
-                       <Link ref={aboutReadMoreRef} href={aboutData.link} className={`${styles.linkXS} Awrite`}>
+                       <Link ref={aboutReadMoreRef} href={aboutData.link} className={`${styles.linkXS} Awrite MW`} data-tt="Learn More">
                            <span className="scr_read">About me</span>Read more
                        </Link>
                    </div>
-                   <Link
-                       ref={aboutImageTriggerRef}
-                       href={aboutData.link}
-                       className={`${styles.cnt_im} MW`}
-                       data-tt="Read more" data-w="1"
-                   >
-                       <div className="Oi" data-oi={aboutData.ioMedia} style={{ visibility: 'hidden' }}/>
-                       <LazyMedia
-                           ref={aboutImageRef} src={aboutData.imageSrc} type="image"
-                           alt="About Chris Hall" aspectRatio={aboutData.imageAspect}
-                       />
+                   <Link ref={aboutImageInteractionRef} href={aboutData.link}
+                       className={`${styles.cnt_im} MW`} data-tt="Read more" data-w="1"> {/* data-w="1" for inverted hover text */}
+                       <div className="Oi" data-oi={aboutData.ioImageTrigger} style={{ visibility: 'hidden' }}/>
+                       <LazyMedia ref={aboutImageMediaRef} src={aboutData.imageSrc} type="image"
+                           alt="About Chris Hall" aspectRatio={aboutData.imageAspect} />
                        {webglReady && (
-                           <Base
-                               src={aboutData.imageSrc}
-                               triggerElementRef={aboutImageTriggerRef}
-                               mediaElementRef={aboutImageRef}
-                               isVisible={aboutImageIOState} // Use specific IO state
-                               touch={isTouchDevice}
-                           />
+                           <Base src={aboutData.imageSrc} triggerElementRef={aboutImageInteractionRef}
+                               mediaElementRef={aboutImageMediaRef} isVisible={aboutImageInView}
+                               touch={isTouchDevice} />
                        )}
                    </Link>
                </div>
@@ -8264,14 +8326,15 @@ export default function MouseCursor() {
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link'; // Use Next.js Link for client-side routing
+import Link from 'next/link';
 import gsap from 'gsap';
-import styles from './Nav.module.pcss';
-import { useTextAnimation } from '@/hooks/useTextAnimation'; // Import the hook
+import styles from './Nav.module.pcss'; // Ensure this path is correct
+import { useTextAnimation } from '@/hooks/useTextAnimation';
 
-export default function Nav() {
-  const [timeString, setTimeString] = useState('00:00AM'); // Initial placeholder
-  const [clockActive, setClockActive] = useState(false); // Control when clock animations run
+// Assume a theme prop: 'light' (default) or 'dark' (when Bg makes page dark)
+export default function Nav({ currentTheme = 'light' }) {
+  const [timeString, setTimeString] = useState('00:00AM');
+  const [clockActive, setClockActive] = useState(false);
   const navRef = useRef(null);
   const logoRef = useRef(null);
   const cityRef = useRef(null);
@@ -8283,13 +8346,11 @@ export default function Nav() {
   const playgroundLinkRef = useRef(null);
   const contactLinkRef = useRef(null);
 
-  // Refs to track if clock parts need re-animation
   const hoursAnimTrigger = useRef(0);
   const minutesAnimTrigger = useRef(0);
   const ampmAnimTrigger = useRef(0);
-  const prevTimeString = useRef(''); // Store previous time to detect changes
+  const prevTimeString = useRef('');
 
-  // --- Clock Update Logic ---
   useEffect(() => {
     const updateClock = () => {
       const date = new Date();
@@ -8297,116 +8358,78 @@ export default function Nav() {
       let currentM = date.getMinutes();
       let ampm = 'AM';
       let displayH = currentH;
-
       if (displayH >= 12) { ampm = 'PM'; if (displayH > 12) displayH -= 12; }
-      if (displayH === 0) displayH = 12; // Handle midnight
-
+      if (displayH === 0) displayH = 12;
       const newH = String(displayH).padStart(2, '0');
       const newM = String(currentM).padStart(2, '0');
       const newTimeString = `${newH}:${newM}${ampm}`;
 
-      // Trigger animation *only if digits change* and clock is active
       if (clockActive && newTimeString !== prevTimeString.current) {
         if (prevTimeString.current.substring(0, 2) !== newH) hoursAnimTrigger.current++;
         if (prevTimeString.current.substring(3, 5) !== newM) minutesAnimTrigger.current++;
-        if (prevTimeString.current.substring(5) !== ampm) ampmAnimTrigger.current++; // Trigger AM/PM change
-
-        setTimeString(newTimeString); // Update state
-        prevTimeString.current = newTimeString; // Store new time
+        if (prevTimeString.current.substring(5) !== ampm) ampmAnimTrigger.current++;
+        setTimeString(newTimeString);
+        prevTimeString.current = newTimeString;
       } else if (!clockActive && newTimeString !== timeString) {
-         // Update state initially even if not animating yet
          setTimeString(newTimeString);
          prevTimeString.current = newTimeString;
       }
     };
+    updateClock();
+    const intervalId = setInterval(updateClock, 1000);
+    return () => clearInterval(intervalId);
+  }, [clockActive, timeString]);
 
-    updateClock(); // Initial call
-    const intervalId = setInterval(updateClock, 1000); // Check every second
-    return () => clearInterval(intervalId); // Cleanup interval
-  }, [clockActive, timeString]); // Depend on clockActive status
-
-  // --- Initial Nav Fade In & Animation Activation ---
   useEffect(() => {
     if (navRef.current) {
       gsap.to(navRef.current, {
-        opacity: 1,
-        duration: 0.1, // Quick fade
-        delay: 0.1, // Small delay
-        onComplete: () => {
-          // Activate clock animations *after* initial text reveals start
-          setClockActive(true);
-        }
+        opacity: 1, duration: 0.1, delay: 0.1,
+        onComplete: () => setClockActive(true)
       });
-      // Fade in clock separator ':' - adjust delay as needed
-      gsap.to(`.${styles.nav_clock_s}`, { opacity: 1, duration: 0.1, delay: 0.5 }); // Example delay
+      gsap.to(`.${styles.nav_clock_s}`, { opacity: 1, duration: 0.1, delay: 0.5 });
     }
   }, []);
 
-  // --- Apply Text Animations ---
-  // isActive is true for initial load animations.
-  // Delays based on legacy sequence (minimal staggering)
-  const navBaseDelay = 0.2; // Start delay after nav fade-in
+  const navBaseDelay = 0.2;
   const clockStartDelay = navBaseDelay + 0.05;
   const linksStartDelay = clockStartDelay + 0.15;
 
-  // Logo and City - standard reveal
   useTextAnimation(logoRef, true, { params: { delay: navBaseDelay } });
   useTextAnimation(cityRef, true, { params: { delay: clockStartDelay } });
-
-  // Clock parts - use triggerDependencies to re-animate on change
-  useTextAnimation(hoursRef, true, {
-      params: { delay: clockStartDelay + 0.05 },
-      triggerDependencies: [hoursAnimTrigger.current]
-  });
-  useTextAnimation(minutesRef, true, {
-      params: { delay: clockStartDelay + 0.10 },
-      triggerDependencies: [minutesAnimTrigger.current]
-  });
-   useTextAnimation(ampmRef, true, {
-      params: { delay: clockStartDelay + 0.15 },
-      triggerDependencies: [ampmAnimTrigger.current] // Triggered by hour/ampm change
-  });
-
-  // Links - standard reveal
+  useTextAnimation(hoursRef, true, { params: { delay: clockStartDelay + 0.05 }, triggerDependencies: [hoursAnimTrigger.current] });
+  useTextAnimation(minutesRef, true, { params: { delay: clockStartDelay + 0.10 }, triggerDependencies: [minutesAnimTrigger.current] });
+  useTextAnimation(ampmRef, true, { params: { delay: clockStartDelay + 0.15 }, triggerDependencies: [ampmAnimTrigger.current] });
   useTextAnimation(indexLinkRef, true, { params: { delay: linksStartDelay } });
   useTextAnimation(aboutLinkRef, true, { params: { delay: linksStartDelay + 0.05 } });
   useTextAnimation(playgroundLinkRef, true, { params: { delay: linksStartDelay + 0.10 } });
-  useTextAnimation(contactLinkRef, true, { params: { delay: linksStartDelay + 0.15 }, className: 'Awrite Awrite-inv' }); // Add inverted class
+  useTextAnimation(contactLinkRef, true, { params: { delay: linksStartDelay + 0.15 }, className: 'Awrite Awrite-inv' });
+
+  // Apply theme class
+  const navClasses = `${styles.nav} ${currentTheme === 'dark' ? styles.navThemeDark : styles.navThemeLight}`;
 
   return (
-    <nav ref={navRef} className={styles.nav} style={{ opacity: 0 }}> {/* Start hidden */}
-      {/* Blur effect div - purely presentational */}
+    <nav ref={navRef} className={navClasses} style={{ opacity: 0 }}>
       <div className={styles.nav_blur}><div></div><div></div><div></div><div></div></div>
-
-      {/* Top row container */}
-      <div className={`${styles.nav_top} c-vw`}> {/* Use global padding class */}
-        {/* Left side: Logo and Clock */}
+      <div className={`${styles.nav_top} c-vw`}>
         <div className={styles.nav_left}>
-          {/* Logo - Apply ref to the Link/span */}
-          <Link ref={logoRef} className={`${styles.nav_logo} Awrite`} href="/" data-type="index"> {/* Add Awrite class */}
-             CHRIS HALL {/* Plain text, animation handled by hook */}
+          <Link ref={logoRef} className={`${styles.nav_logo} Awrite`} href="/" data-type="index">
+             CHRIS HALL
           </Link>
-          <div className={styles.sep}></div> {/* Separator */}
-          {/* Clock */}
+          <div className={styles.sep}></div>
           <div className={styles.nav_clock}>
-             {/* Apply refs to spans containing text */}
              <span ref={cityRef} className={`${styles.nav_clock_p} Awrite`}>LAX</span>
              <span ref={hoursRef} className={`${styles.nav_clock_h} Awrite`}>{timeString.substring(0,2)}</span>
-             <div className={styles.nav_clock_s}>:</div> {/* Colon */}
+             <div className={styles.nav_clock_s}>:</div>
              <span ref={minutesRef} className={`${styles.nav_clock_m} Awrite`}>{timeString.substring(3,5)}</span>
              <span ref={ampmRef} className={`${styles.nav_clock_a} Awrite`}>{timeString.substring(5)}</span>
           </div>
         </div>
-
-        {/* Right side: Links */}
         <div className={styles.nav_right}>
           <div className={styles.nav_right_ops}>
-            {/* Apply refs to Links */}
             <Link ref={indexLinkRef} className="Awrite" href="/index/" data-type="projects">INDEX</Link>
             <Link ref={aboutLinkRef} className="Awrite" href="/about/" data-type="about">ABOUT</Link>
             <Link ref={playgroundLinkRef} className="Awrite" href="/playground/" data-type="playground">PLAYGROUND</Link>
           </div>
-          {/* Contact Link - Apply ref and inverted class */}
           <a ref={contactLinkRef} className="Awrite Awrite-inv" href="mailto:chris@chrishall.io">
              LETS TALK
           </a>
@@ -8419,580 +8442,86 @@ export default function Nav() {
 
 ===== FILE: components/layout/Nav.module.pcss =====
 
+/* components/layout/Nav.module.pcss */
+/* ... (all your existing nav styles from css_dump.txt) ... */
+
 .nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 50;
-  --gray: #8a8a8a;
+  /* Base styles */
+  /* Default to light theme variables or direct values */
+  --nav-text-color: var(--dark);       /* Legacy --dark */
+  --nav-text-accent: var(--gray);    /* Legacy --gray for clock */
+  --nav-bg-color: transparent;       /* Or var(--light) if it had a solid bg */
+  --nav-link-hover-color: var(--dark); /* For .Awrite:hover if not inverted */
+  --nav-contact-bg: var(--dark);
+  --nav-contact-text: var(--light);
+
+  /* Apply the variables */
+  color: var(--nav-text-color);
+  /* ... other base nav styles ... */
 }
 
-.nav_blur {
-  position: absolute;
-  z-index: 5;
-  left: 0;
-  top: 0;
-  width: 100%;
-  transform-origin: left top;
-  pointer-events: none;
-  transition:
-    1s transform cubic-bezier(0.55, 0, 0.1, 1),
-    1s height cubic-bezier(0.55, 0, 0.1, 1);
-  transform: translateZ(0) translateY(-30%);
-}
-
-:root.D .nav_blur {
-  height: 280%;
-}
-
-@media (orientation: landscape) {
-  :root.T .nav_blur {
-    height: 280%;
-  }
-}
-
-@media (orientation: portrait) {
-  :root.T .nav_blur {
-    height: 280%;
-  }
-}
-
-.nav_blur > div,
-.nav_blur:before,
-.nav_blur:after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.nav_blur > div:nth-of-type(1) {
-  z-index: 2;
-  -webkit-backdrop-filter: blur(1px);
-  backdrop-filter: blur(1px);
-  -webkit-mask: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0) 0%,
-    rgb(255, 255, 255) 12.5%,
-    rgb(255, 255, 255) 37.5%,
-    rgba(255, 255, 255, 0) 50%
-  );
-}
-
-.nav_blur > div:nth-of-type(2) {
-  z-index: 3;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  -webkit-mask: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0) 12.5%,
-    rgb(255, 255, 255) 37.5%,
-    rgb(255, 255, 255) 50%,
-    rgba(255, 255, 255, 0) 62.5%
-  );
-}
-
-.nav_blur > div:nth-of-type(3) {
-  z-index: 4;
-  -webkit-mask: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0) 37.5%,
-    rgb(255, 255, 255) 50%,
-    rgb(255, 255, 255) 62.5%,
-    rgba(255, 255, 255, 0) 75%
-  );
-}
-
-:root.D .nav_blur > div:nth-of-type(3) {
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
-@media (orientation: portrait) {
-  :root.T .nav_blur > div:nth-of-type(3) {
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-  }
-}
-
-.nav_blur > div:nth-of-type(4) {
-  z-index: 5;
-  -webkit-mask: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0) 50%,
-    rgb(255, 255, 255) 62.5%,
-    rgb(255, 255, 255) 75%,
-    rgba(255, 255, 255, 0) 87.5%
-  );
-}
-
-:root.D .nav_blur > div:nth-of-type(4) {
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-
-@media (orientation: portrait) {
-  :root.T .nav_blur > div:nth-of-type(4) {
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-  }
-}
-
-.nav_top {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  z-index: 54;
-  pointer-events: none;
-  line-height: 1.27;
-}
-
-:root.D .nav_top {
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
-  align-items: center;
-}
-
-@media (orientation: landscape) {
-  :root.T .nav_top {
-    padding-top: 1.4rem;
-    padding-bottom: 1.4rem;
-    align-items: center;
-  }
-}
-
-@media (orientation: portrait) {
-  :root.T .nav_top {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    align-items: flex-start;
-  }
-}
-
-.nav_left {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-@media (orientation: portrait) and (max-width: 745px) {
-  :root.T .nav_left {
-    width: 8.8rem;
-    flex-wrap: wrap;
-  }
-}
-
-.nav_left .Awrite {
-  --dark: #8a8a8a;
-}
-
-.nav_logo {
-  display: flex;
-  pointer-events: all;
-  opacity: 0;
-}
-
-.nav_clock {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.nav_clock_p {
-  margin-right: 0.6rem;
-}
-
-.nav_clock_s {
-  opacity: 0;
-  color: var(--gray);
-}
-
+/*
+.nav_logo,
+.nav_right_ops a,
+.nav_clock_h,
+.nav_clock_m,
 .nav_clock_a {
-  margin-left: 0.6rem;
+  /* Base link/text color */
+  /* This will be overridden by .Awrite's own --dark/--light logic,
+     but useful if theme changes those variables  
+} */
+
+.nav_clock_p .Awrite { /* City */
+  --dark: var(--nav-text-accent); /* Make city use the accent color */
+}
+.nav_clock_s { /* Colon */
+  color: var(--nav-text-accent);
 }
 
-.nav_right {
-  display: flex;
+
+/* Light theme (default or explicit class) */
+.navThemeLight {
+  --nav-text-color: var(--dark);
+  --nav-text-accent: var(--gray);
+  --nav-link-hover-color: var(--dark);
+  --nav-contact-bg: var(--dark);
+  --nav-contact-text: var(--light);
+}
+/* For .Awrite text animation inside light theme Nav */
+.navThemeLight :global(.Awrite) {
+  --dark: var(--nav-text-color); /* Text color */
+  --light: var(--nav-contact-bg); /* Background for fakes, usually dark */
+}
+.navThemeLight :global(.Awrite-inv) {
+  --dark: var(--nav-contact-text); /* Text color for inverted */
+  --light: var(--nav-contact-bg); /* Background for inverted (which is its text color) */
 }
 
-:root.D .nav_right {
-  justify-content: flex-end;
-  align-items: center;
+
+/* Dark theme (when background becomes dark, e.g., from Bg component) */
+.navThemeDark {
+  --nav-text-color: var(--light);       /* Text becomes light */
+  --nav-text-accent: var(--gray);     /* Accent might stay gray or become lighter gray */
+  --nav-link-hover-color: var(--light); /* Hover becomes light */
+  --nav-contact-bg: var(--light);       /* Contact button bg becomes light */
+  --nav-contact-text: var(--dark);      /* Contact button text becomes dark */
+}
+/* For .Awrite text animation inside dark theme Nav */
+.navThemeDark :global(.Awrite) {
+  --dark: var(--nav-text-color);
+  --light: var(--nav-contact-bg); /* If contact bg is now light, fakes should be light */
+}
+.navThemeDark :global(.Awrite-inv) {
+  --dark: var(--nav-contact-text);
+  --light: var(--nav-contact-bg);
 }
 
-@media (orientation: landscape) {
-  :root.T .nav_right {
-    justify-content: flex-end;
-    align-items: center;
-  }
-}
 
-@media (orientation: portrait) and (max-width: 745px) {
-  :root.T .nav_right {
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 23.3rem;
-  }
-}
-
-@media (orientation: portrait) and (max-width: 745px) {
-  :root.T .nav_right_ops {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  :root.T .nav_right_ops a + a {
-    margin-top: 2px;
-  }
-}
-
-.nav_right a {
-  opacity: 0;
-}
-
-:root.D .nav_right a {
-  margin-left: 2.4rem;
-}
-
-@media (orientation: landscape) {
-  :root.T .nav_right a {
-    margin-left: 2.4rem;
-  }
-}
-
-@media (orientation: portrait) and (min-width: 744px) {
-  :root.T .nav_right a {
-    margin-left: 2.4rem;
-  }
-}
-
-.nav_right a.act {
-  pointer-events: all;
-}
-
-.nav_right a.inac {
-  pointer-events: none !important;
-  opacity: 0.5 !important;
-}
-
-.nav_right a:not(.act) {
-  pointer-events: all;
-}
-
-.nav .colorChg {
-  width: 24px;
-  height: 12px;
-  display: block;
-  position: relative;
-  background: #000;
-  border-radius: 2px;
-  margin-bottom: 0.5%;
-}
-
-.nav .colorChg:before {
-  content: "";
-  border-radius: 2px;
-  background: #f8f6f2;
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  left: 1px;
-  top: 1px;
-  display: block;
-}
-
-.nav_burger {
-  position: relative;
-  width: 3.7rem;
-  height: 10px;
-  justify-content: center;
-  align-items: center;
-}
-
-:root.D .nav_burger {
-  display: none;
-}
-
-:root.T .nav_burger {
-  display: flex;
-}
-
-.nav_burger_i {
-  width: 3.7rem;
-  height: 10px;
-  position: relative;
-}
-
-.nav_burger_i span {
-  position: absolute;
-  width: 100%;
-  left: 0;
-  height: 1px;
-}
-
-.nav_burger_i span:before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  background: var(--ck_accent);
-  transition: 0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.nav_burger_i span:first-child {
-  top: 0;
-  transition:
-    0.6s left cubic-bezier(0.55, 0, 0.1, 1),
-    0.6s top cubic-bezier(0.55, 0, 0.1, 1),
-    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.nav_burger_i span:first-child:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #e63642;
-  transform: ScaleX(0);
-  transform-origin: center center;
-  transition: 0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.nav_burger_i span:last-child {
-  top: 100%;
-  transform: translateY(-100%) rotate(0);
-  transition:
-    0.6s left cubic-bezier(0.55, 0, 0.1, 1),
-    0.6s top cubic-bezier(0.55, 0, 0.1, 1),
-    0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.nav_burger_i span:last-child:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #e63642;
-  transform: scaleX(0);
-  transform-origin: center center;
-  transition: 0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.nav_menu {
-  position: absolute;
-  right: 0;
-}
-
-:root.D .nav_menu {
-  display: flex;
-  justify-content: flex-end;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-:root.T .nav_menu {
-  left: 0;
-  top: 0;
-  bottom: 0;
-  opacity: 0;
-  transition: 0.6s opacity cubic-bezier(0.55, 0, 0.1, 1);
-  background: #eceae4;
-  color: #000;
-  overflow-y: Scroll;
-  padding-bottom: 32rem;
-  padding-top: 15rem;
-}
-
-:root.T .nav_menu_t {
-  position: absolute;
-  left: var(--pgrid);
-  bottom: 1.6rem;
-}
-
-:root.T .nav_menu_ops {
-  padding: 0 1.3rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-direction: column;
-}
-
-:root.T .nav_menu_ops .simp {
-  font-size: 4.2rem;
-  line-height: 1.1;
-  position: relative;
-  padding-bottom: 0.4rem;
-}
-
-:root.T .nav_menu_ops .simp:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background: #000;
-  transform-origin: left center;
-  height: 1px;
-  transform: scaleX(0);
-  transition: 0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-:root.T .nav_menu_ops .simp.actLink:before {
-  transform: scaleX(1);
-}
-
-:root.T .nav_menu_links {
-  font-family: OverpassMono;
-  text-transform: uppercase;
-  font-size: 1.3rem;
-  padding: 0 1.3rem;
-  margin-top: 4rem;
-}
-
-:root.T .nav_menu_links .t {
-  color: #888;
-}
-
-:root.T .nav_menu_links a {
-  margin-top: 1.6rem;
-  position: relative;
-}
-
-:root.T .nav_menu_links a svg {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: -1rem;
-}
-
-:root.T .nav_menu_redes {
-  margin-top: 3rem;
-  padding: 0 1.3rem;
-}
-
-:root.T .nav_menu_redes .t {
-  font-family: OverpassMono;
-  text-transform: uppercase;
-  font-size: 1.3rem;
-  color: #888;
-}
-
-:root.T .nav_menu_redes ul {
-  margin-top: 1rem;
-}
-
-:root.T .nav_menu_redes ul li {
-  font-size: 1.6rem;
-  line-height: 1.25;
-}
-
-:root.T .nav_menu_bg {
-  right: var(--pgrid);
-  width: calc(100vw - 1rem);
-  overflow: clip;
-  position: absolute;
-  aspect-ratio: 1/1;
-  bottom: 1.6rem;
-}
-
-:root.D .nav_menu_ops {
-  display: flex;
-  justify-content: flex-end;
-  color: #888;
-}
-
-:root.D .nav_menu_ops .ops_el {
-  position: relative;
-  overflow: hidden;
-  transition: 0.6s color cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-:root.D .nav_menu_ops .ops_el .char {
-  position: relative;
-}
-
-:root.D .nav_menu_ops .ops_el .rel {
-  position: relative;
-  white-space: nowrap;
-}
-
-:root.D .nav_menu_ops .ops_el .ghost {
-  top: 50%;
-  left: 0;
-  position: absolute;
-  white-space: nowrap;
-}
-
-:root.D .nav_menu_ops .ops_el .ghost .char {
-  opacity: 0;
-}
-
-:root.D .nav_menu_ops .ops_el:hover {
-  color: var(--ck_accent);
-}
-
-:root.T html:not(.act-menu) .nav_menu {
-  pointer-events: none !important;
-}
-
-:root.T html:not(.act-menu) .nav_menu * {
-  pointer-events: none !important;
-}
-
-:root.T .act-menu .nav_menu {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.act-menu .nav_burger span:first-child {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(25deg);
-}
-
-.act-menu .nav_burger span:first-child:before {
-  transform: scaleX(0);
-  transition: 0.6s transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.act-menu .nav_burger span:first-child:after {
-  transform: scaleX(1);
-  transition: 0.6s transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.act-menu .nav_burger span:nth-child(2):before {
-  transform: translateY(-50%) scaleX(0);
-  transition: 0.6s transform cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.act-menu .nav_burger span:last-child {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-25deg);
-}
-
-.act-menu .nav_burger span:last-child:before {
-  transform: scaleX(0);
-  transition: 0.6s transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
-.act-menu .nav_burger span:last-child:after {
-  transform: scaleX(1);
-  transition: 0.6s transform 0.6s cubic-bezier(0.55, 0, 0.1, 1);
-}
-
+/* Ensure .nav_blur adapts if its appearance is theme-dependent
+.nav_blur {
+  /* ... existing blur styles ... */
+  /* If blur color needs to change with theme, apply here or via JS 
+} */
 
 
 ===== FILE: components/layout/TranslationLayout.jsx =====
@@ -9000,50 +8529,184 @@ export default function Nav() {
 // components/layout/TransitionLayout.jsx
 'use client';
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname } from 'next/navigation'; // Use App Router hook
+import React, { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import gsap from 'gsap';
+import { useLenis } from '@/contexts/LenisContext'; // To stop/start scroll
 
 export default function TransitionLayout({ children }) {
   const pathname = usePathname();
+  const contentRef = useRef(null);
+  const { lenis } = useLenis(); // Get Lenis instance ref
 
-  // Define animation variants
-  const variants = {
-    initial: {
-      opacity: 0,
-      // y: 20, // Optional slide effect
-    },
-    animate: {
+  useEffect(() => {
+    const pageElement = contentRef.current;
+    if (!pageElement) return;
+
+    const lenisInstance = lenis?.current;
+
+    // Stop Lenis during transition
+    lenisInstance?.stop();
+
+    // Intro animation (matches legacy animIntro)
+    // Ensure element starts at opacity 0 if it's a new page
+    gsap.set(pageElement, { opacity: 0 }); // Set initial state for incoming page
+    const tl = gsap.timeline({
+      onComplete: () => {
+        lenisInstance?.start(); // Resume scroll after intro
+      }
+    });
+
+    tl.to(pageElement, {
       opacity: 1,
-      // y: 0,
-      transition: {
-        duration: 0.6, // Match legacy animOut/animIntro duration?
-        ease: [0.65, 0, 0.35, 1], // Example ease (cubic-bezier)
-      },
-    },
-    exit: {
-      opacity: 0,
-      // y: -20, // Optional slide effect
-      transition: {
-        duration: 0.4, // Faster exit?
-        ease: [0.65, 0, 0.35, 1],
-      },
-    },
-  };
+      duration: 0.45, // Legacy duration
+      delay: 0.1,     // Legacy delay
+      ease: 'power2.inOut', // Example ease
+    });
+
+    // Handle exit animation when pathname changes for the *outgoing* page
+    // This requires a more complex setup with a library like react-transition-group
+    // or a custom hook to manage previous children.
+    // For a simpler GSAP approach without extra libraries for exit:
+    // We'd typically trigger an exit animation *before* Next.js unmounts the old page.
+    // This can be done by listening to router events in usePageTransition.js
+    // and having it control a global "isTransitioning" state or call an exit function.
+
+    // For now, this focuses on the enter animation.
+    // The `usePageTransition` hook already handles stopping Lenis on routeChangeStart
+    // and starting it on routeChangeComplete.
+
+    return () => {
+      tl.kill(); // Kill GSAP animation on unmount
+    };
+  }, [pathname, lenis]); // Re-run on pathname change
 
   return (
-    <AnimatePresence mode="wait"> {/* 'wait' ensures exit animation finishes before enter starts */}
-      <motion.div
-        key={pathname} // Key change triggers animation on route change
-        variants={variants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <div ref={contentRef} style={{ opacity: 0 }}> {/* Start with opacity 0 */}
+      {children}
+    </div>
   );
+}
+
+
+===== FILE: components/shared/LazyMedia.jsx =====
+
+// components/shared/LazyMedia.jsx
+'use client';
+
+import React, { useRef, useEffect, useState, forwardRef } from 'react';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import styles from './LazyMedia.module.pcss'; // We'll create this next
+
+const LazyMedia = forwardRef(({
+  src,
+  type = 'image', // 'image' or 'video'
+  alt = '',
+  aspectRatio, // e.g., "16/9" or "720/540"
+  className = '',
+  ioOptions = { threshold: 0.1 }, // When 10% of the item is visible
+  onLoaded, // Optional callback when media is loaded
+  ...props // Spread other props like autoPlay, loop, muted for video
+}, ref) => {
+  const elementRef = useRef(null); // Ref for the IO target (usually the wrapper div)
+  const [isInView, entry] = useIntersectionObserver(elementRef, ioOptions, true); // Freeze once visible
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(null);
+
+  useEffect(() => {
+    if (isInView && src && !currentSrc) {
+      setCurrentSrc(src); // Set src to trigger loading when in view
+    }
+  }, [isInView, src, currentSrc]);
+
+  const handleLoad = () => {
+    setIsLoaded(true);
+    if (onLoaded) {
+      onLoaded();
+    }
+  };
+
+  // Calculate paddingBottom for aspect ratio
+  let paddingBottom = '56.25%'; // Default to 16:9
+  if (aspectRatio) {
+    const [width, height] = aspectRatio.split('/').map(Number);
+    if (width && height) {
+      paddingBottom = `${(height / width) * 100}%`;
+    }
+  }
+
+  return (
+    <div
+      ref={elementRef}
+      className={`${styles.lazyMediaWrapper} ${isLoaded ? styles.loaded : ''} ${className}`}
+      style={{ paddingTop: paddingBottom }} // Aspect ratio padding
+    >
+      {currentSrc && (
+        type === 'image' ? (
+          <img
+            ref={ref} // Forwarded ref
+            src={currentSrc}
+            alt={alt}
+            onLoad={handleLoad}
+            className={styles.mediaContent}
+            loading="lazy" // Native browser lazy loading as a fallback/enhancement
+            {...props}
+          />
+        ) : (
+          <video
+            ref={ref} // Forwarded ref
+            src={currentSrc}
+            onLoadedData={handleLoad} // Use onLoadedData for video
+            className={styles.mediaContent}
+            playsInline // Important for mobile
+            muted // Default to muted for autoplay scenarios
+            loop // Default to loop for background/preview videos
+            autoPlay // Autoplay when src is set and in view
+            {...props} // Allow overriding defaults like controls, autoPlay, loop, muted
+          />
+        )
+      )}
+      {!isLoaded && <div className={styles.placeholder}></div>} {/* Optional placeholder */}
+    </div>
+  );
+});
+
+LazyMedia.displayName = 'LazyMedia';
+export default LazyMedia;
+
+
+===== FILE: components/shared/LazyMedia.module.pcss =====
+
+/* components/shared/LazyMedia.module.pcss */
+.lazyMediaWrapper {
+  position: relative;
+  overflow: hidden;
+  background-color: #e0e0e0; /* Light placeholder background */
+  width: 100%; /* Take full width of its container */
+}
+
+.mediaContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Or 'contain' based on design */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.lazyMediaWrapper.loaded .mediaContent {
+  opacity: 1;
+}
+
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Optional: Add a subtle loading animation or icon */
 }
 
 
@@ -11454,183 +11117,207 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import { Renderer, Camera, Transform, Vec2 } from 'ogl'; // Import necessary OGL components
-import { useViewport } from '@/hooks/useViewport'; // Hook to get window dimensions
+import { Renderer, Camera, Transform, Texture, Vec2 } from 'ogl';
+import { useViewport } from '@/hooks/useViewport';
 
-// Create the context
 const WebGLContext = createContext(null);
 
-// Create Provider Component
+// Define your MSDF font assets here
+// In a real app, you might have multiple or load this config dynamically
+const MSDF_FONT_ASSETS = {
+  default: { // Name this font whatever you like, e.g., 'montrealMedium'
+    jsonPath: '/fonts/msdf/PPNeueMontreal-Medium.json', // Ensure this path is correct
+    texturePath: '/fonts/msdf/PPNeueMontreal-Medium.png', // Ensure this path is correct
+  }
+  // Add other MSDF fonts if needed:
+  // altFont: { jsonPath: '/fonts/msdf/PPAir-Medium.json', texturePath: '/fonts/msdf/PPAir-Medium.png' },
+};
+
+
 export function WebGLProvider({ children }) {
-  const canvasRef = useRef(null); // Ref for the shared background canvas
+  const canvasRef = useRef(null);
   const rendererInstance = useRef(null);
   const glContext = useRef(null);
   const sceneInstance = useRef(null);
   const cameraInstance = useRef(null);
-  const glViewport = useRef({ width: 1, height: 1 }); // OGL pixel dimensions
-  const viewportUnits = useRef({ width: 1, height: 1 }); // OGL world units
-  const rafIdRef = useRef(null); // Ref for the requestAnimationFrame ID
+  const glViewport = useRef({ width: 1, height: 1 });
+  const viewportUnits = useRef({ width: 1, height: 1 });
+  const rafIdRef = useRef(null);
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const reactViewport = useViewport(); // Get { width, height } from our hook
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const loadedFontAssets = useRef({}); // Store loaded font JSON and OGL Textures
 
-  // --- Initialization Effect ---
+  const reactViewport = useViewport();
+
+  // --- Asset Loading Effect (MSDF Fonts) ---
   useEffect(() => {
-    // Only run once when canvas is available and viewport is valid
+    if (!glContext.current || Object.keys(loadedFontAssets.current).length === Object.keys(MSDF_FONT_ASSETS).length) {
+        // Skip if GL not ready or all fonts already loaded
+        if (Object.keys(loadedFontAssets.current).length > 0 && Object.keys(loadedFontAssets.current).length === Object.keys(MSDF_FONT_ASSETS).length) {
+            setAssetsLoaded(true);
+        }
+        return;
+    }
+
+    const gl = glContext.current;
+    let mounted = true;
+
+    async function loadFont(fontKey, paths) {
+      try {
+        const [fontJsonResponse, fontImage] = await Promise.all([
+          fetch(paths.jsonPath).then(res => res.json()),
+          new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => resolve(img);
+            img.onerror = (err) => reject(new Error(`Failed to load font texture: ${paths.texturePath} - ${err.message}`));
+            img.src = paths.texturePath;
+          })
+        ]);
+
+        if (!mounted) return;
+
+        const fontTexture = new Texture(gl, {
+          image: fontImage,
+          generateMipmaps: false, // MSDF usually doesn't need mipmaps
+          minFilter: gl.LINEAR, // Use linear filtering
+          magFilter: gl.LINEAR,
+        });
+
+        loadedFontAssets.current[fontKey] = {
+          json: fontJsonResponse,
+          texture: fontTexture,
+        };
+
+        console.log(`MSDF Font "${fontKey}" loaded.`);
+
+        // Check if all fonts are loaded
+        if (Object.keys(loadedFontAssets.current).length === Object.keys(MSDF_FONT_ASSETS).length) {
+          setAssetsLoaded(true);
+          console.log('All MSDF fonts loaded.');
+        }
+
+      } catch (error) {
+        console.error(`Error loading MSDF font "${fontKey}":`, error);
+      }
+    }
+
+    Object.entries(MSDF_FONT_ASSETS).forEach(([key, paths]) => {
+        if (!loadedFontAssets.current[key]) { // Only load if not already loaded
+            loadFont(key, paths);
+        }
+    });
+    
+    return () => {
+        mounted = false;
+        // Textures will be disposed if WebGL context is destroyed
+    }
+
+  }, [glContext.current]); // Depend on GL context being available
+
+
+  // --- WebGL Initialization Effect ---
+  useEffect(() => {
     if (!canvasRef.current || !reactViewport.width || !reactViewport.height || isInitialized) {
       return;
     }
-
     try {
-      // --- Setup derived from main🐙🐙🐙/index.js initApp ---
       const renderer = new Renderer({
-        canvas: canvasRef.current,
-        alpha: true, // Match legacy - likely transparent background needed
-        dpr: Math.min(window.devicePixelRatio, 2), // Performance optimization
-        // antialias: true, // Optional: consider for smoother edges
+        canvas: canvasRef.current, alpha: true,
+        dpr: Math.min(window.devicePixelRatio, 2),
       });
       const gl = renderer.gl;
-      // gl.clearColor(0, 0, 0, 0); // Explicitly set clear color to transparent
+      const camera = new Camera(gl, { fov: 45 });
+      camera.position.z = 7;
+      const scene = new Transform();
 
-      // --- Setup from gl🌊🌊🌊/create.js createCamera ---
-      const camera = new Camera(gl, { fov: 45 }); // Default FOV, can be adjusted
-      camera.position.z = 7; // Default camera Z pos from TtA/TtF base.js
-
-      // --- Setup from gl🌊🌊🌊/create.js createScene ---
-      const scene = new Transform(); // OGL scene graph root
-
-      // Store instances in refs
       rendererInstance.current = renderer;
-      glContext.current = gl;
+      glContext.current = gl; // Set gl context here so font loading can start
       sceneInstance.current = scene;
       cameraInstance.current = camera;
 
-      console.log('WebGL Context Initialized');
-      setIsInitialized(true); // Mark as initialized
+      console.log('WebGL Context Initialized (Renderer, Scene, Camera)');
+      setIsInitialized(true);
 
-    } catch (e) {
-      console.error("Failed to initialize WebGL Context:", e);
-      // Handle potential WebGL context loss or errors
-    }
+    } catch (e) { console.error("Failed to initialize WebGL Context:", e); }
 
-    // Cleanup on unmount
     return () => {
       console.log('WebGL Context Cleanup');
-      cancelAnimationFrame(rafIdRef.current); // Stop the render loop
-      // OGL cleanup methods
+      cancelAnimationFrame(rafIdRef.current);
+      // Dispose loaded font textures
+      Object.values(loadedFontAssets.current).forEach(asset => asset.texture?.dispose());
+      loadedFontAssets.current = {};
+      setAssetsLoaded(false);
+
       rendererInstance.current?.dispose();
-      // Note: Geometry/Program disposal should happen in the components using them
       rendererInstance.current = null;
       glContext.current = null;
       sceneInstance.current = null;
       cameraInstance.current = null;
       setIsInitialized(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reactViewport.width, reactViewport.height]); // Depend on viewport size for initial setup
+  }, [reactViewport.width, reactViewport.height, isInitialized]); // isInitialized was missing
 
   // --- Resize Handler Effect ---
   const handleResize = useCallback(() => {
-    if (!isInitialized || !rendererInstance.current || !cameraInstance.current || !reactViewport.width || !reactViewport.height) {
-      return; // Ensure everything is ready
-    }
-
+    if (!isInitialized || !rendererInstance.current || !cameraInstance.current || !reactViewport.width || !reactViewport.height) return;
     const renderer = rendererInstance.current;
     const camera = cameraInstance.current;
     const { width, height } = reactViewport;
-
-    // Update Renderer size
     renderer.setSize(width, height);
-
-    // Update Camera aspect ratio
     camera.perspective({ aspect: width / height });
-
-    // Calculate viewport units (same as legacy main/events.js onResize)
     const fov = camera.fov * (Math.PI / 180);
     const viewportHeight = 2 * Math.tan(fov / 2) * camera.position.z;
     const viewportWidth = viewportHeight * camera.aspect;
-
-    // Store both pixel and world unit dimensions
     glViewport.current = { width, height };
     viewportUnits.current = { width: viewportWidth, height: viewportHeight };
-
-    // console.log('WebGL Resized:', glViewport.current, viewportUnits.current);
-
-  }, [isInitialized, reactViewport]); // Depend on init state and viewport changes
+  }, [isInitialized, reactViewport]);
 
   useEffect(() => {
-    handleResize(); // Call resize initially after setup
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [handleResize]); // Manage resize listener
+  }, [handleResize]);
 
   // --- Render Loop ---
-  // This loop is simplified. In a real app, you might integrate this with GSAP's ticker
-  // or use a library like react-three-fiber's useFrame for more control.
-  // This basic loop just renders the scene. Components needing updates within
-  // the loop would need a way to register their update functions (more advanced context).
   useEffect(() => {
-    if (!isInitialized) return; // Don't start loop until ready
+    if (!isInitialized || !assetsLoaded) return; // Wait for both GL and assets
 
     const render = () => {
       if (!isInitialized || !rendererInstance.current || !sceneInstance.current || !cameraInstance.current) {
-         // Stop loop if context is lost or unmounted
-         cancelAnimationFrame(rafIdRef.current);
-         return;
+         cancelAnimationFrame(rafIdRef.current); return;
       }
-      // Core render call
       rendererInstance.current.render({ scene: sceneInstance.current, camera: cameraInstance.current });
       rafIdRef.current = requestAnimationFrame(render);
     };
-
     rafIdRef.current = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(rafIdRef.current);
+  }, [isInitialized, assetsLoaded]); // Depend on assetsLoaded as well
 
-    return () => {
-      cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [isInitialized]); // Start/stop loop based on initialization
-
-  // Memoize the context value to prevent unnecessary re-renders
   const value = useMemo(() => ({
     gl: glContext.current,
     renderer: rendererInstance.current,
     scene: sceneInstance.current,
     camera: cameraInstance.current,
-    size: glViewport.current, // Pixel dimensions { width, height }
-    viewport: viewportUnits.current, // Viewport units { width, height }
+    size: glViewport.current,
+    viewport: viewportUnits.current,
     isInitialized,
-  }), [isInitialized]); // Only update context value when initialization state changes
+    assetsLoaded, // Expose asset loading status
+    fonts: loadedFontAssets.current, // Expose loaded font assets
+  }), [isInitialized, assetsLoaded]);
 
   return (
     <WebGLContext.Provider value={value}>
-      {/* This canvas is primarily for effects needing a shared background canvas like Bg.jsx */}
-      {/* Other components might create their own canvases or render to this one */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0, // Ensure it's behind other content
-          pointerEvents: 'none', // Typically background effects don't need interaction
-          // background: 'transparent', // Ensure CSS doesn't interfere
-        }}
-      />
-      {/* Render children components */}
+      <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}/>
       {children}
     </WebGLContext.Provider>
   );
 }
 
-// Custom hook for consuming the context
 export function useWebGL() {
   const context = useContext(WebGLContext);
-  if (context === null) {
-    // This error is helpful during development.
-    throw new Error('useWebGL must be used within a WebGLProvider');
-  }
+  if (context === null) throw new Error('useWebGL must be used within a WebGLProvider');
   return context;
 }
 

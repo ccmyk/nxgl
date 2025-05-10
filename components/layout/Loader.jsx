@@ -1,7 +1,7 @@
 // components/layout/Loader.jsx
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap'; // Import GSAP
 import styles from './Loader.module.pcss';
 import { useTextAnimation } from '@/hooks/useTextAnimation'; // Import the text animation hook
@@ -46,7 +46,9 @@ export default function Loader({ onLoaded }) { // Add prop to signal completion
 
     // Store timeline in ref for later control
     const storeTimeline = (tl) => {
-        if (!loaderRef.current) loaderRef.current = {}; // Ensure ref object exists
+        if (!loaderRef.current) {
+            loaderRef.current = {}; // Ensure ref object exists
+        }
         loaderRef.current.counterAnim = tl;
     };
     storeTimeline(counterAnim);
@@ -74,7 +76,9 @@ export default function Loader({ onLoaded }) { // Add prop to signal completion
 
   // Function to initiate hiding sequence
   const hideLoader = useCallback(() => {
-    if (isHiding) return; // Prevent multiple calls
+    if (isHiding) {
+        return; // Prevent multiple calls
+    }
     setIsHiding(true);
     console.log("Loader hide initiated");
 

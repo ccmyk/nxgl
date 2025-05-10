@@ -41,7 +41,9 @@ export function useIntersectionObserver(
   const observe = useCallback(() => {
     const node = elementRef?.current;
     // Don't start if no node, already frozen, or already observing
-    if (!node || frozenRef.current || observerRef.current) return;
+    if (!node || frozenRef.current || observerRef.current) {
+      return;
+    }
 
     // console.log('Starting intersection observer for element:', node, options);
     observerRef.current = new IntersectionObserver(handleIntersection, options);

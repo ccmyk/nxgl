@@ -18,7 +18,9 @@ export default function Bg({ scrollProgress = 0 }) {
 
   // Initialize Mesh and Program
   useEffect(() => {
-    if (!gl || !scene || !isInitialized) return; // Wait for GL context
+    if (!gl || !scene || !isInitialized) {
+      return; // Wait for GL context
+    }
 
     let mesh;
     let program;
@@ -72,10 +74,18 @@ export default function Bg({ scrollProgress = 0 }) {
 
     // Cleanup
     return () => {
-      tl?.kill();
-      scene?.removeChild(mesh);
-      program?.gl?.deleteProgram(program.program);
-      geometry?.dispose();
+      if (tl) {
+        tl.kill();
+      }
+      if (scene) {
+        scene.removeChild(mesh);
+      }
+      if (program && program.gl) {
+        program.gl.deleteProgram(program.program);
+      }
+      if (geometry) {
+        geometry.dispose();
+      }
       console.log('Bg component cleanup');
     };
   }, [gl, scene, isInitialized, screenSize.width, screenSize.height]); // Re-run if GL context or screen size changes
@@ -83,7 +93,7 @@ export default function Bg({ scrollProgress = 0 }) {
   // Update scroll-based animation progress
   useEffect(() => {
     if (animationTimelineRef.current) {
-       // Progress is inverted in legacy (1 = start, 0 = end)
+      // Progress is inverted in legacy (1 = start, 0 = end)
       animationTimelineRef.current.progress(1 - scrollProgress);
     }
   }, [scrollProgress]);
@@ -97,15 +107,15 @@ export default function Bg({ scrollProgress = 0 }) {
 
   // Update time uniform (could be driven by global RAF in context, or local RAF)
   useEffect(() => {
-     let rafId;
-     const update = (time) => {
-         if (programRef.current) {
-             programRef.current.uniforms.uTime.value = time * 0.001;
-         }
-         rafId = requestAnimationFrame(update);
-     };
-     rafId = requestAnimationFrame(update);
-     return () => cancelAnimationFrame(rafId);
+    let rafId;
+    const update = (time) => {
+      if (programRef.current) {
+        programRef.current.uniforms.uTime.value = time * 0.001;
+      }
+      rafId = requestAnimationFrame(update);
+    };
+    rafId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(rafId);
   }, []); // Run time update continuously
 
   // This component doesn't render its own canvas, it uses the shared one
