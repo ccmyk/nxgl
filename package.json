@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,16 +21,21 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@next/eslint-plugin-next": "^15.3.2",
+    "autoprefixer": "^10.4.21",
+    "css-loader": "^7.1.2",
+    "cssnano": "^7.0.7",
     "eslint": "^9.26.0",
     "eslint-config-next": "15.3.1",
     "eslint-plugin-glsl": "0.0.0-wip",
-    "eslint-plugin-jsdoc": "^50.6.11",
+    "eslint-plugin-jsdoc": "^50.6.13",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^16.1.0",
     "postcss": "^8.5.3",
     "postcss-import": "^16.1.0",
+    "postcss-loader": "^8.1.1",
     "postcss-preset-env": "^10.1.6",
-    "raw-loader": "^4.0.2"
+    "raw-loader": "^4.0.2",
+    "style-loader": "^4.0.0"
   }
 }

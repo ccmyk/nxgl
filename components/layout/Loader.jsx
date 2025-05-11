@@ -2,143 +2,116 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import gsap from 'gsap'; // Import GSAP
+import gsap from 'gsap';
 import styles from './Loader.module.pcss';
-import { useTextAnimation } from '@/hooks/useTextAnimation'; // Import the text animation hook
-import WebGLLoader from '@/components/webgl/Loader'; // Import the WebGL Loader
+import { useTextAnimation } from '@/hooks/useTextAnimation';
+import WebGLLoader from '@/components/webgl/Loader';
 
-export default function Loader({ onLoaded }) { // Add prop to signal completion
-  const loaderRef = useRef(null);
+export default function Loader({ onLoaded }) {
+  const domLoaderRef = useRef(null); // Changed name for clarity
   const h1Ref = useRef(null);
   const h2Ref = useRef(null);
-  const counterRef = useRef(null); // Ref for the number display
-  const webglLoaderRef = useRef(null); // Ref to call WebGL fade out
+  const counterDisplayRef = useRef(null); // More descriptive name
+  const webglLoaderInstanceRef = useRef(null); // For WebGL Loader instance methods
 
-  const [counterState, setCounterState] = useState({ num: 0 }); // State for GSAP target
-  const [startAnimations, setStartAnimations] = useState(false);
-  const [isHiding, setIsHiding] = useState(false); // State to control hiding
+  const [counterTarget, setCounterTarget] = useState({ num: 0 }); // GSAP target
+  const [startDomAnimations, setStartDomAnimations] = useState(false);
+  const [isHidingProcess, setIsHidingProcess] = useState(false);
 
-  // --- Text Animations ---
-  // Trigger text animations when startAnimations is true
-  // Delays match the legacy loader's sequence
-  useTextAnimation(h1Ref, startAnimations, { params: { delay: 0.1 } }); // Small delay after start
-  useTextAnimation(h2Ref, startAnimations, { params: { delay: 0.15 } }); // Slightly later
+  useTextAnimation(h1Ref, startDomAnimations, { params: { delay: 0.1 } });
+  useTextAnimation(h2Ref, startDomAnimations, { params: { delay: 0.15 } });
 
-  // --- Counter Animation ---
   useEffect(() => {
-    // Start counter and text animations slightly after mount
-    const startTimer = setTimeout(() => setStartAnimations(true), 100); // Small delay
-
-    // GSAP Counter Animation (mirrors legacy Loader createAnim)
+    const startTimer = setTimeout(() => setStartDomAnimations(true), 100);
     const counterAnim = gsap.timeline({ paused: true })
-      .to(counterState, {
+      .to(counterTarget, {
         num: 42, ease: 'none', duration: 2,
-        onUpdate: () => counterRef.current.textContent = String(Math.floor(counterState.num)).padStart(3, '0'),
+        onUpdate: () => {
+          if (counterDisplayRef.current) { // Always check ref before access
+            counterDisplayRef.current.textContent = String(Math.floor(counterTarget.num)).padStart(3, '0');
+          }
+        },
       }, 0)
-      .to(counterState, {
-        num: 90, ease: 'power2.inOut', duration: 8, // Longer duration like legacy
-        onUpdate: () => counterRef.current.textContent = String(Math.floor(counterState.num)).padStart(3, '0'),
-      }, 2.2); // Start second phase later
+      .to(counterTarget, {
+        num: 90, ease: 'power2.inOut', duration: 8,
+        onUpdate: () => {
+          if (counterDisplayRef.current) {
+            counterDisplayRef.current.textContent = String(Math.floor(counterTarget.num)).padStart(3, '0');
+          }
+        },
+      }, 2.2);
 
-    if (startAnimations) {
+    if (startDomAnimations) {
       counterAnim.play();
     }
-
-    // Store timeline in ref for later control
-    const storeTimeline = (tl) => {
-        if (!loaderRef.current) {
-            loaderRef.current = {}; // Ensure ref object exists
-        }
-        loaderRef.current.counterAnim = tl;
-    };
-    storeTimeline(counterAnim);
-
+    // Store on a general ref if needed, or directly use counterAnim
+    if (!domLoaderRef.current) domLoaderRef.current = {};
+    domLoaderRef.current.counterGsapAnim = counterAnim; // Store GSAP timeline
 
     return () => {
         clearTimeout(startTimer);
-        counterAnim.kill(); // Cleanup GSAP animation
+        counterAnim.kill();
     };
-  }, [startAnimations, counterState]); // Rerun if startAnimations changes
-
-  // --- Fade Out Logic ---
-  useEffect(() => {
-    // This effect simulates the parent component telling the loader to hide
-    // In a real app, this would be triggered by actual loading completion
-    const hideTimer = setTimeout(() => {
-        console.log("Triggering Loader Hide");
-        hideLoader();
-    // }, 5000); // Example: Hide after 5 seconds for testing
-    }, 1400); // Match legacy timeout
-
-    return () => clearTimeout(hideTimer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run once on mount for demo
+  }, [startDomAnimations]); // Removed counterTarget from deps as it's an object mutated by GSAP
 
-  // Function to initiate hiding sequence
   const hideLoader = useCallback(() => {
-    if (isHiding) {
-        return; // Prevent multiple calls
-    }
-    setIsHiding(true);
-    console.log("Loader hide initiated");
+    if (isHidingProcess) return;
+    setIsHidingProcess(true);
+    // console.log("DOM Loader hide initiated");
 
-    // 1. Accelerate counter to 100%
-    const counterAnim = loaderRef.current?.counterAnim;
+    const counterAnim = domLoaderRef.current?.counterGsapAnim;
     if (counterAnim) {
-        gsap.to(counterState, {
+        gsap.to(counterTarget, { // Animate the target object
             num: 100,
-            duration: 0.49, // Fast completion
+            duration: 0.49,
             ease: 'power2.inOut',
             onUpdate: () => {
-                 if (counterRef.current) { // Check if ref exists
-                     counterRef.current.textContent = String(Math.floor(counterState.num)).padStart(3, '0');
+                 if (counterDisplayRef.current) {
+                     counterDisplayRef.current.textContent = String(Math.floor(counterTarget.num)).padStart(3, '0');
                  }
             },
             onComplete: () => {
-                // 2. Trigger WebGL fade out *after* counter hits 100
-                webglLoaderRef.current?.playFadeOut();
+                webglLoaderInstanceRef.current?.playFadeOut();
             }
         });
     } else {
-        // If counter anim doesn't exist, trigger WebGL immediately
-        webglLoaderRef.current?.playFadeOut();
+        webglLoaderInstanceRef.current?.playFadeOut();
     }
 
-    // 3. Fade out the DOM Loader container (slightly delayed)
-    gsap.to(loaderRef.current, { // Target the main loader div
+    gsap.to(domLoaderRef.current, {
         opacity: 0,
         duration: 0.5,
-        delay: 0.2, // Matches legacy delay
+        delay: 0.2,
         ease: 'power2.inOut',
         onComplete: () => {
-            // DOM loader fade out complete (WebGL handles its own completion)
-            console.log("DOM Loader fade out complete");
-            // Note: The WebGL onFadeOutComplete callback will call the parent's onLoaded
+            // console.log("DOM Loader visual fade out complete");
+            // WebGL Loader's onFadeOutComplete will call the main onLoaded
         }
     });
+  }, [isHidingProcess, counterTarget, domLoaderRef, webglLoaderInstanceRef]); // Added dependencies
 
+   useEffect(() => {
+    const demoHideTimer = setTimeout(() => {
+        hideLoader();
+    }, 1400); // Legacy timeout
+    return () => clearTimeout(demoHideTimer);
+  }, [hideLoader]);
 
-  }, [isHiding, counterState]); // Include counterState
-
-   // Callback passed to WebGL Loader
    const handleWebGLLoaded = useCallback(() => {
-       console.log("WebGL Loader fade out notified completion.");
+       // console.log("WebGL Loader part finished.");
        if (onLoaded) {
-           onLoaded(); // Notify parent component
+           onLoaded();
        }
    }, [onLoaded]);
 
-
   return (
-    // Use the ref here
-    <div ref={loaderRef} className={styles.loader}>
+    <div ref={domLoaderRef} className={styles.loader}>
       <div className={styles.loader_bg}></div>
-      <div className={`${styles.loader_cnt} ${styles.c_vw}`}>
-        {/* Attach ref to the number display */}
-        <div ref={counterRef} className={styles.loader_tp}>000</div>
+      <div className={`${styles.loader_cnt} c-vw`}> {/* Added global c-vw */}
+        <div ref={counterDisplayRef} className={styles.loader_tp}>000</div>
         <div className={styles.loader_bp}>
-          {/* Attach refs for text animation */}
-          <h1 ref={h1Ref} className="Awrite" data-params="0.8"> {/* Add Awrite class if hook relies on it */}
+          <h1 ref={h1Ref} className="Awrite" data-params="0.8">
             eva sánchez clemente
           </h1>
           <h2 ref={h2Ref} className="Awrite" data-params="0.8">
@@ -146,8 +119,7 @@ export default function Loader({ onLoaded }) { // Add prop to signal completion
           </h2>
         </div>
       </div>
-       {/* Render the WebGL Loader Component */}
-       <WebGLLoader ref={webglLoaderRef} onFadeOutComplete={handleWebGLLoaded} />
+       <WebGLLoader ref={webglLoaderInstanceRef} onFadeOutComplete={handleWebGLLoaded} />
     </div>
   );
 }

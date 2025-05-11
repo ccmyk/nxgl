@@ -1,17 +1,28 @@
-            /** @type {import('next').NextConfig} */
-            const nextConfig = {
-              webpack(config, { isServer, dev }) {
-                // Add rule for GLSL files
-                config.module.rules.push({
-                  test: /\.(glsl|vs|fs|vert|frag)$/,
-                  exclude: /node_modules/,
-                  use: ['raw-loader'],
-                });
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.pcss$/,
+      use: [
+        "style-loader",
+        {
+          loader: "css-loader",
+          options: {
+            url: true, // Ensure URLs are resolved correctly
+          },
+        },
+        {
+          loader: "postcss-loader",
+          options: {
+            postcssOptions: {
+              config: "./postcss.config.js",
+            },
+          },
+        },
+      ],
+    });
+    return config;
+  },
+};
 
-                // Important: return the modified config
-                return config;
-              },
-            };
-
-            export default nextConfig;
-            
+export default nextConfig;

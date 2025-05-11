@@ -1,2 +1,24 @@
 /* components/webgl/Tt.module.pcss */
 
+/*
+  If the Tt component were to render its own canvas or a wrapper div,
+  styles for those elements would go here.
+
+  Example if Tt rendered its own canvas (not the current implementation):
+  .canvasElement {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    max-width: 100%;
+    max-height: 100%;
+  }
+*/
+
+/* Styles for the HTML interaction element if needed, though these are often global or page-specific */
+/* For example, if the .Oiel class needs specific styling when .act is applied by Tt.jsx */
+:global(.Oiel.act) {
+  /* Styles for the visible static text, e.g., ensuring it's hidden if WebGL is active */
+  /* opacity: 0; */ /* Or handled by WebGL component's parent */
+}

@@ -1,50 +1,53 @@
 // eslint.config.mjs
+import globals from "globals";
+import nextPlugin from "@next/eslint-plugin-next";
+import reactPlugin from "eslint-plugin-react";
+import hooksPlugin from "eslint-plugin-react-hooks";
+import { FlatCompat } from "@eslint/eslintrc";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import globals from "globals";
-import nextPlugin from "@next/eslint-plugin-next"; // Correct import for plugin
-import reactRecommended from "eslint-plugin-react/configs/recommended.js";
-import hooksPlugin from "eslint-plugin-react-hooks";
-// If you decide to use TypeScript later or for stricter JS:
-// import tseslint from 'typescript-eslint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Initialize FlatCompat for eslint:recommended
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: true, // Ensure compatibility with recommended configurations
+    baseDirectory: __dirname,
+    recommendedConfig: {},
 });
 
 export default [
   {
-    ignores: [".next/**"], // IMPORTANT: Ignore the .next directory
+    ignores: [
+        ".next/**",
+        "node_modules/**",
+        "postcss.config.js",
+        "next.config.mjs", // Usually not linted with app rules
+    ],
   },
-  { // Base ESLint recommended rules
-    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
-    rules: {
-      "no-unused-vars": "warn",
-      "no-undef": "error",
-      "eqeqeq": "warn",
-      "curly": "error",
-      "no-console": "warn",
-    },
-  },
-  { // React specific configurations
-    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
+
+  // Base recommended rules (via FlatCompat)
+  ...compat.extends("eslint:recommended"),
+
+  // React specific configurations
+  {
+    files: ["**/*.{js,jsx,mjs}"],
     plugins: {
-      react: reactRecommended.plugins.react, // Access plugin correctly
+      react: reactPlugin,
       "react-hooks": hooksPlugin,
     },
     rules: {
-      ...reactRecommended.rules,
+      ...reactPlugin.configs.recommended.rules,
       ...hooksPlugin.configs.recommended.rules,
-      "react/react-in-jsx-scope": "off", // Not needed with Next.js 17+ / React 17+
-      "react/prop-types": "off", // Typically handled by TypeScript or not used in JS projects
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+      "no-undef": "error",
+      "no-console": ["warn", { "allow": ["warn", "error", "info"] }],
     },
     settings: {
       react: {
-        version: "detect", // Automatically detect React version
+        version: "detect",
       },
     },
     languageOptions: {
@@ -52,23 +55,42 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
+        sourceType: "module",
+        ecmaVersion: 2022, // or "latest"
       },
       globals: {
         ...globals.browser,
-        ...globals.node, // Add node globals if you have backend code / next.config.js etc.
       }
     }
   },
-  { // Next.js specific configurations
-    files: ["**/*.{js,jsx,mjs}"],
+
+  // Next.js specific configurations
+  // Apply these as a distinct configuration object
+  {
+    files: ["**/*.{js,jsx,mjs}"], // Adjust if you have specific Next.js files (e.g. pages, app router components)
     plugins: {
       "@next/next": nextPlugin,
     },
     rules: {
+      // Start with Next.js recommended rules
       ...nextPlugin.configs.recommended.rules,
+      // Add core web vitals rules
       ...nextPlugin.configs["core-web-vitals"].rules,
     },
+    languageOptions: { // Next.js files can run in browser or Node.js environments
+        globals: {
+            ...globals.browser,
+            ...globals.node,
+        }
+    }
   },
-  // If you add TypeScript:
-  // ...tseslint.configs.recommended,
-]
+  // Config for Node.js specific files (like config files themselves if you want to lint them)
+  {
+    files: ["*.config.js", "*.config.mjs" ], // Target config files if needed
+    languageOptions: {
+        globals: {
+            ...globals.node,
+        }
+    }
+  }
+];

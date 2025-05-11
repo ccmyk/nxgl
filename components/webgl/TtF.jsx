@@ -2,13 +2,14 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2, Post } from 'ogl';
+import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2, Post, Renderer, Transform } from 'ogl';
 import gsap from 'gsap';
 import { useWebGL } from '@/contexts/WebGLContext';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import fragmentShaderSource from '@/shaders/ttf/msdf.frag.glsl'; // Specific MSDF frag for TtF
 import vertexShaderSource from '@/shaders/tt/msdf.vert.glsl'; // Reuse base MSDF vertex
 import parentFragmentShaderSource from '@/shaders/ttf/parent.frag.glsl'; // Post-processing shader
+import styles from './TtF.module.pcss';
 import { lerp, clamp } from '@/lib/math';
 // Assuming useLenis provides scroll progress or you pass it as a prop
 // import { useLenis } from '@/hooks/useLenis';

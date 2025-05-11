@@ -2,13 +2,14 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2, Post } from 'ogl';
+import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2, Post, Renderer, Transform } from 'ogl';
 import gsap from 'gsap';
 import { useWebGL } from '@/contexts/WebGLContext';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import fragmentShaderSource from '@/shaders/tta/msdf.frag.glsl'; // Specific MSDF frag for TtA
 import vertexShaderSource from '@/shaders/tt/msdf.vert.glsl'; // Reuse base MSDF vertex shader
 import parentFragmentShaderSource from '@/shaders/tta/parent.frag.glsl'; // Post-processing shader
+import styles from './TtA.module.pcss';
 import { lerp, clamp } from '@/lib/math';
 
 export default function TtA({
