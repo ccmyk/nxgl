@@ -1,66 +1,62 @@
 // components/webgl/Tt.jsx
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { Program, Mesh, Text as OGLText, Texture, Geometry, Vec2 } from 'ogl';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { Program, Mesh, Text as OGLText, Geometry, Vec2 } from 'ogl';
 import gsap from 'gsap';
-import SplitType from 'split-type'; // Ensure this is installed: pnpm add split-type
+import SplitType from 'split-type'; 
 import { useWebGL } from '@/contexts/WebGLContext';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-// Assuming your shaders are correctly imported. If using raw-loader for .glsl:
 import fragmentShaderSource from '@/shaders/tt/msdf.frag.glsl';
 import vertexShaderSource from '@/shaders/tt/msdf.vert.glsl';
-import { lerp, clamp } from '@/lib/math'; // Assuming math utils exist
-import styles from './Tt.module.pcss'; // Import the CSS module
+import { lerp, clamp } from '@/lib/math';
+import styles from './Tt.module.pcss';
 
 export default function Tt({
   text = "DEFAULT TEXT",
-  fontKey = 'default', // Key to access font from WebGLContext.fonts
-  interactionElementRef, // REQUIRED: Ref to the HTML element for mouse interaction (e.g., the h2 or span)
-  ioRefSelf, // REQUIRED: Ref to the element triggering the IO (e.g., parent container or the interactionElementRef itself)
-  isVisible = true, // Optional: External visibility control
+  fontKey = 'default',
+  interactionElementRef,
+  ioRefSelf,
+  isVisible = true,
   align = 'center',
   letterSpacing = -0.022,
   size = 5,
-  width = undefined, // OGL Text width property
-  color = [0, 0, 0], // Default to black [R, G, B] float values (0-1)
-  animationParams = { durationIn: 0.8, durationPower: 2.0, delay: 0 }, // Includes base delay
+  width = undefined,
+  color = [0, 0, 0],  // [R, G, B] 0-1
+  animationParams = { durationIn: 0.8, durationPower: 2.0, delay: 0 },
   ioOptions = { threshold: 0.1 },
-  className = '', // Allow passing additional classes for the wrapper (if any)
-  glCanvasClassName = '', // Specific class for the canvas element itself
+  className = '',
+  glCanvasClassName = '',
 }) {
   const { gl, scene, camera, isInitialized: isWebGLInitialized, assetsLoaded, fonts } = useWebGL();
   const meshRef = useRef(null);
-  const textDataRef = useRef(null); // Stores OGL Text instance data
+  const textDataRef = useRef(null);
   const programRef = useRef(null);
   const geometryRef = useRef(null);
-  const splitInstanceRef = useRef(null); // For SplitType on interactionElementRef
-  const revealAnimationRef = useRef(null); // GSAP timeline for reveal
-  const interactionTimelineInRef = useRef(null); // GSAP timeline for mouse power in
-  const interactionTimelineOutRef = useRef(null); // GSAP timeline for mouse power out
-  const charBoundsRef = useRef([]); // Store character bounds for interaction
+  const splitInstanceRef = useRef(null);
+  const revealAnimationRef = useRef(null);
+  const interactionTimelineInRef = useRef(null);
+  const interactionTimelineOutRef = useRef(null);
+  const charBoundsRef = useRef([]);
 
   const [interactionState, setInteractionState] = useState({
     targetCharIndex: -1,
-    mouseXPercent: 0, // Mouse X relative to element width (-0.5 to 0.5)
-    charPowers: [], // Lerped power for each char [0..1]
-    targetCharPowers: [], // Target power for each char [0..1]
+    mouseXPercent: 0,
+    charPowers: [],
+    targetCharPowers: [],
     lerpFactor: 0.06,
   });
 
+  // Select font data from context
   const fontData = fonts && fonts[fontKey] ? fonts[fontKey] : null;
-
-  const [isInView] = useIntersectionObserver(ioRefSelf, ioOptions, true); // Freeze once visible
+  // Use intersection observer to trigger once element is in view
+  const [isInView] = useIntersectionObserver(ioRefSelf, ioOptions, true);
   const combinedIsActive = isWebGLInitialized && assetsLoaded && fontData && isVisible && isInView;
 
-  // --- 1. Setup OGL Text Object and Mesh ---
+  // 1. Initialize OGL Text mesh when WebGL ready and text visible
   useEffect(() => {
-    if (!gl || !scene || !fontData?.json || !fontData?.texture || !isWebGLInitialized || !text) {
-      return;
-    }
-
+    if (!gl || !scene || !fontData?.json || !fontData?.texture || !isWebGLInitialized || !text) return;
     let mesh, program, geometry;
-
     try {
       const oglText = new OGLText({
         font: fontData.json,
@@ -69,70 +65,55 @@ export default function Tt({
         align,
         letterSpacing,
         size,
-        lineHeight: 1, // Adjust if multiline
+        lineHeight: 1,
       });
       textDataRef.current = oglText;
-
       geometry = new Geometry(gl, {
         position: { size: 3, data: oglText.buffers.position },
         uv: { size: 2, data: oglText.buffers.uv },
         id: { size: 1, data: oglText.buffers.id },
         index: { data: oglText.buffers.index },
       });
-      geometry.computeBoundingBox(); // Important for centering
+      geometry.computeBoundingBox();
       geometryRef.current = geometry;
-
       const charCount = oglText.meta.chars.length || 1;
-      // Ensure uPowers uniform array in shader matches charCount
-      // The shader provided previously had fixed size arrays for uWidth/uHeight,
-      // OGL Text handles this internally. We need uPowers for interaction.
-      // The fragment shader should be updated if it uses PITO for array size.
-      // For now, assume msdf.frag.glsl is generic or PITO is handled.
-
       program = new Program(gl, {
         vertex: vertexShaderSource,
-        fragment: fragmentShaderSource, // Ensure this shader uses uPowers correctly
+        fragment: fragmentShaderSource,
         uniforms: {
           tMap: { value: fontData.texture },
-          uColor: { value: color }, // Text color [R, G, B]
-          uAlpha: { value: 1.0 }, // Overall opacity, can be animated
-          // MSDF uniforms
-          uThreshold: { value: 0.05 }, // Adjust for MSDF rendering
-          // Interaction uniforms
-          uMouse: { value: new Vec2(0, 0) }, // For X offset based on mouse
-          uPower: { value: 0.0 }, // Overall interaction strength (0-1)
-          uHoveredCharIndex: { value: -1.0 }, // Index of hovered char
-          // Initialize uPowers with default state (0.0 means no distortion from base)
+          uColor: { value: color },
+          uAlpha: { value: 1.0 },
+          uThreshold: { value: 0.05 },
+          uMouse: { value: new Vec2(0, 0) },
+          uPower: { value: 0.0 },
+          uHoveredCharIndex: { value: -1.0 },
           uPowers: { value: new Float32Array(charCount).fill(0.0) },
-          // Reveal animation
-          uRevealProgress: { value: 1.0 }, // 1 = hidden, 0 = shown
+          uRevealProgress: { value: 1.0 },
         },
         transparent: true,
         cullFace: null,
-        depthWrite: false, // Usually false for text
+        depthWrite: false,
       });
       programRef.current = program;
-
       mesh = new Mesh(gl, { geometry, program });
-      // Center the text mesh based on its computed geometry width
+      // Center the text mesh in its local space
       mesh.position.x = -oglText.width / 2;
-      mesh.position.y = -oglText.height / 2 + oglText.height * 0.35; // Adjust Y for baseline alignment
+      mesh.position.y = -oglText.height / 2 + oglText.height * 0.35;
       mesh.setParent(scene);
       meshRef.current = mesh;
-
       // Initialize interaction state arrays
       setInteractionState(prev => ({
         ...prev,
         charPowers: new Float32Array(charCount).fill(0.0),
         targetCharPowers: new Float32Array(charCount).fill(0.0),
       }));
-
       // console.log('Tt Initialized:', text);
     } catch (error) {
       console.error("Error initializing Tt:", text, error);
     }
-
     return () => {
+      // Cleanup on unmount or dependency change
       revealAnimationRef.current?.kill();
       interactionTimelineInRef.current?.kill();
       interactionTimelineOutRef.current?.kill();
@@ -143,30 +124,28 @@ export default function Tt({
     };
   }, [gl, scene, isWebGLInitialized, assetsLoaded, fontData, text, width, align, letterSpacing, size, color]);
 
-
-  // --- 2. Setup Interaction Element (SplitType & Mouse Events) ---
+  // 2. Setup interaction element (split text for hover tracking, GSAP timelines for hover in/out)
   useEffect(() => {
     const interactionNode = interactionElementRef?.current;
     if (!interactionNode || !textDataRef.current || !programRef.current || !combinedIsActive) return;
-
-    // GSAP Timelines for uPower (overall interaction strength)
+    // GSAP timelines for overall power uniform
     interactionTimelineInRef.current = gsap.timeline({ paused: true })
       .to(programRef.current.uniforms.uPower, { value: 1.0, duration: 0.36, ease: 'power2.out' });
     interactionTimelineOutRef.current = gsap.timeline({ paused: true })
       .to(programRef.current.uniforms.uPower, { value: 0.0, duration: 0.6, ease: 'power2.inOut', onComplete: () => {
-        if(programRef.current) programRef.current.uniforms.uHoveredCharIndex.value = -1.0;
+          if (programRef.current) {
+            programRef.current.uniforms.uHoveredCharIndex.value = -1.0;
+          }
       }});
-
-    // SplitType for character bounds
+    // Split text into spans for each character
     let splitInstance;
     try {
       splitInstanceRef.current?.revert();
       splitInstance = new SplitType(interactionNode, { types: 'chars', tagName: 'span' });
       splitInstanceRef.current = splitInstance;
-
       const parentRect = interactionNode.getBoundingClientRect();
       const bounds = (splitInstance.chars || []).map((el, idx) => {
-        el.dataset.charIndex = idx; // For debugging or direct CSS
+        el.dataset.charIndex = idx;
         const rect = el.getBoundingClientRect();
         return {
           left: rect.left - parentRect.left,
@@ -176,150 +155,131 @@ export default function Tt({
       });
       charBoundsRef.current = bounds;
     } catch (e) {
-      console.error("SplitType Error on Tt interaction element:", e, interactionNode);
+      console.error("SplitType error in Tt:", e);
       return;
     }
-
-    const findHoveredChar = (mouseX) => {
-      const relativeX = mouseX - interactionNode.getBoundingClientRect().left;
+    // Helper to find which character index is hovered based on mouse X
+    const findHoveredChar = (x) => {
+      const relativeX = x - interactionNode.getBoundingClientRect().left;
       for (const bound of charBoundsRef.current) {
-        if (relativeX >= bound.left && relativeX < bound.left + bound.width) {
-          return bound.index;
-        }
+        if (relativeX >= bound.left && relativeX < bound.left + bound.width) return bound.index;
       }
       return -1;
     };
-
-    const handleInteractionMove = (e) => {
+    // Mouse event handlers
+    const handleMove = e => {
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const targetIndex = findHoveredChar(clientX);
-      const relativeX = (clientX - interactionNode.getBoundingClientRect().left) / interactionNode.clientWidth;
+      const rect = interactionNode.getBoundingClientRect();
+      const relativeX = (clientX - rect.left) / rect.width;
       setInteractionState(prev => ({
-          ...prev,
-          targetCharIndex: targetIndex,
-          mouseXPercent: clamp(relativeX - 0.5, -0.5, 0.5), // Center around 0
+        ...prev,
+        targetCharIndex: targetIndex,
+        mouseXPercent: clamp(relativeX - 0.5, -0.5, 0.5),
       }));
       if (programRef.current) {
-        programRef.current.uniforms.uHoveredCharIndex.value = parseFloat(targetIndex);
+        programRef.current.uniforms.uHoveredCharIndex.value = targetIndex !== -1 ? targetIndex : -1.0;
       }
     };
-
-    const handleInteractionEnter = (e) => {
-      setInteractionState(prev => ({ ...prev, lerpFactor: 0.08 })); // Faster lerp
+    const handleEnter = e => {
+      setInteractionState(prev => ({ ...prev, lerpFactor: 0.08 }));
       interactionTimelineOutRef.current?.pause();
-      interactionTimelineInRef.current?.restart(); // Play from start
-      handleInteractionMove(e);
+      interactionTimelineInRef.current?.restart();
+      handleMove(e);
     };
-
-    const handleInteractionLeave = () => {
-      setInteractionState(prev => ({ ...prev, lerpFactor: 0.04, targetCharIndex: -1 })); // Slower lerp, reset
+    const handleLeave = () => {
+      setInteractionState(prev => ({ ...prev, lerpFactor: 0.04, targetCharIndex: -1 }));
       interactionTimelineInRef.current?.pause();
       interactionTimelineOutRef.current?.restart();
     };
-
-    interactionNode.addEventListener('mouseenter', handleInteractionEnter);
-    interactionNode.addEventListener('mousemove', handleInteractionMove);
-    interactionNode.addEventListener('mouseleave', handleInteractionLeave);
-    // Add touch equivalents if desired, though complex hover might not translate well
-
+    interactionNode.addEventListener('mouseenter', handleEnter);
+    interactionNode.addEventListener('mousemove', handleMove);
+    interactionNode.addEventListener('mouseleave', handleLeave);
+    // Touch events (optional)
+    interactionNode.addEventListener('touchstart', handleEnter, { passive: true });
+    interactionNode.addEventListener('touchmove', handleMove, { passive: true });
+    interactionNode.addEventListener('touchend', handleLeave);
     return () => {
-      interactionNode.removeEventListener('mouseenter', handleInteractionEnter);
-      interactionNode.removeEventListener('mousemove', handleInteractionMove);
-      interactionNode.removeEventListener('mouseleave', handleInteractionLeave);
+      interactionNode.removeEventListener('mouseenter', handleEnter);
+      interactionNode.removeEventListener('mousemove', handleMove);
+      interactionNode.removeEventListener('mouseleave', handleLeave);
+      interactionNode.removeEventListener('touchstart', handleEnter);
+      interactionNode.removeEventListener('touchmove', handleMove);
+      interactionNode.removeEventListener('touchend', handleLeave);
       splitInstanceRef.current?.revert();
       interactionTimelineInRef.current?.kill();
       interactionTimelineOutRef.current?.kill();
     };
-  }, [interactionElementRef, combinedIsActive]); // Rerun if interaction element or active state changes
+  }, [interactionElementRef, combinedIsActive]);
 
-  // --- 3. Lerp and Update uPowers Uniform for Character Interaction ---
+  // 3. Lerp update for character distortion powers each frame
   useEffect(() => {
     if (!programRef.current || !textDataRef.current || !combinedIsActive) return;
-
-    const currentPowers = [...interactionState.charPowers]; // Clone for modification
+    const currentPowers = Array.from(interactionState.charPowers);
     const { targetCharIndex, lerpFactor } = interactionState;
     const charCount = textDataRef.current.meta.chars.length;
-
-    if (currentPowers.length !== charCount) { // Ensure array is sized correctly
-        setInteractionState(prev => ({
-            ...prev,
-            charPowers: new Float32Array(charCount).fill(0.0),
-            targetCharPowers: new Float32Array(charCount).fill(0.0),
-        }));
-        return;
+    if (currentPowers.length !== charCount) {
+      // If length mismatch, reset arrays
+      setInteractionState(prev => ({
+        ...prev,
+        charPowers: new Float32Array(charCount).fill(0.0),
+        targetCharPowers: new Float32Array(charCount).fill(0.0),
+      }));
+      return;
     }
-
-    let needsUniformUpdate = false;
-
-    // Calculate target powers (1 for hovered, decreasing for neighbors)
+    let needsUpdate = false;
+    // Calculate target distortion power for each character based on hovered index
     const newTargetPowers = new Float32Array(charCount);
     for (let i = 0; i < charCount; i++) {
-      let targetPower = 0.0; // Default: no distortion
+      let targetPower = 0.0;
       if (targetCharIndex !== -1) {
         const dist = Math.abs(i - targetCharIndex);
-        // Example: Max power for hovered, 0.5 for adjacent, 0.25 for next, etc.
-        targetPower = Math.max(0, 1.0 - dist * 0.3); // Adjust multiplier for spread
+        targetPower = Math.max(0, 1.0 - dist * 0.3);
       }
       newTargetPowers[i] = targetPower;
     }
-
-    // Lerp current powers towards new target powers
+    // Lerp current powers toward target powers
     const newPowers = new Float32Array(charCount);
     for (let i = 0; i < charCount; i++) {
       newPowers[i] = lerp(currentPowers[i], newTargetPowers[i], lerpFactor);
       if (Math.abs(newPowers[i] - currentPowers[i]) > 0.001) {
-        needsUniformUpdate = true;
+        needsUpdate = true;
       }
     }
-
-    if (needsUniformUpdate) {
+    if (needsUpdate && programRef.current) {
       programRef.current.uniforms.uPowers.value = newPowers;
       setInteractionState(prev => ({ ...prev, charPowers: newPowers, targetCharPowers: newTargetPowers }));
     }
+    // Update uniform for overall mouse X offset effect
     if (programRef.current) {
-        programRef.current.uniforms.uMouse.value.x = interactionState.mouseXPercent;
+      programRef.current.uniforms.uMouse.value.x = interactionState.mouseXPercent;
     }
+  }, [interactionState, combinedIsActive]);
 
-  }, [interactionState, combinedIsActive, textDataRef]);
-
-  // --- 4. Reveal Animation (uRevealProgress) ---
+  // 4. Reveal animation for text (fade in from invisible)
   useEffect(() => {
     if (!combinedIsActive || !programRef.current || revealAnimationRef.current?.isActive()) return;
-
     const { durationIn, delay: startDelay } = animationParams;
     const tl = gsap.timeline({ delay: startDelay });
     tl.fromTo(programRef.current.uniforms.uRevealProgress,
-      { value: 1.0 }, // Start hidden
-      { value: 0.0, duration: durationIn, ease: 'power3.out' } // Animate to shown
+      { value: 1.0 },
+      { value: 0.0, duration: durationIn, ease: 'power3.out' }
     );
-    // Also animate overall interaction power (uPower) in, if desired
     tl.fromTo(programRef.current.uniforms.uPower,
       { value: 0.0 },
-      { value: 0.5, duration: animationParams.durationPower || 1.0, ease: 'power2.inOut' }, // Default uPower after reveal
-      0 // Start uPower animation with reveal
+      { value: 0.5, duration: animationParams.durationPower || 1.0, ease: 'power2.inOut' },
+      0
     );
-
     revealAnimationRef.current = tl;
     tl.play();
-
-    // Add .act class to interaction element after animation (from legacy)
+    // After reveal, add 'act' class to interaction element to indicate activation
     if (interactionElementRef?.current) {
-        gsap.delayedCall(startDelay + durationIn, () => {
-            interactionElementRef.current.classList.add('act');
-        });
+      gsap.delayedCall(startDelay + durationIn, () => {
+        interactionElementRef.current.classList.add('act');
+      });
     }
-
   }, [combinedIsActive, animationParams, interactionElementRef]);
 
-  // The WebGL mesh is added to the shared scene from WebGLContext.
-  // This component itself doesn't render a DOM element, unless you want a wrapper.
-  // If you need a canvas specifically for this, you'd manage it here.
-  // For now, assuming it draws to the main WebGLContext canvas.
-  // If Tt needs its own canvas (e.g. for specific sizing not fitting the global canvas),
-  // it would be similar to TtA/TtF, creating its own Renderer.
-  // However, the legacy .glF elements seemed to be individual canvases, implying they might
-  // be better off managing their own render target if precise sizing relative to HTML is key.
-  // For now, this version draws to the shared scene.
-
-  return null; // This component draws to the shared WebGL canvas via context.scene
+  // This component renders nothing to the DOM by itself (WebGL canvas draws the text)
+  return null;
 }

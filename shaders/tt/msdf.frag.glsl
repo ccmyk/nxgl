@@ -24,7 +24,7 @@ float median(float r, float g, float b) {
 void main() {
   vec3 sample = texture(tMap, vUv).rgb;
   float sd = median(sample.r, sample.g, sample.b) - 0.5;
-  float d = fwidth(sd);              // ← yes, this is correct
+  float d = fwidth(sd);
   float alpha = clamp(sd / d + 0.5, 0.0, 1.0);
 
   // modulate by uStart and uPower if needed

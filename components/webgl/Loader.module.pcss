@@ -1,13 +1,90 @@
-/* components/webgl/Loader.module.pcss */
+/* Loader.module.pcss */
 
-.canvasElement {
-  position: fixed; /* Covers the entire viewport */
-  top: 0;
-  left: 0;
+/* Full-screen loader container overlay */
+.loaderOverlay {
+  position: fixed;
+  inset: 0;                     /* shorthand for top:0; right:0; bottom:0; left:0 */
   width: 100vw;
   height: 100vh;
-  pointer-events: none; /* Loader overlay shouldn't block interactions */
-  z-index: 99; /* High z-index, but potentially below DOM loader elements */
-  opacity: 1; /* Base opacity */
-  /* Transitions are handled by the component's GSAP animation */
+  background-color: #000;       /* or use the legacy loader background color */
+  color: #fff;                  /* text color for contrast (white on black background) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;                /* ensure loader is on top of other layout elements (nav, content, cursor) */
+  pointer-events: auto;         /* allow overlay to capture pointer events (block interaction with underlying content) */
+  transition: opacity 0.8s ease-out;
+  opacity: 1;                   /* start fully visible */
+}
+
+/* When loader is finished (add this class via JS to trigger fade-out) */
+.loaderOverlay.hidden {
+  opacity: 0;
+  pointer-events: none;         /* ignore events when fading out (optional, since we will remove the element after) */
+}
+
+/* Inner content wrapper (if needed for additional styling) */
+.loaderInner {
+  text-align: center;           /* center text horizontally */
+  padding: 2rem;
+}
+
+/* Main loader title text */
+.loaderTitle {
+  font-family: var(--font-title, sans-serif);  /* use the designated title font if defined */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  /* Responsive font sizing: clamp(min, vw-based, max) to scale with screen size */
+  font-size: clamp(2rem, 8vw, 5rem);
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Optional subtitle or loading indicator text */
+.loaderSubtitle {
+  font-family: var(--font-base, sans-serif);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+/* Ensure any loader text spans (for per-letter animation) are inline-block so they can animate independently */
+.loaderTitle span,
+.loaderSubtitle span {
+  display: inline-block;
+  white-space: pre;    /* preserve spaces if any in text content */
+}
+
+/* (Optional) Initial state for text letter animation: hidden and shifted down */
+.loaderTitle span {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* (Optional) Animated state for text letters: visible and in place */
+.loaderTitle span.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Canvas overlay for WebGL (fade effect) */
+.loaderCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9990;        /* slightly below the .loaderOverlay (so canvas is behind the text) */
+  pointer-events: none; /* canvas doesn’t capture clicks – allow clicks to pass through after loader is gone */
+}
+
+/* Media query for very small screens (adjust spacing or font if needed) */
+@media (max-width: 480px) {
+  .loaderInner { padding: 1.5rem; }
+  .loaderTitle { letter-spacing: 0.05em; }
+  .loaderSubtitle { font-size: clamp(0.9rem, 4vw, 1.2rem); }
 }
