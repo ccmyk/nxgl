@@ -1,4 +1,4 @@
-/* components/MouseCursor.module.pcss */
+/* components/layout/MouseCursor.module.pcss */
 
 .mouse {
   position: fixed;
@@ -12,39 +12,28 @@
   cursor: none !important;
 }
 
-.mouse_el {
+.hoverElement {
   position: absolute;
   left: 2rem;
   top: -0.8rem;
   overflow: hidden;
-}
-
-.mouse_el .Awrite {
   white-space: nowrap;
 }
 
-.mouse_el .Awrite-w {
-  --dark: #f8f6f2;
+.hoverContent {
+  display: inline-block;
+  white-space: nowrap;
   --light: #000;
+  --dark: #f8f6f2;
+  color: var(--dark);
 }
 
-.hoverElement {
-  position: absolute;
-  left: 15px; /* Adjust positioning based on original */
-  top: -8px; /* Adjust positioning */
-  overflow: hidden; /* Needed for width animation */
-  white-space: nowrap;
-  background-color: transparent; /* Or style as needed */
-  width: 0; /* Controlled by GSAP */
-}
-
-.inverted {
-  /* Styles matching original .Awrite-inv */
+/* Optional inverted theme styles can be toggled in component logic */
+.hoverContent.Awrite-inv {
   color: var(--light);
-  background: var(--dark);
+  background-color: var(--dark);
 }
 
-/* Hide cursor on touch devices if desired */
 @media (hover: none) {
   .mouse {
     display: none;

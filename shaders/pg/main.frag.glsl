@@ -1,6 +1,5 @@
+#version 300 es
 precision highp float;
-
-
 uniform sampler2D tMap;
 uniform vec2 uCover;
 uniform float uMouse;

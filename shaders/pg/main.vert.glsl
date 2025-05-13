@@ -1,4 +1,4 @@
-
+#version 300 es
 attribute vec3 uv;
 attribute vec3 position;
 

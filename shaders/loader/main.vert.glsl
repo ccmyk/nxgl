@@ -1,5 +1,4 @@
-// src/webgl/components/Loader/shaders/main.vert.glsl
-
+#version 300 es
 attribute vec2 position;
 varying vec2 vUv;
 void main() {

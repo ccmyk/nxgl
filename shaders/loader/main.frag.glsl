@@ -1,5 +1,4 @@
-// src/webgl/components/Loader/shaders/main.frag.glsl
-
+#version 300 es
 precision highp float;
 varying vec2 vUv;
 uniform vec2 uResolution;
