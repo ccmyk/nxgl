@@ -1,80 +1,167 @@
 /* components/layout/Nav.module.pcss */
-/* ... (all your existing nav styles from css_dump.txt) ... */
 
 .nav {
-  /* Base styles */
-  /* Default to light theme variables or direct values */
-  --nav-text-color: var(--dark);       /* Legacy --dark */
-  --nav-text-accent: var(--gray);    /* Legacy --gray for clock */
-  --nav-bg-color: transparent;       /* Or var(--light) if it had a solid bg */
-  --nav-link-hover-color: var(--dark); /* For .Awrite:hover if not inverted */
-  --nav-contact-bg: var(--dark);
-  --nav-contact-text: var(--light);
-
-  /* Apply the variables */
-  color: var(--nav-text-color);
-  /* ... other base nav styles ... */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  --gray: #8a8a8a;
 }
 
-/*
-.nav_logo,
-.nav_right_ops a,
-.nav_clock_h,
-.nav_clock_m,
-.nav_clock_a {
-  /* Base link/text color */
-  /* This will be overridden by .Awrite's own --dark/--light logic,
-     but useful if theme changes those variables  
-} */
-
-.nav_clock_p .Awrite { /* City */
-  --dark: var(--nav-text-accent); /* Make city use the accent color */
-}
-.nav_clock_s { /* Colon */
-  color: var(--nav-text-accent);
-}
-
-
-/* Light theme (default or explicit class) */
-.navThemeLight {
-  --nav-text-color: var(--dark);
-  --nav-text-accent: var(--gray);
-  --nav-link-hover-color: var(--dark);
-  --nav-contact-bg: var(--dark);
-  --nav-contact-text: var(--light);
-}
-/* For .Awrite text animation inside light theme Nav */
-.navThemeLight :global(.Awrite) {
-  --dark: var(--nav-text-color); /* Text color */
-  --light: var(--nav-contact-bg); /* Background for fakes, usually dark */
-}
-.navThemeLight :global(.Awrite-inv) {
-  --dark: var(--nav-contact-text); /* Text color for inverted */
-  --light: var(--nav-contact-bg); /* Background for inverted (which is its text color) */
-}
-
-
-/* Dark theme (when background becomes dark, e.g., from Bg component) */
-.navThemeDark {
-  --nav-text-color: var(--light);       /* Text becomes light */
-  --nav-text-accent: var(--gray);     /* Accent might stay gray or become lighter gray */
-  --nav-link-hover-color: var(--light); /* Hover becomes light */
-  --nav-contact-bg: var(--light);       /* Contact button bg becomes light */
-  --nav-contact-text: var(--dark);      /* Contact button text becomes dark */
-}
-/* For .Awrite text animation inside dark theme Nav */
-.navThemeDark :global(.Awrite) {
-  --dark: var(--nav-text-color);
-  --light: var(--nav-contact-bg); /* If contact bg is now light, fakes should be light */
-}
-.navThemeDark :global(.Awrite-inv) {
-  --dark: var(--nav-contact-text);
-  --light: var(--nav-contact-bg);
-}
-
-
-/* Ensure .nav_blur adapts if its appearance is theme-dependent
 .nav_blur {
-  /* ... existing blur styles ... */
-  /* If blur color needs to change with theme, apply here or via JS 
-} */
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  transform-origin: left top;
+  pointer-events: none;
+  transition:
+    1s transform cubic-bezier(0.55, 0, 0.1, 1),
+    1s height cubic-bezier(0.55, 0, 0.1, 1);
+  transform: translateZ(0) translateY(-30%);
+}
+
+:root.D .nav_blur,
+:root.T .nav_blur {
+  height: 280%;
+}
+
+.nav_blur > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.nav_blur > div:nth-of-type(1) {
+  z-index: 2;
+  backdrop-filter: blur(1px);
+  -webkit-mask: linear-gradient(to top, transparent 0%, white 12.5%, white 37.5%, transparent 50%);
+}
+
+.nav_blur > div:nth-of-type(2) {
+  z-index: 3;
+  backdrop-filter: blur(2px);
+  -webkit-mask: linear-gradient(to top, transparent 12.5%, white 37.5%, white 50%, transparent 62.5%);
+}
+
+.nav_blur > div:nth-of-type(3) {
+  z-index: 4;
+  backdrop-filter: blur(4px);
+  -webkit-mask: linear-gradient(to top, transparent 37.5%, white 50%, white 62.5%, transparent 75%);
+}
+
+.nav_blur > div:nth-of-type(4) {
+  z-index: 5;
+  backdrop-filter: blur(8px);
+  -webkit-mask: linear-gradient(to top, transparent 50%, white 62.5%, white 75%, transparent 87.5%);
+}
+
+.nav_top {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  z-index: 54;
+  pointer-events: none;
+  line-height: 1.27;
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
+  align-items: center;
+}
+
+:root.T .nav_top {
+  @media (orientation: portrait) {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    align-items: flex-start;
+  }
+}
+
+.nav_left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+:root.T .nav_left {
+  @media (orientation: portrait) and (max-width: 745px) {
+    width: 8.8rem;
+    flex-wrap: wrap;
+  }
+}
+
+.nav_logo {
+  display: flex;
+  pointer-events: all;
+  opacity: 0;
+}
+
+.nav_clock {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.nav_clock_p {
+  margin-right: 0.6rem;
+}
+
+.nav_clock_s {
+  opacity: 0;
+  color: var(--gray);
+}
+
+.nav_clock_a {
+  margin-left: 0.6rem;
+}
+
+.nav_right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+:root.T .nav_right {
+  @media (orientation: portrait) and (max-width: 745px) {
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 23.3rem;
+  }
+}
+
+.nav_right_ops {
+  @media (orientation: portrait) and (max-width: 745px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.nav_right_ops a + a {
+  @media (orientation: portrait) and (max-width: 745px) {
+    margin-top: 2px;
+  }
+}
+
+.nav_right a {
+  opacity: 0;
+  margin-left: 2.4rem;
+}
+
+.nav_right a.act {
+  pointer-events: all;
+}
+
+.nav_right a.inac {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+.nav_right a:not(.act) {
+  pointer-events: all;
+}
