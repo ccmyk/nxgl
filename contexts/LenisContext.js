@@ -1,90 +1,138 @@
-// contexts/LenisContext.js
+// contexts/LenisContext.js (or .jsx)
 'use client';
 
-import React, { createContext, useContext, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useRef, useEffect, useCallback, useMemo, useState } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 
 const LenisContext = createContext(null);
 
-const getLegacyLenisOptions = (isTouch = false) => ({
-  lerp: 0.04, duration: 0.8, smoothWheel: !isTouch,
-  smoothTouch: false, normalizeWheel: true,
+// Options based on your legacy setup
+const getLenisOptions = (isTouchDevice = false) => ({
+  lerp: isTouchDevice ? 0.1 : 0.07, // Example: slightly different lerp for touch
+  duration: 1.2, // From your scrollTo example, or adjust
+  smoothWheel: !isTouchDevice,
+  smoothTouch: isTouchDevice, // Enable smooth touch if desired
+  normalizeWheel: true, // Usually good to keep
 });
 
-export function LenisProvider({ children, isTouch }) {
+export function LenisProvider({ children, isTouch: isTouchDeviceProp }) {
   const lenisRef = useRef(null);
   const tickerCallbackRef = useRef(null);
-  const isScrollingRef = useRef(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  // Determine isTouch. Default to false if prop not provided initially.
+  const isTouch = typeof isTouchDeviceProp === 'boolean' ? isTouchDeviceProp : false;
 
   useEffect(() => {
-    const options = getLegacyLenisOptions(isTouch);
+    if (typeof window === 'undefined') return;
+
+    const options = getLenisOptions(isTouch);
     const lenis = new Lenis(options);
     lenisRef.current = lenis;
-    lenis.stop(); // Start stopped
+    setIsReady(true);
+
+    // Start stopped, as per loader sequence logic
+    lenis.stop();
     document.documentElement.classList.add('lenis-stopped');
     document.documentElement.classList.remove('lenis-scrolling');
 
-    const handleScroll = (e) => { /* ... (scroll class handling logic as before) ... */
-        const { scroll, velocity, direction, targetScroll } = e;
-        if (targetScroll > 0) { document.documentElement.classList.add('scroll-start'); }
-        else { document.documentElement.classList.remove('scroll-start'); }
-        if (direction === 1) { document.documentElement.classList.remove('scroll-up'); document.documentElement.classList.add('scroll-down'); }
-        else if (direction === -1) { document.documentElement.classList.remove('scroll-down'); document.documentElement.classList.add('scroll-up'); }
-        const isCurrentlyScrolling = Math.abs(velocity) > 0.1;
-        if (isCurrentlyScrolling !== isScrollingRef.current) {
-            if (isCurrentlyScrolling) { document.documentElement.classList.add('lenis-scrolling'); document.documentElement.classList.remove('lenis-stopped'); }
-            else { document.documentElement.classList.remove('lenis-scrolling'); document.documentElement.classList.add('lenis-stopped'); }
-            isScrollingRef.current = isCurrentlyScrolling;
-        }
+    const handleScroll = (e) => {
+      const { velocity, direction, targetScroll } = e;
+      if (targetScroll > 0) {
+        document.documentElement.classList.add('scroll-start');
+      } else {
+        document.documentElement.classList.remove('scroll-start');
+      }
+
+      if (direction === 1) {
+        document.documentElement.classList.remove('scroll-up');
+        document.documentElement.classList.add('scroll-down');
+      } else if (direction === -1) {
+        document.documentElement.classList.remove('scroll-down');
+        document.documentElement.classList.add('scroll-up');
+      }
+
+      const currentlyScrolling = Math.abs(velocity) > 0.02;
+      if (currentlyScrolling !== isScrolling) {
+          setIsScrolling(currentlyScrolling);
+          if (currentlyScrolling) {
+              document.documentElement.classList.add('lenis-scrolling');
+              document.documentElement.classList.remove('lenis-stopped');
+          } else {
+              document.documentElement.classList.remove('lenis-scrolling');
+              document.documentElement.classList.add('lenis-stopped');
+          }
+      }
     };
+
     lenis.on('scroll', handleScroll);
 
-    tickerCallbackRef.current = (time) => { lenisRef.current?.raf(time * 1000); };
+    // Use GSAP ticker for Lenis updates
+    tickerCallbackRef.current = (time) => {
+      lenisRef.current?.raf(time * 1000); // Lenis expects milliseconds
+    };
     gsap.ticker.add(tickerCallbackRef.current);
 
     return () => {
-      if (tickerCallbackRef.current) gsap.ticker.remove(tickerCallbackRef.current);
+      if (tickerCallbackRef.current) {
+        gsap.ticker.remove(tickerCallbackRef.current);
+        tickerCallbackRef.current = null;
+      }
       lenisRef.current?.off('scroll', handleScroll);
       lenisRef.current?.destroy();
       lenisRef.current = null;
-      document.documentElement.classList.remove('lenis-stopped', 'lenis-scrolling', 'scroll-start', 'scroll-up', 'scroll-down');
+      setIsReady(false);
+      // Clear classes on unmount
+      document.documentElement.classList.remove(
+        'lenis-stopped', 'lenis-scrolling',
+        'scroll-start', 'scroll-up', 'scroll-down'
+      );
     };
-  }, [isTouch]);
+  }, [isTouch, isScrolling]); // Added isScrolling to dependencies of useEffect
 
-  // --- Lenis Control Methods ---
   const startScroll = useCallback(() => {
-    lenisRef.current?.start();
-    // Optional: Add legacy event dispatch if needed elsewhere
-    // document.dispatchEvent(new Event('startscroll'));
-  }, []);
+    if (lenisRef.current && isReady) {
+        lenisRef.current.start();
+        // Class update might be slightly delayed due to event, force it if needed
+        // document.documentElement.classList.remove('lenis-stopped');
+        // document.documentElement.classList.add('lenis-scrolling'); // Or let event handle
+        console.log("Lenis: Scrolling STARTED via startScroll()");
+    }
+  }, [isReady]);
 
   const stopScroll = useCallback(() => {
-    lenisRef.current?.stop();
-    // Optional: Add legacy event dispatch if needed elsewhere
-    // document.dispatchEvent(new Event('stopscroll'));
-  }, []);
+    if (lenisRef.current && isReady) {
+        lenisRef.current.stop();
+        // document.documentElement.classList.add('lenis-stopped');
+        // document.documentElement.classList.remove('lenis-scrolling');
+        console.log("Lenis: Scrolling STOPPED via stopScroll()");
+    }
+  }, [isReady]);
 
   const scrollTo = useCallback((target, options = {}) => {
-    lenisRef.current?.scrollTo(target, {
-      offset: options.offset ?? 0, immediate: options.immediate ?? false,
-      lock: options.lock ?? false, force: options.force ?? false,
-      duration: options.duration ?? 1.2,
-      easing: options.easing ?? ((t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))),
-      ...options,
-    });
-     // Optional: Add legacy event dispatch if needed elsewhere
-     // const event = new CustomEvent('scrollto', { detail: { target, options } });
-     // document.dispatchEvent(event);
-  }, []);
+    if (lenisRef.current && isReady) {
+        lenisRef.current.scrollTo(target, {
+            offset: options.offset ?? 0,
+            immediate: options.immediate ?? false,
+            lock: options.lock ?? false,
+            force: options.force ?? false, // Not a standard Lenis option, remove if not custom
+            duration: options.duration ?? 1.2, // Default duration from your example
+            easing: options.easing ?? ((t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))), // Default easing
+            ...options, // Pass through other valid Lenis options
+        });
+    }
+  }, [isReady]);
 
-  // --- Context Value ---
   const value = useMemo(() => ({
-    lenis: lenisRef, // Provide the ref
-    startScroll,      // Provide control function
-    stopScroll,       // Provide control function
-    scrollTo,         // Provide control function
-  }), [startScroll, stopScroll, scrollTo]); // Dependencies include the stable callbacks
+    lenisInstance: lenisRef.current, // Expose the instance directly if needed by advanced components
+    startScroll,
+    stopScroll,
+    scrollTo,
+    isScrolling, // Expose scrolling state
+    isLenisReady: isReady, // Expose ready state
+  }), [startScroll, stopScroll, scrollTo, isScrolling, isReady]); // isReady added
 
   return (
     <LenisContext.Provider value={value}>
@@ -93,12 +141,10 @@ export function LenisProvider({ children, isTouch }) {
   );
 }
 
-// --- Hook ---
 export function useLenis() {
   const context = useContext(LenisContext);
   if (context === null) {
     throw new Error('useLenis must be used within a LenisProvider');
   }
-  // Return the ref and the control methods
   return context;
 }

@@ -4,10 +4,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
-import styles from './Nav.module.pcss'; // Ensure this path is correct
+import styles from './Nav.module.pcss';
 import { useTextAnimation } from '@/hooks/useTextAnimation';
 
-// Assume a theme prop: 'light' (default) or 'dark' (when Bg makes page dark)
 export default function Nav({ currentTheme = 'light' }) {
   const [timeString, setTimeString] = useState('00:00AM');
   const [clockActive, setClockActive] = useState(false);
