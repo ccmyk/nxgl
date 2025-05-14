@@ -1,12 +1,6 @@
-import { defineConfig } from 'next';
-
-export default defineConfig({
-  experimental: {
-    turbo: {
-      loaders: {
-        '.glsl': ['raw-loader'],
-      },
-    },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  turbopack: {
   },
   webpack(config) {
     config.module.rules.push({
@@ -14,6 +8,30 @@ export default defineConfig({
       type: 'asset/source',
     });
 
+    config.module.rules.push({
+      test: /\.pcss$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            url: true,
+            importLoaders: 1,
+          },
+        },
+        {
+          loader: 'postcss-loader',
+          options: {
+            postcssOptions: {
+              config: './postcss.config.js',
+            },
+          },
+        },
+      ],
+    });
+
     return config;
   },
-});
+};
+
+export default nextConfig;
