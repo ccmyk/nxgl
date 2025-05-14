@@ -405,3 +405,67 @@
   opacity: 0;
   transition: 0.4s opacity cubic-bezier(0.55, 0, 0.1, 1);
 }
+
+/* additional styles for the footer */
+.footer {
+  padding: 4rem 0;
+  background-color: var(--background-footer, #ffffff);
+  color: var(--color-footer, #000);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer_cm {
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.cta {
+  position: relative;
+  display: inline-block;
+}
+
+.cnt {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.cnt_lk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.cnt_lk_el {
+  position: relative;
+}
+
+.cnt_lk_el a {
+  opacity: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.cnt_lk_el a.is-animated {
+  pointer-events: auto;
+}
+
+.cnt_lk_el svg {
+  width: 0.7rem;
+  height: auto;
+}
+
+.cnt_cp {
+  font-size: 0.8rem;
+  opacity: 0;
+}
+
+.cnt_cp.is-animated {
+  opacity: 1;
+}

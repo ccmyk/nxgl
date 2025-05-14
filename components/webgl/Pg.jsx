@@ -5,8 +5,8 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Renderer, Camera, Transform, Program, Mesh, Texture, Plane, Vec2 } from 'ogl';
 import gsap from 'gsap';
 import styles from './Pg.module.pcss'; // Assuming basic styles exist
-import fragmentShader from '@/shaders/pg/main.frag.glsl'; // Import shaders
-import vertexShader from '@/shaders/pg/main.vert.glsl';
+import frag from '@/shaders/pg/main.frag.glsl'; // Import shaders
+import vert from '@/shaders/pg/main.vert.glsl';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useLenis } from '@/hooks/useLenis';
 import { useViewport } from '@/hooks/useViewport'; // Use viewport hook
@@ -84,8 +84,8 @@ export default function Pg({
 
       // --- Create Shared Program ---
       program = new Program(gl, {
-        vertex: vertexShader,
-        fragment: fragmentShader,
+        vertex: vert,
+        fragment: frag,
         uniforms: {
           uTime: { value: 0 },
           uStart: { value: 0 }, // Not used in PG shaders?

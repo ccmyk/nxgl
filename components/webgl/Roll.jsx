@@ -5,8 +5,8 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Renderer, Program, Mesh, Texture, Triangle, Vec2 } from 'ogl';
 import gsap from 'gsap';
 import styles from './Roll.module.pcss'; // Assuming basic styles exist
-import fragmentShader from '@/shaders/roll/single.frag.glsl'; // Import shaders
-import vertexShader from '@/shaders/roll/single.vert.glsl';
+import frag from '@/shaders/roll/single.frag.glsl'; // Import shaders
+import vert from '@/shaders/roll/single.vert.glsl';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useLenis } from '@/hooks/useLenis'; // To get scroll position
 import { clamp, lerp } from '@/lib/math';
@@ -114,8 +114,8 @@ export default function Roll({
 
       // --- Program Setup ---
       program = new Program(gl, {
-        vertex: vertexShader,
-        fragment: fragmentShader,
+        vertex: vert,
+        fragment: frag,
         uniforms: {
           uStart: { value: 0 }, // Animated by scroll
           uEnd: { value: 0 }, // Animated by scroll

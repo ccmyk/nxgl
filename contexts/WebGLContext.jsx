@@ -1,72 +1,24 @@
 // contexts/WebGLContext.jsx
 'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useRef,
-  useEffect,
-  useState,
-} from 'react';
-import { Renderer, Camera, Transform } from 'ogl';
+import { createContext, useContext, useRef } from 'react';
 
-export const WebGLContext = createContext(null);
+const WebGLContext = createContext(null);
 
-export function WebGLProvider({ children, canvasRef, onReadyAndResourcesLoaded }) {
-  const rendererRef = useRef(null);
-  const cameraRef = useRef(null);
-  const sceneRef = useRef(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+export const useWebGL = () => useContext(WebGLContext);
 
-  useEffect(() => {
-    if (!canvasRef?.current) return;
+export default function WebGLProvider({ children }) {
+  const webgl = useRef({});
 
-    const renderer = new Renderer({ dpr: 2, canvas: canvasRef.current, alpha: true });
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 1);
+  const register = (name, instance) => {
+    webgl.current[name] = instance;
+  };
 
-    const camera = new Camera(gl);
-    camera.position.z = 1;
+  const unregister = (name) => {
+    delete webgl.current[name];
+  };
 
-    const scene = new Transform();
+  const value = { webgl, register, unregister };
 
-    rendererRef.current = renderer;
-    cameraRef.current = camera;
-    sceneRef.current = scene;
-
-    const handleResize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    setIsInitialized(true);
-
-    if (typeof onReadyAndResourcesLoaded === 'function') {
-      onReadyAndResourcesLoaded(true);
-    }
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      renderer.dispose();
-    };
-  }, [canvasRef, onReadyAndResourcesLoaded]);
-
-  return (
-    <WebGLContext.Provider
-      value={{
-        renderer: rendererRef.current,
-        camera: cameraRef.current,
-        scene: sceneRef.current,
-        isInitialized,
-        gl: rendererRef.current?.gl,
-      }}
-    >
-      {children}
-    </WebGLContext.Provider>
-  );
-}
-
-export function useWebGL() {
-  return useContext(WebGLContext);
+  return <WebGLContext.Provider value={value}>{children}</WebGLContext.Provider>;
 }

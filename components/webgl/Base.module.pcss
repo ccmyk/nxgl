@@ -1,21 +1,13 @@
 /* components/webgl/Base.module.pcss */
 
-.canvasElement {
-  position: absolute; /* Positioned relative to its parent container (e.g., .cnt_prj_im) */
+.canvas {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* Canvas itself doesn't need mouse events */
-  z-index: 2; /* Ensure it's above the base img/video but below potential overlays */
-  opacity: 1; /* Base opacity */
-  filter: blur(0px); /* Base filter */
-  transition: opacity 0.6s cubic-bezier(0.55, 0, 0.1, 1), filter 0.6s cubic-bezier(0.55, 0, 0.1, 1); /* Smooth transitions if state changes */
-  will-change: opacity, filter; /* Optimize transitions */
-}
-
-/* Optional class for exit animation (matches legacy .hideme concept if needed) */
-.isExiting {
-  opacity: 0 !important; /* Force hide */
-  filter: blur(6px) !important; /* Apply blur on exit */
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
