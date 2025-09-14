@@ -1,0 +1,14 @@
+{
+  "navLinks": [
+    { "label": "Work", "url": "/index" },
+    { "label": "About", "url": "/about" },
+    { "label": "Playground", "url": "/playground" },
+    { "label": "Let's Talk", "url": "mailto:hello@evasanchez.info" }
+  ],
+  "footerText": "Eva Sánchez © 2024",
+  "socialLinks": [
+    { "label": "Instagram", "url": "https://instagram.com/evasanchez" },
+    { "label": "LinkedIn", "url": "https://linkedin.com/in/evasanchez" },
+    { "label": "Behance", "url": "https://behance.net/evasanchez" }
+  ]
+}
