@@ -7,7 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Utility to split text into lines, words, chars
 function splitText(text: string) {
   const lines = text.split(/\r?\n/).map((line) => {
     const words = line.split(/(\s+)/).map((word) => {
@@ -54,11 +53,10 @@ export default function Write({
   renderWord,
   renderLine,
 }: Props) {
-  // Only support string children for splitting
+
   const text = typeof children === "string" ? children : "";
   const lines = splitText(text);
 
-  // Special handling for Atext: recursively render Write for each line
   if (variant === "text") {
     return (
       <Tag
@@ -72,7 +70,7 @@ export default function Write({
             variant="line"
             className="line"
             inverse={inverse}
-            delay={delay + lIdx * 0.15} // Stagger the line animations
+            delay={delay + lIdx * 0.15}
             msTighter={msTighter}
             renderLine={renderLine}
           >
@@ -83,24 +81,21 @@ export default function Write({
     );
   }
 
-  // Refs for animation
   const charRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const lineRefs = useRef<Array<HTMLDivElement | null>>([]);
   const containerRef = useRef<HTMLElement>(null);
 
-  // Animation effect
   useEffect(() => {
     if (!text || typeof window === "undefined" || !containerRef.current) return;
 
     const times = msTighter ? TIMES_MS : TIMES_BASE;
 
-    // Use a single timeline with a ScrollTrigger
     const tl = gsap.timeline({
       paused: true,
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 85%", // When the top of the trigger hits 85% of the viewport
-        toggleActions: "play none none none", // Play once on enter
+        start: "top 85%",
+        toggleActions: "play none none none",
       },
       onComplete: () => {
         if (loop) {
@@ -143,7 +138,7 @@ export default function Write({
     }
 
     return () => {
-      // Kill the timeline and its ScrollTrigger instance
+
       if (tl.scrollTrigger) {
         tl.scrollTrigger.kill();
       }
@@ -151,12 +146,10 @@ export default function Write({
     };
   }, [text, variant, msTighter, delay, loop]);
 
-  // Class names for legacy CSS
   const variantClass =
     variant === "line" ? "Aline" : variant === "text" ? "Atext" : "Awrite";
   const invClass = inverse ? `${variantClass}-inv` : undefined;
 
-  // Render helpers
   let charIndex = 0;
 
   return (
@@ -166,8 +159,7 @@ export default function Write({
       ref={containerRef}
     >
       {lines.map((line, lIdx) => {
-        // When variant is "line", we just want to render the line content for the parent to animate.
-        // The splitting into words/chars is for the "write" variant.
+
         if (variant === "line") {
           return (
             <div
@@ -180,7 +172,6 @@ export default function Write({
           );
         }
 
-        // Otherwise, for "write" variant, split into words and chars
         return (
           <div key={lIdx} className="line">
             {line.words.map((word, wIdx) => (

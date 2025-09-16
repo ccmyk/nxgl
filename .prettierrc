@@ -1,6 +1,14 @@
-// .prettierrc
 {
   "semi": true,
   "singleQuote": false,
-  "plugins": ["prettier-plugin-glsl"]
+  "plugins": ["prettier-plugin-glsl"],
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "always",
+        "printWidth": 80
+      }
+    }
+  ]
 }

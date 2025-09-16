@@ -9,7 +9,8 @@
 		"lint": "biome lint ./src",
 		"format": "biome format --write ./src",
 		"check": "biome check --write ./src",
-		"generate:font": "msdf-bmfont -f json --font-size 64 --texture-size 2048,2048"
+		"generate:font": "msdf-bmfont -f json --font-size 64 --texture-size 2048,2048",
+        "format:md": "prettier --write '**/*.md'"
 	},
 	"dependencies": {
 		"@gsap/react": "^2.1.2",
@@ -25,7 +26,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",
-		"@types/node": "^20.19.14",
+		"@types/node": "^20.19.15",
 		"@types/react": "^19.1.13",
 		"@types/react-dom": "^19.1.9",
 		"msdf-bmfont": "^1.1.0",
