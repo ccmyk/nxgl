@@ -1,5 +1,5 @@
 // src/webgl/hooks/useGL.ts
-'use client';
+"use client";
 
-import { useOGL, useFrame } from 'react-ogl';
+import { useFrame, useOGL } from "react-ogl";
 export { useOGL, useFrame };

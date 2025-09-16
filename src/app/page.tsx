@@ -1,16 +1,14 @@
 // src/app/page.tsx
 'use client';
-import { useRef, useEffect } from 'react';
-import { IOBridge } from '@/components/DOMBridge/IOBridge';
-import { MediaBridge } from '@/components/DOMBridge/MediaBridge';
-import { Tt } from '@/webgl/components/Tt/Tt';
+
+import { useEffect, useRef } from 'react';
 import { Bg } from '@/webgl/components/Bg/Bg';
-import { useSmartLinks } from '@/hooks/useSmartLinks';
+import { Tt } from '@/webgl/components/Tt/Tt';
 
-export default function Home() {
+export default function Home()       {
   const contentRef = useRef<HTMLDivElement | null>(null);
-+  useSmartLinks();
 
-  useEffect(() => {
+  useEffect() => {
     contentRef.current = document.querySelector('#content');
-  }, []);
+  }
+}

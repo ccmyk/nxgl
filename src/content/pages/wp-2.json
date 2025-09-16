@@ -1,0 +1,27 @@
+// ./src/content/pages/wp-2.json
+{
+  "id": 2,
+  "title": "Imported Page 2",
+  "slug": "wp-2",
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 1,
+      "text": "Imported Page"
+    },
+    {
+      "type": "awrite",
+      "html": "SCRAMBLE THIS",
+      "params": "0,3"
+    },
+    {
+      "type": "atext",
+      "html": "<p>First animated line.</p><p>Second animated line.</p>",
+      "params": "0,3"
+    },
+    {
+      "type": "paragraph",
+      "html": "Replace this stub by parsing your real wp-json/pages/2.html (same block shape)."
+    }
+  ]
+}
